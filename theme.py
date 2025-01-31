@@ -1,4 +1,4 @@
-# theme.py - Manages dark mode theme for the entire app
+''' theme.py - Manages dark mode theme for the entire app '''
 import streamlit as st
 
 def apply_dark_theme():
@@ -35,6 +35,21 @@ def apply_dark_theme():
             transition: 0.3s ease-in-out;
         }
 
+        /* Styling for login and create account tabs */
+        div[data-testid="stTabs"] button {
+            border-radius: 50px !important;  /* Make tabs rounded */
+            padding: 10px 20px !important;
+            font-weight: bold !important;
+            color: white !important;
+            background-color: #1e1e1e !important;
+            border: 2px solid #32CD32 !important;
+        }
+
+        div[data-testid="stTabs"] button[aria-selected="true"] {
+            background-color: #32CD32 !important;
+            color: black !important;
+        }
+        
         /* Scrollbar Customization */
         ::-webkit-scrollbar {
             width: 8px;
