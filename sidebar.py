@@ -5,17 +5,12 @@ def show_sidebar():
     with st.sidebar:
         st.markdown("""
             <style>
-                .stSelectbox div[data-baseweb="select"] {
-                    background-color: #90EE90 !important; /* Light green background */
-                    border-radius: 5px;
-                }
-                .stSelectbox div[data-baseweb="popover"] {
-                    background-color: #90EE90 !important; /* Light green dropdown */
-                }
-                .stSidebarContent {
-                    background-color: #90EE90 !important; /* Light green menu container */
-                    border-radius: 5px;
-                }
+            .stSelectbox div[data-baseweb="select"] {
+                background-color: #90EE90 !important;
+            }
+            .stSidebarContent {
+                background-color: #90EE90 !important;
+            }
             </style>
         """, unsafe_allow_html=True)
         
