@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 
 def show_sidebar():
     with st.sidebar:
-        st.title("Code For Impact")
+        st.title("AI For Impact")
         
         menu_options = {
             "Home": "home",
