@@ -1,3 +1,4 @@
+''' sidebar.py - Handles sidebar navigation '''
 import streamlit as st
 from streamlit_option_menu import option_menu
 
@@ -5,20 +6,11 @@ def show_sidebar():
     with st.sidebar:
         st.markdown("""
             <style>
-            /* Sidebar background color */
-            section[data-testid="stSidebar"] {
-                background-color: #90EE90 !important;
-            }
-            
-            /* Selectbox dropdown background */
-            div[data-baseweb="select"] > div {
-                background-color: #90EE90 !important;
-            }
-            
-            /* Option menu background */
-            div[data-testid="stSidebarContent"] {
-                background-color: #90EE90 !important;
-            }
+                div[data-testid="stSidebarNav"] {
+                    background-color: #90EE90 !important;
+                    padding: 10px;
+                    border-radius: 10px;
+                }
             </style>
         """, unsafe_allow_html=True)
         
