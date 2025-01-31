@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 def show_sidebar():
     with st.sidebar:
         st.title("Code For Impact")
+        
         menu_options = {
             "Home": "home",
             "Assignments": {
@@ -19,6 +20,7 @@ def show_sidebar():
             "Help": "help",
             "Logout": "logout"
         }
+        
         selected = option_menu(
             menu_title=None,
             options=list(menu_options.keys()),
@@ -27,4 +29,13 @@ def show_sidebar():
             default_index=0,
             orientation="vertical",
         )
-        return menu_options[selected]
+
+        # Handle sub-options for Assignments and Quizzes
+        if selected in ["Assignments", "Quizzes"]:
+            sub_options = list(menu_options[selected].keys())
+            sub_selected = st.selectbox(f"Select a {selected[:-1]}", sub_options, key=f"{selected}_selection")
+
+            if sub_selected:
+                return menu_options[selected][sub_selected]  # Return selected sub-option
+        
+        return menu_options[selected]  # Return main selection if no sub-option is chosen
