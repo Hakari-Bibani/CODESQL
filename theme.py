@@ -1,14 +1,12 @@
+''' theme.py - Manages UI Theme Styles '''
+import streamlit as st
+
 def apply_dark_theme():
     st.markdown("""
         <style>
         body {
             background-color: #121212;
             color: #ffffff;
-        }
-        /* Ensure sidebar remains light */
-        [data-testid="stSidebar"] {
-            background-color: #ffffff !important;
-            color: #000000 !important;
         }
         .title {
             color: #ff4757;
@@ -28,6 +26,9 @@ def apply_dark_theme():
             font-size: 1.2rem;
             color: #bdc3c7;
             margin-top: 2rem;
+        }
+        .stSidebar {
+            background-color: #b0b0b0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
