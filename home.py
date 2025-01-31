@@ -15,9 +15,9 @@ def show_home():
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Load and display Lottie animation (Transparent and Resizable)
+    # Load and display Lottie animation (Forcing Transparency)
     lottie_animation = load_lottie_animation("animation.json")  # Load from local file
-    st_lottie(lottie_animation, speed=1, height=300, width=300, key="ai_animation")
+    st_lottie(lottie_animation, speed=1, height=200, width=200, key="ai_animation", background="rgba(0,0,0,0)")
 
     # Video Section
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
