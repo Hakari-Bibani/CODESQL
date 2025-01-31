@@ -1,43 +1,27 @@
 import streamlit as st
-from theme import apply_dark_theme
-from style import apply_custom_styles
 from streamlit_lottie import st_lottie
 import json
-import os
+from theme import apply_dark_theme
+from style import apply_custom_styles
 
-def load_lottie_animation(filepath: str):
-    """Load Lottie animation from a JSON file."""
-    with open(filepath, "r") as f:
+def load_lottie_animation(path: str):
+    """Loads a Lottie animation from a local JSON file."""
+    with open(path, "r") as f:
         return json.load(f)
 
 def show_home():
-    apply_dark_theme()      # Ensures background is dark
-    apply_custom_styles()   # Ensures animated title/footer style
+    apply_dark_theme()      # ensures background is dark
+    apply_custom_styles()   # ensures animated title/footer style
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Load and display the Lottie animation
-    animation_path = os.path.join(os.getcwd(), "animation.json")  # Adjust path if needed
-    lottie_animation = load_lottie_animation(animation_path)
+    # Load the animation
+    lottie_animation = load_lottie_animation("animation.json")
 
-    # Apply custom CSS to remove Lottie background
-    st.markdown(
-        """
-        <style>
-        .lottie-container iframe {
-            background: none !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    # Display Lottie animation (small size, no rectangular box)
+    st_lottie(lottie_animation, speed=1, width=150, height=150, key="ai_animation")
 
-    # Display animation with forced transparency
-    st.markdown('<div class="lottie-container">', unsafe_allow_html=True)
-    st_lottie(lottie_animation, speed=1, width=300, height=300, key="ai_animation")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Video
+    # Video Section
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
     st.video(video_url)
 
