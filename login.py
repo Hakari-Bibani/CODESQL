@@ -1,9 +1,11 @@
+''' login.py - Manages authentication with dark theme '''
 import streamlit as st
 from database import create_tables
+from style import apply_dark_theme  # Import dark theme
+
 import sqlite3
 
 def register_user(fullname, email, phone, username, password):
-    """Registers a new user in the database."""
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     try:
@@ -26,7 +28,6 @@ def register_user(fullname, email, phone, username, password):
     return True
 
 def login_user(username, password):
-    """Check if a username/password is valid."""
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
@@ -35,7 +36,7 @@ def login_user(username, password):
     return data
 
 def show_login_create_account():
-    """Renders the login and create account tabs."""
+    apply_dark_theme()  # Apply dark mode
     tabs = st.tabs(["Login", "Create Account"])
     with tabs[0]:
         st.subheader("Login")
