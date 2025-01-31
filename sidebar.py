@@ -5,10 +5,18 @@ def show_sidebar():
     with st.sidebar:
         st.markdown("""
             <style>
-            .stSelectbox div[data-baseweb="select"] {
+            /* Sidebar background color */
+            section[data-testid="stSidebar"] {
                 background-color: #90EE90 !important;
             }
-            .stSidebarContent {
+            
+            /* Selectbox dropdown background */
+            div[data-baseweb="select"] > div {
+                background-color: #90EE90 !important;
+            }
+            
+            /* Option menu background */
+            div[data-testid="stSidebarContent"] {
                 background-color: #90EE90 !important;
             }
             </style>
