@@ -1,4 +1,3 @@
-''' login.py - Updated with red error messages '''
 import streamlit as st
 import sqlite3
 from database import create_tables
