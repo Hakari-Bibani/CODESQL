@@ -19,7 +19,7 @@ def show_home():
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
     # Load Lottie animation from GitHub (Replace 'YOUR_GITHUB_USERNAME' & 'YOUR_REPO')
-    animation_url = "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/animation.json"
+    animation_url = "https://raw.githubusercontent.com/Hakari-Bibani/CODESQL/main/animation.json"
     lottie_animation = load_lottie_animation(animation_url)
 
     # Display animation with transparency and resizable properties
