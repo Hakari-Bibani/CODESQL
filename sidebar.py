@@ -5,37 +5,21 @@ def show_sidebar():
     with st.sidebar:
         st.markdown("""
             <style>
-                .sidebar-title {
-                    color: yellow;
-                    font-size: 2rem;
-                    font-weight: bold;
-                    font-family: 'Poppins', sans-serif;
-                    text-align: center;
-                    margin-bottom: 10px;
+                .stSelectbox div[data-baseweb="select"] {
+                    background-color: #90EE90 !important; /* Light green background */
+                    border-radius: 5px;
                 }
-                .css-1aumxhk {
-                    background-color: #28a745 !important;  /* Green background for menu items */
-                    border-radius: 10px;
-                    padding: 10px;
-                    margin-bottom: 5px;
-                    transition: background-color 0.3s ease-in-out;
+                .stSelectbox div[data-baseweb="popover"] {
+                    background-color: #90EE90 !important; /* Light green dropdown */
                 }
-                .css-1aumxhk:hover {
-                    background-color: #218838 !important;  /* Darker green on hover */
-                }
-                .css-10trblm, .stSelectbox label, .stTextInput label {
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 1.1rem;
-                    color: white;
-                }
-                .stSelectbox div[data-baseweb="select"] > div {
-                    background-color: #28a745 !important;
-                    border-radius: 10px;
+                .stSidebarContent {
+                    background-color: #90EE90 !important; /* Light green menu container */
+                    border-radius: 5px;
                 }
             </style>
         """, unsafe_allow_html=True)
         
-        st.markdown("<div class='sidebar-title'>Code For Impact</div>", unsafe_allow_html=True)
+        st.title("Code For Impact")
         
         menu_options = {
             "Home": "home",
