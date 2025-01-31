@@ -2,67 +2,28 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 def show_sidebar():
-    st.markdown("""
-        <style>
-            /* Sidebar Background */
-            [data-testid="stSidebar"] {
-                background-color: #1B5E20 !important;
-                color: white !important;
-            }
-            
-            /* Sidebar Title */
-            [data-testid="stSidebar"] h1 {
-                color: #C8E6C9 !important;
-                text-align: center;
-                font-size: 22px !important;
-                font-weight: bold;
-            }
-            
-            /* Sidebar Menu Items */
-            .css-1d391kg, .css-10trblm, .css-1v3fvcr, .css-1aumxhk {
-                color: white !important;
-                font-size: 18px !important;
-                font-weight: bold !important;
-                padding: 10px !important;
-                background-color: #2E7D32 !important;
-                border-radius: 8px !important;
-                margin-bottom: 5px !important;
-            }
-            
-            .css-1d391kg:hover, .css-10trblm:hover, .css-1v3fvcr:hover, .css-1aumxhk:hover {
-                background-color: #388E3C !important;
-                color: #C8E6C9 !important;
-            }
-            
-            /* Sidebar Buttons */
-            .stButton>button {
-                background-color: #2E7D32 !important;
-                color: white !important;
-                border-radius: 8px !important;
-                font-weight: bold !important;
-                padding: 10px !important;
-                border: none !important;
-            }
-            .stButton>button:hover {
-                background-color: #388E3C !important;
-                color: white !important;
-            }
-            
-            /* Sidebar Selectbox */
-            .stSelectbox div[data-baseweb="select"] {
-                background-color: #1B5E20 !important;
-                color: white !important;
-                border-radius: 8px !important;
-                font-size: 16px !important;
-            }
-            .stSelectbox div[data-baseweb="select"] * {
-                color: white !important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-
     with st.sidebar:
-        st.title("Code For Impact")
+        st.markdown("""
+            <style>
+                .sidebar-title {
+                    color: yellow;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    font-family: 'Arial', sans-serif;
+                    text-align: center;
+                    margin-bottom: 10px;
+                }
+                .css-1aumxhk {
+                    background-color: #28a745 !important;  /* Green background for menu items */
+                    border-radius: 5px;
+                }
+                .css-10trblm {
+                    font-family: 'Arial', sans-serif;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("<div class='sidebar-title'>Code For Impact</div>", unsafe_allow_html=True)
         
         menu_options = {
             "Home": "home",
