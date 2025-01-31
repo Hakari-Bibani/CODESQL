@@ -4,14 +4,6 @@ from streamlit_option_menu import option_menu
 
 def show_sidebar():
     with st.sidebar:
-        st.markdown("""
-            <style>
-                div[data-baseweb="select"] > div {
-                    background-color: #90EE90 !important;
-                }
-            </style>
-        """, unsafe_allow_html=True)
-        
         st.title("Code For Impact")
         
         menu_options = {
