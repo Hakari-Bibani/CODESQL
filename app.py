@@ -6,13 +6,14 @@ from home import show_home
 from database import create_tables
 
 def main():
-    # Apply dark theme site-wide
+    # 1) Set the page config FIRST
+    st.set_page_config(page_title="Code for Impact", layout="wide")
+    
+    # 2) Then apply any custom styles or theme
     apply_dark_theme()
 
-    st.set_page_config(page_title="Code for Impact", layout="wide")
     create_tables()
 
-    # Manage login session
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
 
