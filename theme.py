@@ -50,6 +50,12 @@ def apply_dark_theme():
             color: black !important;
         }
         
+        /* Custom Error Message Styling */
+        .error-text {
+            color: #FF6347 !important; /* Red */
+            font-weight: bold !important;
+        }
+        
         /* Scrollbar Customization */
         ::-webkit-scrollbar {
             width: 8px;
