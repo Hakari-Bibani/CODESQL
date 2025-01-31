@@ -14,4 +14,4 @@ def show_home():
 
     # Footer
     st.markdown('<div class="footer">📌Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
-    st.markdown('<div class="footer">AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
+    st.markdown('<div class="footer">💡AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
