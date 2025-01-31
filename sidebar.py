@@ -9,16 +9,28 @@ def show_sidebar():
                     color: yellow;
                     font-size: 2rem;
                     font-weight: bold;
-                    font-family: 'Arial', sans-serif;
+                    font-family: 'Poppins', sans-serif;
                     text-align: center;
                     margin-bottom: 10px;
                 }
                 .css-1aumxhk {
                     background-color: #28a745 !important;  /* Green background for menu items */
-                    border-radius: 5px;
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-bottom: 5px;
+                    transition: background-color 0.3s ease-in-out;
                 }
-                .css-10trblm {
-                    font-family: 'Arial', sans-serif;
+                .css-1aumxhk:hover {
+                    background-color: #218838 !important;  /* Darker green on hover */
+                }
+                .css-10trblm, .stSelectbox label, .stTextInput label {
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 1.1rem;
+                    color: white;
+                }
+                .stSelectbox div[data-baseweb="select"] > div {
+                    background-color: #28a745 !important;
+                    border-radius: 10px;
                 }
             </style>
         """, unsafe_allow_html=True)
