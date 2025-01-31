@@ -2,40 +2,40 @@
 import streamlit as st
 
 def apply_dark_theme():
-    # IMPORTANT: Make sure st.set_page_config() is called in your main script
-    # before any Streamlit command. Do NOT call it here, or you'll trigger the
-    # 'SetPageConfigMustBeFirstCommandError' if anything else has run first.
-
     st.markdown(
         '''
         <style>
-        /* Force dark background across main containers in newer Streamlit versions */
+        /* Apply dark background */
         html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
         .block-container, .stApp {
             background-color: #121212 !important;
             color: #ffffff !important;
         }
 
-        /* Default text elements */
-        .stText, .stMarkdown, .stException {
-            color: #ffffff !important;
+        /* Set font to green */
+        .stTextInput > label, .stSelectbox > label, .stButton > button {
+            color: #32CD32 !important;  /* Light Green */
+            font-weight: bold;
         }
 
-        /* Input labels, buttons, selects */
-        .stTextInput > label, .stSelectbox > label, .stButton > button {
-            color: #ffffff !important;
-        }
+        /* Text Input Box Improvements */
         .stTextInput, .stSelectbox, .stButton > button {
             background-color: #1e1e1e !important;
-            border: 1px solid #444 !important;
-            color: #ffffff !important;
-        }
-        .stButton > button:hover {
-            background-color: #ff4757 !important;
-            color: #fff !important;
+            color: white !important;
+            border-radius: 8px !important;  /* Rounded corners */
+            border: 1px solid #32CD32 !important; /* Green border */
+            padding: 10px;
+            box-shadow: 0px 0px 5px rgba(50, 205, 50, 0.5); /* Soft glow */
         }
 
-        /* Scrollbars */
+        /* Hover effect on buttons */
+        .stButton > button:hover {
+            background-color: #32CD32 !important;
+            color: black !important;
+            transition: 0.3s ease-in-out;
+        }
+
+        /* Scrollbar Customization */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -43,7 +43,7 @@ def apply_dark_theme():
             background: #1e1e1e;
         }
         ::-webkit-scrollbar-thumb {
-            background-color: #3e3e3e;
+            background-color: #32CD32;
             border-radius: 10px;
         }
         </style>
