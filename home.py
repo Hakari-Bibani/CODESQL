@@ -1,16 +1,13 @@
 import streamlit as st
 from streamlit_lottie import st_lottie
-import requests
+import json
 from theme import apply_dark_theme
 from style import apply_custom_styles
 
-# Load Lottie animation from GitHub
-def load_lottie_animation(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
+def load_lottie_animation(filepath: str):
+    """Loads a Lottie animation from a local JSON file."""
+    with open(filepath, "r") as f:
+        return json.load(f)
 
 def show_home():
     apply_dark_theme()      # Ensures background is dark
@@ -18,15 +15,11 @@ def show_home():
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Load Lottie animation from GitHub (Replace 'YOUR_GITHUB_USERNAME' & 'YOUR_REPO')
-    animation_url = "https://raw.githubusercontent.com/Hakari-Bibani/CODESQL/main/animation.json"
-    lottie_animation = load_lottie_animation(animation_url)
+    # Load and display Lottie animation (Transparent and Resizable)
+    lottie_animation = load_lottie_animation("animation.json")  # Load from local file
+    st_lottie(lottie_animation, speed=1, height=300, width=300, key="ai_animation")
 
-    # Display animation with transparency and resizable properties
-    if lottie_animation:
-        st_lottie(lottie_animation, key="lottie_home", speed=1, width=400, height=400, loop=True, background_color=None)
-
-    # Video
+    # Video Section
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
     st.video(video_url)
 
