@@ -2,35 +2,56 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 def show_sidebar():
+    st.markdown("""
+        <style>
+            /* Sidebar Background */
+            [data-testid="stSidebar"] {
+                background-color: #1B5E20 !important;
+                color: white !important;
+            }
+            
+            /* Sidebar Title */
+            [data-testid="stSidebar"] h1 {
+                color: #C8E6C9 !important;
+                text-align: center;
+                font-size: 22px;
+                font-weight: bold;
+            }
+            
+            /* Sidebar Buttons */
+            .stButton>button {
+                background-color: #2E7D32 !important;
+                color: white !important;
+                border-radius: 8px !important;
+                font-weight: bold !important;
+                padding: 10px !important;
+                border: none !important;
+            }
+            .stButton>button:hover {
+                background-color: #388E3C !important;
+                color: white !important;
+            }
+            
+            /* Sidebar Selectbox */
+            .stSelectbox div[data-baseweb="select"] {
+                background-color: #1B5E20 !important;
+                color: white !important;
+                border-radius: 8px !important;
+                font-size: 16px !important;
+            }
+            .stSelectbox div[data-baseweb="select"] * {
+                color: white !important;
+            }
+            
+            /* Sidebar Menu Items */
+            .css-1d391kg, .css-10trblm {
+                color: white !important;
+                font-size: 18px !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
     with st.sidebar:
-        st.markdown("""
-            <style>
-                .sidebar .sidebar-content {
-                    background-color: #1B5E20;
-                    color: white;
-                }
-                .sidebar .stButton>button {
-                    background-color: #2E7D32;
-                    color: white;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    padding: 10px;
-                }
-                .sidebar .stButton>button:hover {
-                    background-color: #388E3C;
-                    color: white;
-                }
-                .sidebar .stSelectbox div[data-baseweb="select"] {
-                    background-color: #1B5E20;
-                    color: white;
-                    border-radius: 8px;
-                }
-                .sidebar .stSelectbox div[data-baseweb="select"] * {
-                    color: white;
-                }
-            </style>
-        """, unsafe_allow_html=True)
-        
         st.title("Code For Impact")
         
         menu_options = {
