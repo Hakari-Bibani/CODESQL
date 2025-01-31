@@ -1,13 +1,17 @@
 import streamlit as st
-from streamlit_lottie import st_lottie
-import json
 from theme import apply_dark_theme
 from style import apply_custom_styles
+from streamlit_lottie import st_lottie
+import json
 
-def load_lottie_animation(path: str):
-    """Loads a Lottie animation from a local JSON file."""
-    with open(path, "r") as f:
-        return json.load(f)
+def load_lottie_animation():
+    """Loads the Lottie animation from a JSON file."""
+    try:
+        with open("animation.json", "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        st.error("⚠️ Animation file not found!")
+        return None
 
 def show_home():
     apply_dark_theme()      # ensures background is dark
@@ -15,31 +19,18 @@ def show_home():
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Load Lottie animation
-    lottie_animation = load_lottie_animation("animation.json")
+    # Load and display Lottie animation with a transparent background
+    lottie_animation = load_lottie_animation()
+    if lottie_animation:
+        st_lottie(
+            lottie_animation,
+            speed=1,               # Adjust animation speed
+            loop=True,             # Set to True to make it loop continuously
+            quality="high",        # Options: "low", "medium", "high"
+            key="ai_animation"     # Unique key for Streamlit component
+        )
 
-    # Centered Animation with Transparent Background
-    st.markdown(
-        """
-        <style>
-        .lottie-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: -20px;
-        }
-        </style>
-        <div class="lottie-container">
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Display Lottie Animation
-    st_lottie(lottie_animation, speed=1, width=150, height=150, key="ai_animation")  # Removed background=None
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    # Video Section
+    # Video
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
     st.video(video_url)
 
