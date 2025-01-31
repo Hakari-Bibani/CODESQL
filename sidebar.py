@@ -6,10 +6,8 @@ def show_sidebar():
     with st.sidebar:
         st.markdown("""
             <style>
-                div[data-testid="stSidebarNav"] > div {
+                div[data-baseweb="select"] > div {
                     background-color: #90EE90 !important;
-                    padding: 10px;
-                    border-radius: 10px;
                 }
             </style>
         """, unsafe_allow_html=True)
