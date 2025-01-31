@@ -17,7 +17,7 @@ def show_home():
 
     # Load and display Lottie animation
     animation = load_lottie_animation("animation.json")  # Ensure the file is in the main directory
-    st_lottie(animation, speed=1, loop=True, quality="high", height=300, width=300)
+    st_lottie(animation, speed=1, loop=True, quality="high", height=200, width=100)
 
     # Video Section
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
