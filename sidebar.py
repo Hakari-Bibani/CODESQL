@@ -14,8 +14,24 @@ def show_sidebar():
             [data-testid="stSidebar"] h1 {
                 color: #C8E6C9 !important;
                 text-align: center;
-                font-size: 22px;
+                font-size: 22px !important;
                 font-weight: bold;
+            }
+            
+            /* Sidebar Menu Items */
+            .css-1d391kg, .css-10trblm, .css-1v3fvcr, .css-1aumxhk {
+                color: white !important;
+                font-size: 18px !important;
+                font-weight: bold !important;
+                padding: 10px !important;
+                background-color: #2E7D32 !important;
+                border-radius: 8px !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .css-1d391kg:hover, .css-10trblm:hover, .css-1v3fvcr:hover, .css-1aumxhk:hover {
+                background-color: #388E3C !important;
+                color: #C8E6C9 !important;
             }
             
             /* Sidebar Buttons */
@@ -41,12 +57,6 @@ def show_sidebar():
             }
             .stSelectbox div[data-baseweb="select"] * {
                 color: white !important;
-            }
-            
-            /* Sidebar Menu Items */
-            .css-1d391kg, .css-10trblm {
-                color: white !important;
-                font-size: 18px !important;
             }
         </style>
     """, unsafe_allow_html=True)
