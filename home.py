@@ -18,8 +18,8 @@ def show_home():
     # Load the animation
     lottie_animation = load_lottie_animation("animation.json")
 
-    # Display Lottie animation (small size, no rectangular box)
-    st_lottie(lottie_animation, speed=1, width=150, height=150, key="ai_animation")
+    # Display Lottie animation (transparent background)
+    st_lottie(lottie_animation, speed=1, width=150, height=150, key="ai_animation", background=None)
 
     # Video Section
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
