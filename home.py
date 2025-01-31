@@ -34,8 +34,8 @@ def show_home():
         unsafe_allow_html=True,
     )
 
-    # Display Transparent Lottie Animation (No Rectangular Background)
-    st_lottie(lottie_animation, speed=1, width=150, height=150, key="ai_animation", background=None)
+    # Display Lottie Animation
+    st_lottie(lottie_animation, speed=1, width=150, height=150, key="ai_animation")  # Removed background=None
 
     st.markdown("</div>", unsafe_allow_html=True)
 
