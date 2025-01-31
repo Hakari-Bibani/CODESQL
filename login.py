@@ -4,6 +4,7 @@ from database import create_tables
 from theme import apply_dark_theme
 
 def register_user(fullname, email, phone, username, password):
+    """Registers a new user in the database."""
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     try:
@@ -25,8 +26,19 @@ def register_user(fullname, email, phone, username, password):
     conn.close()
     return True
 
+def login_user(username, password):
+    """Checks if a username/password is valid in the database."""
+    conn = sqlite3.connect(st.secrets["general"]["db_path"])
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
 def show_login_create_account():
-    apply_dark_theme()
+    """Renders the login and create account tabs."""
+    apply_dark_theme()  # Apply the dark theme styles
+
     tabs = st.tabs(["Login", "Create Account"])
     
     with tabs[0]:
@@ -35,7 +47,7 @@ def show_login_create_account():
         password = st.text_input("Password", type="password", key="login_password")
 
         if st.button("Login"):
-            user = login_user(username, password)
+            user = login_user(username, password)  # Now this function is properly defined
             if user:
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = username
