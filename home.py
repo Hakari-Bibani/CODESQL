@@ -20,8 +20,22 @@ def show_home():
     animation_path = os.path.join(os.getcwd(), "animation.json")  # Adjust path if needed
     lottie_animation = load_lottie_animation(animation_path)
 
-    # Display animation with custom size (width=300, height=300) and no background
+    # Apply custom CSS to remove Lottie background
+    st.markdown(
+        """
+        <style>
+        .lottie-container iframe {
+            background: none !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Display animation with forced transparency
+    st.markdown('<div class="lottie-container">', unsafe_allow_html=True)
     st_lottie(lottie_animation, speed=1, width=300, height=300, key="ai_animation")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Video
     video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
