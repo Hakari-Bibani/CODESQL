@@ -1,4 +1,4 @@
-''' theme.py - Manages dark mode theme for the entire app '''
+# theme.py - Manages dark mode theme for the entire app
 import streamlit as st
 
 def apply_dark_theme():
@@ -49,14 +49,15 @@ def apply_dark_theme():
             background-color: #32CD32 !important;
             color: black !important;
         }
-        
+
         /* Custom Error Message Styling - Set to Red */
         .error-text {
-            color: #FF0000 !important; /* Red color */
+            color: #FF0000 !important; /* Bright Red */
             font-weight: bold !important;
             font-size: 16px !important;
+            padding: 5px;
         }
-        
+
         /* Scrollbar Customization */
         ::-webkit-scrollbar {
             width: 8px;
