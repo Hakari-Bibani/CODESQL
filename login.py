@@ -3,9 +3,8 @@ import sqlite3
 from database import create_tables
 from theme import apply_dark_theme
 
-import sqlite3
-
 def register_user(fullname, email, phone, username, password):
+    """Registers a new user in the database."""
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     try:
@@ -28,6 +27,7 @@ def register_user(fullname, email, phone, username, password):
     return True
 
 def login_user(username, password):
+    """Check if a username/password is valid."""
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
@@ -36,38 +36,46 @@ def login_user(username, password):
     return data
 
 def show_login_create_account():
-    apply_dark_theme()
+    """Renders the login and create account tabs with updated styles."""
+    apply_dark_theme()  # Apply green font & improved input styles
+
     tabs = st.tabs(["Login", "Create Account"])
+
     with tabs[0]:
-        st.subheader("Login")
+        st.subheader("🔑 Login")
         username = st.text_input("Username", key="login_username")
         password = st.text_input("Password", type="password", key="login_password")
+
         if st.button("Login"):
             user = login_user(username, password)
             if user:
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = username
-                st.success("Login successful!")
+                st.success("✅ Login successful!")
                 st.rerun()
             else:
-                st.error("Invalid username or password.")
+                st.error("❌ Invalid username or password.")
 
     with tabs[1]:
-        st.subheader("Create Account")
+        st.subheader("🆕 Create Account")
         reg_fullname = st.text_input("Full Name", key="reg_fullname")
         reg_email = st.text_input("Email", key="reg_email")
         reg_phone = st.text_input("Mobile Number", key="reg_phone")
         reg_username = st.text_input("Username", key="reg_username")
         reg_password = st.text_input("Password", type="password", key="reg_password")
+
         if st.button("Register"):
             if all([reg_fullname, reg_email, reg_phone, reg_username, reg_password]):
                 try:
                     phone_int = int(reg_phone)
                 except ValueError:
-                    st.error("Please enter a valid phone number (digits only).")
+                    st.error("❌ Please enter a valid phone number (digits only).")
                     return
+
                 result = register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password)
                 if not result:
-                    st.error("Username already exists. Please choose a different one.")
+                    st.error("⚠️ Username already exists. Choose a different one.")
                 else:
-                    st.success("Account created successfully! You can now log in.")
+                    st.success("✅ Account created successfully! You can now log in.")
+            else:
+                st.error("⚠️ Please fill out all fields.")
