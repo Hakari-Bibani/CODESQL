@@ -74,8 +74,9 @@ def show_login_create_account():
 
                 result = register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password)
                 if not result:
-                    st.error("⚠️ Username already exists. Choose a different one.")
-                else:
-                    st.success("✅ Account created successfully! You can now log in.")
+    st.markdown('<p style="color: red; font-weight: bold;">⚠️ Username already exists. Choose a different one.</p>', unsafe_allow_html=True)
+else:
+    st.markdown('<p style="color: green; font-weight: bold;">✅ Account created successfully! You can now log in.</p>', unsafe_allow_html=True)
+                
             else:
                 st.error("⚠️ Please fill out all fields.")
