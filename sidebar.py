@@ -6,7 +6,7 @@ def show_sidebar():
     with st.sidebar:
         st.markdown("""
             <style>
-                div[data-testid="stSidebarNav"] {
+                div[data-testid="stSidebarNav"] > div {
                     background-color: #90EE90 !important;
                     padding: 10px;
                     border-radius: 10px;
