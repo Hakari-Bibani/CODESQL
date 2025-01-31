@@ -12,7 +12,7 @@ def apply_dark_theme():
             color: #ffffff !important;
         }
 
-        /* Set font to green */
+        /* Set input labels to green */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
             color: #32CD32 !important;  /* Light Green */
             font-weight: bold;
@@ -50,10 +50,11 @@ def apply_dark_theme():
             color: black !important;
         }
         
-        /* Custom Error Message Styling */
+        /* Custom Error Message Styling - Set to Red */
         .error-text {
-            color: #FF6347 !important; /* Red */
+            color: #FF0000 !important; /* Red color */
             font-weight: bold !important;
+            font-size: 16px !important;
         }
         
         /* Scrollbar Customization */
