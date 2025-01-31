@@ -30,12 +30,12 @@ def show_sidebar():
             orientation="vertical",
         )
 
-        # Handle sub-options for Assignments and Quizzes
         if selected in ["Assignments", "Quizzes"]:
-            sub_options = list(menu_options[selected].keys())
+            sub_options = ["Select"] + list(menu_options[selected].keys())
             sub_selected = st.selectbox(f"Select a {selected[:-1]}", sub_options, key=f"{selected}_selection")
-
-            if sub_selected:
+            if sub_selected != "Select":
                 return menu_options[selected][sub_selected]  # Return selected sub-option
+            else:
+                return "home"  # Stay on home page if no selection
         
-        return menu_options[selected]  # Return main selection if no sub-option is chosen
+        return menu_options[selected]  # Return main selection if not Assignments/Quizzes
