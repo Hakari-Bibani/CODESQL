@@ -1,10 +1,10 @@
+''' login.py - Updated with red error messages '''
 import streamlit as st
 import sqlite3
 from database import create_tables
 from theme import apply_dark_theme
 
 def register_user(fullname, email, phone, username, password):
-    """Registers a new user in the database."""
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     try:
@@ -26,21 +26,10 @@ def register_user(fullname, email, phone, username, password):
     conn.close()
     return True
 
-def login_user(username, password):
-    """Check if a username/password is valid."""
-    conn = sqlite3.connect(st.secrets["general"]["db_path"])
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
-    data = cursor.fetchone()
-    conn.close()
-    return data
-
 def show_login_create_account():
-    """Renders the login and create account tabs with updated styles."""
-    apply_dark_theme()  # Apply green font & improved input styles
-
+    apply_dark_theme()
     tabs = st.tabs(["Login", "Create Account"])
-
+    
     with tabs[0]:
         st.subheader("🔑 Login")
         username = st.text_input("Username", key="login_username")
@@ -54,8 +43,8 @@ def show_login_create_account():
                 st.success("✅ Login successful!")
                 st.rerun()
             else:
-                st.error("❌ Invalid username or password.")
-
+                st.markdown('<p class="error-text">❌ Invalid username or password.</p>', unsafe_allow_html=True)
+    
     with tabs[1]:
         st.subheader("🆕 Create Account")
         reg_fullname = st.text_input("Full Name", key="reg_fullname")
@@ -69,13 +58,12 @@ def show_login_create_account():
                 try:
                     phone_int = int(reg_phone)
                 except ValueError:
-                    st.error("❌ Please enter a valid phone number (digits only).")
+                    st.markdown('<p class="error-text">❌ Please enter a valid phone number (digits only).</p>', unsafe_allow_html=True)
                     return
-
                 result = register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password)
                 if not result:
-                    st.error("⚠️ Username already exists. Choose a different one.")
+                    st.markdown('<p class="error-text">⚠️ Username already exists. Choose a different one.</p>', unsafe_allow_html=True)
                 else:
                     st.success("✅ Account created successfully! You can now log in.")
             else:
-                st.error("⚠️ Please fill out all fields.")
+                st.markdown('<p class="error-text">⚠️ Please fill out all fields.</p>', unsafe_allow_html=True)
