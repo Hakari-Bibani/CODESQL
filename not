@@ -7,6 +7,7 @@ from io import StringIO
 from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
+from github_sync import push_db_to_github
 
 def show():
     # Apply the custom page style
@@ -167,7 +168,7 @@ def show():
             st.write("No text output captured.")
 
         if st.session_state["map_object"]:
-            st.markdown("### 🗺️ Map Output")
+            st.markdown("### 🗘️ Map Output")
             st_folium(st.session_state["map_object"], width=700, height=500)
 
         if st.session_state["dataframe_object"] is not None:
@@ -190,6 +191,9 @@ def show():
             cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
             conn.commit()
             conn.close()
+
+            # Push updated database to GitHub
+            push_db_to_github(st.secrets["general"]["db_path"])
 
             st.success(f"Submission successful! Your grade: {grade}/100")
         else:
