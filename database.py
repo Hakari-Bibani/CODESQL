@@ -1,9 +1,18 @@
+# database.py
 import sqlite3
 import streamlit as st
+import os
+from github_sync import pull_db_from_github
 
 def create_tables():
     """Create the required tables in the database if they don't exist."""
-    conn = sqlite3.connect(st.secrets["general"]["db_path"])
+    db_path = st.secrets["general"]["db_path"]
+
+    # 1) Pull the DB from GitHub to ensure local is updated
+    pull_db_from_github(db_path)
+
+    # 2) Now proceed with table creation
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -44,34 +53,3 @@ def create_tables():
 
     conn.commit()
     conn.close()
-
-def save_grade(password, grade, assignment):
-    """
-    Save the grade in the 'records' table for the given assignment.
-    :param password: The password used to identify the user.
-    :param grade: The grade to be saved.
-    :param assignment: The assignment column (e.g., 'as2') to update.
-    """
-    db_path = st.secrets["general"]["db_path"]
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    # Ensure assignment column exists
-    if assignment not in ['as1', 'as2', 'as3', 'as4', 'quiz1', 'quiz2']:
-        conn.close()
-        raise ValueError("Invalid assignment column.")
-
-    try:
-        # Update the grade in the specified assignment column
-        cursor.execute(f"""
-            UPDATE records
-            SET {assignment} = ?
-            WHERE password = ?
-        """, (grade, password))
-
-        conn.commit()
-        conn.close()
-        print(f"Grade for {assignment} saved successfully.")
-    except Exception as e:
-        conn.close()
-        raise e
