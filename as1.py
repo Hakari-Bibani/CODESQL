@@ -100,10 +100,10 @@ def show():
 
             **Expected Output:**
             1. A map showing the three coordinates.
-            2. A clearly formatted text summary (expressed to two decimal places) showing the calculated distances (in kilometers) between:
-               - **Distance between Point 1 and Point 2:** 59.57 km
-               - **Distance between Point 2 and Point 3:** 73.14 km
-               - **Distance between Point 1 and Point 3:** 37.98 km
+            2. A text summary (Express values to two decimal places.): showing the calculated distances (in kilometers) between:
+               - Point 1 and Point 2.
+               - Point 2 and Point 3.
+               - Point 1 and Point 3.
             """)
 
         with tab2:
@@ -145,7 +145,8 @@ def show():
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.header("Step 3: Run and Submit Your Code")
-        code_input = st.text_area("**📝 Paste Your Python Code Below**", height=300)
+        st.markdown('<span style="color:white; font-weight:bold;">📝 Paste Your Code Here</span>', unsafe_allow_html=True)
+        code_input = st.text_area("", height=300)
 
         # Run Code Button
         run_button = st.button("Run Code", key="run_code_button")
@@ -188,7 +189,17 @@ def show():
         if st.session_state["run_success"]:
             st.markdown("### 📄 Captured Output")
             if st.session_state["captured_output"]:
-                st.markdown(f"<pre style='color: #32CD32; font-weight: bold;'>{st.session_state['captured_output']}</pre>", unsafe_allow_html=True)
+                formatted_output = st.session_state["captured_output"].replace(
+                    "Distance between Point 1 and Point 2:",
+                    "<span style='color:blue; font-weight:bold;'>Distance between Point 1 and Point 2:</span>")
+                formatted_output = formatted_output.replace(
+                    "Distance between Point 2 and Point 3:",
+                    "<span style='color:blue; font-weight:bold;'>Distance between Point 2 and Point 3:</span>")
+                formatted_output = formatted_output.replace(
+                    "Distance between Point 1 and Point 3:",
+                    "<span style='color:blue; font-weight:bold;'>Distance between Point 1 and Point 3:</span>")
+
+                st.markdown(formatted_output, unsafe_allow_html=True)
             else:
                 st.write("No text output captured.")
 
