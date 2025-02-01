@@ -34,7 +34,7 @@ def show():
     # ─────────────────────────────────────────────────────────────────
     # STEP 1: ENTER YOUR PASSWORD
     # ─────────────────────────────────────────────────────────────────
-    st.markdown('<h3 style="color: blue;">Step 1: Enter Your Password</h3>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
     password = st.text_input("Password", type="password", key="as1_password")
     enter_password = st.button("Enter")
 
@@ -59,7 +59,7 @@ def show():
         # ─────────────────────────────────────────────────────────────────
         # STEP 2: REVIEW ASSIGNMENT DETAILS
         # ─────────────────────────────────────────────────────────────────
-        st.markdown('<h3 style="color: blue;">Step 2: Review Assignment Details</h3>', unsafe_allow_html=True)
+        st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
@@ -144,7 +144,7 @@ def show():
         # ─────────────────────────────────────────────────────────────────
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
-        st.markdown('<h3 style="color: blue;">Step 3: Run and Submit Your Code</h3>', unsafe_allow_html=True)
+        st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
         code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
 
