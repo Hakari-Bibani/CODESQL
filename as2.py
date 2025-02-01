@@ -1,10 +1,11 @@
-# as2.py - Adapted for password-based login and database storage
+# as2.py - Fully Fixed Update
 import streamlit as st
 import os
-from grades.grade2 import grade_assignment  # ensure this path is correct in your project
+from grades.grade2 import grade_assignment  # Ensure this path is correct in your project
 from database import create_tables
 import sqlite3
 from github_sync import push_db_to_github
+from style2 import set_page_style as apply_custom_styles  # Import the styling function
 
 def update_grade_in_db(password, grade):
     db_path = st.secrets["general"]["db_path"]
@@ -56,7 +57,7 @@ def show():
             with st.expander("See More"):
                 st.markdown("""
                 ### Task Requirements
-                - **Fetch Earthquake Data**: Use the USGS Earthquake API for the date range **January 2nd, 2025, to January 9th, 2025**.
+                - **Fetch Earthquake Data**: Use the USGS Earthquake API for the date range **January 2nd, 2025, to January 9th,  2025**.
                 - **Filter Data**: Only include earthquakes with magnitude > 4.0.
                 - **Map Visualization**: Create an interactive map using `folium`.
                 - **Bar Chart**: Visualize earthquake frequency by magnitude.
@@ -128,7 +129,3 @@ def show():
 
 if __name__ == "__main__":
     show()
-
-
-
-
