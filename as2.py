@@ -8,7 +8,7 @@ def show():
     st.title("Assignment 2: Earthquake Data Analysis")
 
     # Step 1: Validate Password
-    st.header("Step 1: Enter Your Password")
+    st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
     password = st.text_input("Enter Your Password", type="password")
     verify_button = st.button("Verify Password")
 
@@ -24,8 +24,12 @@ def show():
             user_record = cursor.fetchone()
 
             if user_record:
-                st.success(f"Password verified. Proceed to the next steps.")
-                st.session_state["verified"] = True
+                # Check if Assignment 2 has already been submitted
+                if user_record[7] != 0:  # Assuming as2 is the 8th column (index 7)
+                    st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+                else:
+                    st.success(f"Password verified. Proceed to the next steps.")
+                    st.session_state["verified"] = True
             else:
                 st.error("Invalid Password. Please enter a valid password registered before.")
                 st.session_state["verified"] = False
@@ -38,7 +42,7 @@ def show():
 
     if st.session_state.get("verified", False):
         # Step 2: Assignment and Grading Details
-        st.header("Step 2: Review Assignment Details")
+        st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
@@ -153,11 +157,11 @@ def show():
             """)
 
         # Step 3: Code Submission and Output
-        st.header("Step 3: Run and Submit Your Code")
+        st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
         code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
 
         # Step 4: Upload Files
-        st.header("Step 4: Upload Your Outputs")
+        st.markdown('<h1 style="color: #ADD8E6;">Step 4: Upload Your Outputs</h1>', unsafe_allow_html=True)
         uploaded_html = st.file_uploader("Upload your HTML file (Map)", type=["html"])
         uploaded_png = st.file_uploader("Upload your PNG file (Bar Chart)", type=["png"])
         uploaded_csv = st.file_uploader("Upload your CSV file (Summary)", type=["csv"])
