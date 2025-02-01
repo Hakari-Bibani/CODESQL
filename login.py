@@ -1,12 +1,18 @@
+# login.py
 import streamlit as st
 import sqlite3
 from database import create_tables
 from theme import apply_dark_theme
+from github_sync import push_db_to_github, pull_db_from_github
 
 def register_user(fullname, email, phone, username, password):
-    """Registers a new user in the database."""
+    """Registers a new user in the database (no password hashing for simplicity)."""
+    # 1) Pull the latest DB to ensure we have the most up-to-date data
+    pull_db_from_github(st.secrets["general"]["db_path"])
+
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
+    
     try:
         cursor.execute(
             "INSERT INTO users (fullname, email, phone, username, password) VALUES (?, ?, ?, ?, ?)",
@@ -17,6 +23,7 @@ def register_user(fullname, email, phone, username, password):
         conn.close()
         return False
 
+    # Insert a default record as well
     cursor.execute("""
         INSERT INTO records
         (password, fullname, email, as1, as2, as3, as4, quiz1, quiz2, total)
@@ -24,10 +31,17 @@ def register_user(fullname, email, phone, username, password):
     """, (password, fullname, email))
     conn.commit()
     conn.close()
+
+    # 2) Push the updated DB so new user is saved remotely
+    push_db_to_github(st.secrets["general"]["db_path"])
+    
     return True
 
 def login_user(username, password):
-    """Checks if a username/password is valid in the database."""
+    """Check if a username/password is valid in the database."""
+    # Pull the latest DB to reflect any recent changes
+    pull_db_from_github(st.secrets["general"]["db_path"])
+    
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
@@ -36,9 +50,8 @@ def login_user(username, password):
     return data
 
 def show_login_create_account():
-    """Renders the login and create account tabs."""
-    apply_dark_theme()  # Apply the dark theme styles
-
+    """Renders the login and create account tabs with dark theme + DB sync."""
+    apply_dark_theme()
     tabs = st.tabs(["Login", "Create Account"])
     
     with tabs[0]:
@@ -47,7 +60,7 @@ def show_login_create_account():
         password = st.text_input("Password", type="password", key="login_password")
 
         if st.button("Login"):
-            user = login_user(username, password)  # Now this function is properly defined
+            user = login_user(username, password)
             if user:
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = username
