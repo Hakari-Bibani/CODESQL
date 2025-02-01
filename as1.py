@@ -31,10 +31,10 @@ def show():
 
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
-    # ────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
     # STEP 1: ENTER YOUR PASSWORD
-    # ────────────────────────────────────────────────────────
-    st.markdown('<h2 style="color: blue;">Step 1: Enter Your Password</h2>', unsafe_allow_html=True)
+    # ─────────────────────────────────────────────────────────────────
+    st.markdown('<h3 style="color: blue;">Step 1: Enter Your Password</h3>', unsafe_allow_html=True)
     password = st.text_input("Password", type="password", key="as1_password")
     enter_password = st.button("Enter")
 
@@ -56,10 +56,10 @@ def show():
         conn.close()
 
     if st.session_state["password_entered"] and st.session_state["valid_password"]:
-        # ────────────────────────────────────────────────────────
+        # ─────────────────────────────────────────────────────────────────
         # STEP 2: REVIEW ASSIGNMENT DETAILS
-        # ────────────────────────────────────────────────────────
-        st.markdown('<h2 style="color: blue;">Step 2: Review Assignment Details</h2>', unsafe_allow_html=True)
+        # ─────────────────────────────────────────────────────────────────
+        st.markdown('<h3 style="color: blue;">Step 2: Review Assignment Details</h3>', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
@@ -141,9 +141,88 @@ def show():
                 - Checks if the calculated distances are accurate within a 100-meter tolerance.
             """)
 
-        # ────────────────────────────────────────────────────────
+        # ─────────────────────────────────────────────────────────────────
         # STEP 3: RUN AND SUBMIT YOUR CODE
-        # ────────────────────────────────────────────────────────
-        st.markdown('<h2 style="color: blue;">Step 3: Run and Submit Your Code</h2>', unsafe_allow_html=True)
-        st.markdown('<p style="color: white;">🖍️ Paste Your Code Here</p>', unsafe_allow_html=True)
+        # ─────────────────────────────────────────────────────────────────
+        st.markdown('<h3 style="color: blue;">Step 3: Run and Submit Your Code</h3>', unsafe_allow_html=True)
+        st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
         code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+
+        # Run Code Button
+        run_button = st.button("Run Code", key="run_code_button")
+        if run_button and code_input:
+            st.session_state["run_success"] = False
+            st.session_state["captured_output"] = ""
+            try:
+                from io import StringIO
+                import sys
+
+                captured_output = StringIO()
+                sys.stdout = captured_output
+
+                # Execute the user's code in a controlled environment
+                local_context = {}
+                exec(code_input, {}, local_context)
+
+                # Restore stdout
+                sys.stdout = sys.__stdout__
+
+                # Capture printed output
+                st.session_state["captured_output"] = captured_output.getvalue()
+
+                # Look for specific outputs (folium.Map, pandas.DataFrame)
+                map_object = next((obj for obj in local_context.values() if isinstance(obj, folium.Map)), None)
+                dataframe_object = next((obj for obj in local_context.values() if isinstance(obj, pd.DataFrame)), None)
+
+                # Store outputs in session state
+                st.session_state["map_object"] = map_object
+                st.session_state["dataframe_object"] = dataframe_object
+
+                # Mark the run as successful
+                st.session_state["run_success"] = True
+
+            except Exception as e:
+                sys.stdout = sys.__stdout__
+                st.error(f"An error occurred while running your code: {e}")
+
+        # Display Outputs
+        if st.session_state["run_success"]:
+            st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
+            if st.session_state["captured_output"]:
+                # Format the output with preserved whitespace and line breaks
+                formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
+                st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
+            else:
+                st.markdown('<p style="color: white;">No text output captured.</p>', unsafe_allow_html=True)
+
+            if st.session_state["map_object"]:
+                st.markdown("### 🗘️ Map Output")
+                st_folium(st.session_state["map_object"], width=700, height=500)
+
+            if st.session_state["dataframe_object"] is not None:
+                st.markdown("### 📊 DataFrame Output")
+                st.dataframe(st.session_state["dataframe_object"])
+
+        # Submit Code Button
+        submit_button = st.button("Submit Code", key="submit_code_button")
+        if submit_button:
+            if not st.session_state.get("run_success", False):
+                st.error("Please run your code successfully before submitting.")
+            elif password:
+                # Grade the submission
+                from grades.grade1 import grade_assignment
+                grade = grade_assignment(code_input)
+
+                # Update the grade in the records table for this password
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
+                conn.commit()
+                conn.close()
+
+                # Push the updated DB to GitHub
+                push_db_to_github(db_path)
+
+                st.success(f"Submission successful! Your grade: {grade}/100")
+            else:
+                st.error("Please enter your password to submit.")
