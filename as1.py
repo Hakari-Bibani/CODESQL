@@ -189,7 +189,9 @@ def show():
         if st.session_state["run_success"]:
             st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
             if st.session_state["captured_output"]:
-                st.markdown(f'<pre style="color: white;">{st.session_state["captured_output"]}</pre>', unsafe_allow_html=True)
+                # Format the output with preserved whitespace and line breaks
+                formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
+                st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
             else:
                 st.markdown('<p style="color: white;">No text output captured.</p>', unsafe_allow_html=True)
 
