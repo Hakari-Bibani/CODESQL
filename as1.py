@@ -196,8 +196,8 @@ def show():
                 st.markdown('<p style="color: white;">No text output captured.</p>', unsafe_allow_html=True)
 
             if st.session_state["map_object"]:
-                st.markdown("### 🗘️ Map Output")
-                st_folium(st.session_state["map_object"], width=700, height=500)
+                st.markdown("### 🗺️ Map Output")
+                st_folium(st.session_state["map_object"], width=1000, height=500)
 
             if st.session_state["dataframe_object"] is not None:
                 st.markdown("### 📊 DataFrame Output")
