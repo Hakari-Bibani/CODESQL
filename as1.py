@@ -194,7 +194,7 @@ def show():
 
             if st.session_state["map_object"]:
                 st.markdown("### 🗘️ Map Output")
-                st_folium(st.session_state["map_object"], width=700, height=500)
+                st_folium(st.session_state["map_object"], width=500, height=500)
 
             if st.session_state["dataframe_object"] is not None:
                 st.markdown("### 📊 DataFrame Output")
