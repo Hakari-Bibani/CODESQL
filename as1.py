@@ -23,6 +23,8 @@ def show():
         st.session_state["captured_output"] = ""
     if "password_entered" not in st.session_state:
         st.session_state["password_entered"] = False
+    if "valid_password" not in st.session_state:
+        st.session_state["valid_password"] = False
 
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
@@ -34,9 +36,24 @@ def show():
     enter_password = st.button("Enter")
 
     if enter_password and password:
-        st.session_state["password_entered"] = True
+        db_path = st.secrets["general"]["db_path"]
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM records WHERE password = ?", (password,))
+        user_record = cursor.fetchone()
 
-    if st.session_state["password_entered"]:
+        if user_record:
+            # Check if Assignment 2 has already been submitted
+            if user_record[6] != 0:  # Assuming as2 is the 7th column (index 6)
+                st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+            else:
+                st.session_state["password_entered"] = True
+                st.session_state["valid_password"] = True
+        else:
+            st.error("Invalid password. Please enter the correct password registered before.")
+        conn.close()
+
+    if st.session_state["password_entered"] and st.session_state["valid_password"]:
         # ─────────────────────────────────────────────────────────────────
         # STEP 2: REVIEW ASSIGNMENT DETAILS
         # ─────────────────────────────────────────────────────────────────
@@ -191,8 +208,7 @@ def show():
                 from grades.grade1 import grade_assignment
                 grade = grade_assignment(code_input)
 
-                # Store the grade in the records table for this password
-                db_path = st.secrets["general"]["db_path"]
+                # Update the grade in the records table for this password
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
                 cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
