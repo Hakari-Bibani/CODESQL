@@ -94,9 +94,9 @@ def show():
             - Point 3: Latitude: 36.660477, Longitude: 43.840174
 
             **Python Libraries You Will Use:**
-            - geopy for calculating the distance between two coordinates.
-            - folium for plotting the points on an interactive map.
-            - pandas to create a DataFrame that displays the distances between the points.
+            - `geopy` for calculating the distance between two coordinates.
+            - `folium` for plotting the points on an interactive map.
+            - `pandas` to create a DataFrame that displays the distances between the points.
 
             **Expected Output:**
             1. A map showing the three coordinates.
@@ -111,14 +111,14 @@ def show():
             ### Detailed Grading Breakdown
             #### 1. Code Structure and Implementation (30 points)
             - **Library Imports (5 points):**
-                - Checks if the required libraries (folium, geopy, geodesic) are imported.
+                - Checks if the required libraries (`folium`, `geopy`, `geodesic`) are imported.
             - **Coordinate Handling (5 points):**
                 - Checks if the correct coordinates are defined in the code.
             - **Code Execution (10 points):**
                 - Checks if the code runs without errors.
             - **Code Quality (10 points):**
                 - **Variable Naming:** 2 points (deducted if single-letter variables are used).
-                - **Spacing:** 2 points (deducted if improper spacing is found, e.g., no space after =).
+                - **Spacing:** 2 points (deducted if improper spacing is found, e.g., no space after `=`).
                 - **Comments:** 2 points (deducted if no comments are present).
                 - **Code Organization:** 2 points (deducted if no blank lines are used for separation).
             """)
@@ -126,7 +126,7 @@ def show():
                 st.markdown("""
             #### 2. Map Visualization (40 points)
             - **Map Generation (15 points):**
-                - Checks if the folium.Map is correctly initialized.
+                - Checks if the `folium.Map` is correctly initialized.
             - **Markers (15 points):**
                 - Checks if markers are added to the map for each coordinate.
             - **Polylines (5 points):**
@@ -136,7 +136,7 @@ def show():
 
             #### 3. Distance Calculations (30 points)
             - **Geodesic Implementation (10 points):**
-                - Checks if the geodesic function is used correctly to calculate distances.
+                - Checks if the `geodesic` function is used correctly to calculate distances.
             - **Distance Accuracy (20 points):**
                 - Checks if the calculated distances are accurate within a 100-meter tolerance.
             """)
@@ -145,19 +145,6 @@ def show():
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.header("Step 3: Run and Submit Your Code")
-        st.markdown("""
-        <style>
-        .stTextArea textarea {
-            color: white !important;
-        }
-        pre {
-            color: white !important;
-        }
-        .dataframe {
-            color: white !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
         code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
 
         # Run Code Button
