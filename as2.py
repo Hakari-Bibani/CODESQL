@@ -5,7 +5,7 @@ from grades.grade2 import grade_assignment  # Ensure this path is correct in you
 from database import create_tables
 import sqlite3
 from github_sync import push_db_to_github
-from style2 import set_page_style as apply_custom_styles  # Import the styling function
+from utils.style2 import set_page_style as apply_custom_styles  # Import the styling function
 
 def update_grade_in_db(password, grade):
     db_path = st.secrets["general"]["db_path"]
