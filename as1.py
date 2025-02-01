@@ -48,11 +48,15 @@ def show():
             # Check if Assignment 2 has already been submitted
             if user_record[6] != 0:  # Assuming as2 is the 7th column (index 6)
                 st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+                st.session_state["password_entered"] = False
+                st.session_state["valid_password"] = False
             else:
                 st.session_state["password_entered"] = True
                 st.session_state["valid_password"] = True
         else:
             st.error("Invalid password. Please enter the correct password registered before.")
+            st.session_state["password_entered"] = False
+            st.session_state["valid_password"] = False
         conn.close()
 
     if st.session_state["password_entered"] and st.session_state["valid_password"]:
@@ -209,20 +213,30 @@ def show():
             if not st.session_state.get("run_success", False):
                 st.error("Please run your code successfully before submitting.")
             elif password:
-                # Grade the submission
-                from grades.grade1 import grade_assignment
-                grade = grade_assignment(code_input)
-
-                # Update the grade in the records table for this password
+                # Check if Assignment 2 has already been submitted
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
-                cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
-                conn.commit()
+                cursor.execute("SELECT as2 FROM records WHERE password = ?", (password,))
+                as2_submitted = cursor.fetchone()[0]
                 conn.close()
 
-                # Push the updated DB to GitHub
-                push_db_to_github(db_path)
+                if as2_submitted != 0:
+                    st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+                else:
+                    # Grade the submission
+                    from grades.grade1 import grade_assignment
+                    grade = grade_assignment(code_input)
 
-                st.success(f"Submission successful! Your grade: {grade}/100")
+                    # Update the grade in the records table for this password
+                    conn = sqlite3.connect(db_path)
+                    cursor = conn.cursor()
+                    cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
+                    conn.commit()
+                    conn.close()
+
+                    # Push the updated DB to GitHub
+                    push_db_to_github(db_path)
+
+                    st.success(f"Submission successful! Your grade: {grade}/100")
             else:
                 st.error("Please enter your password to submit.")
