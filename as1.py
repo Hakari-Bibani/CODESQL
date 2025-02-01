@@ -145,8 +145,20 @@ def show():
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.header("Step 3: Run and Submit Your Code")
-        st.markdown('<p style="color: white;"><strong>📝 Paste Your Code Here</strong></p>', unsafe_allow_html=True)
-        code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+        st.markdown("""
+        <style>
+        .stTextArea textarea {
+            color: white !important;
+        }
+        pre {
+            color: white !important;
+        }
+        .dataframe {
+            color: white !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
 
         # Run Code Button
         run_button = st.button("Run Code", key="run_code_button")
@@ -187,9 +199,9 @@ def show():
 
         # Display Outputs
         if st.session_state["run_success"]:
-            st.markdown('<p style="color: white;"><strong>### 📄 Captured Output</strong></p>', unsafe_allow_html=True)
+            st.markdown("### 📄 Captured Output")
             if st.session_state["captured_output"]:
-                st.markdown(f'<pre style="color: white;">{st.session_state["captured_output"]}</pre>', unsafe_allow_html=True)
+                st.text(st.session_state["captured_output"])
             else:
                 st.write("No text output captured.")
 
