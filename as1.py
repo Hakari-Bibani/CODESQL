@@ -145,7 +145,7 @@ def show():
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.header("Step 3: Run and Submit Your Code")
-        st.markdown('<span style="color:white; font-weight:bold;">📝 Paste Your Code Here</span>', unsafe_allow_html=True)
+        st.markdown("<b style='color:white;'>**📝 Paste Your Code Here**</b>", unsafe_allow_html=True)
         code_input = st.text_area("", height=300)
 
         # Run Code Button
@@ -189,17 +189,17 @@ def show():
         if st.session_state["run_success"]:
             st.markdown("### 📄 Captured Output")
             if st.session_state["captured_output"]:
-                formatted_output = st.session_state["captured_output"].replace(
-                    "Distance between Point 1 and Point 2:",
-                    "<span style='color:blue; font-weight:bold;'>Distance between Point 1 and Point 2:</span>")
-                formatted_output = formatted_output.replace(
-                    "Distance between Point 2 and Point 3:",
-                    "<span style='color:blue; font-weight:bold;'>Distance between Point 2 and Point 3:</span>")
-                formatted_output = formatted_output.replace(
-                    "Distance between Point 1 and Point 3:",
-                    "<span style='color:blue; font-weight:bold;'>Distance between Point 1 and Point 3:</span>")
-
-                st.markdown(formatted_output, unsafe_allow_html=True)
+                highlighted_output = st.session_state["captured_output"].replace(
+                    "Distance between Point 1 and Point 2: 59.57 km",
+                    "<span style='color:blue;'>Distance between Point 1 and Point 2: 59.57 km</span>"
+                ).replace(
+                    "Distance between Point 2 and Point 3: 73.14 km",
+                    "<span style='color:blue;'>Distance between Point 2 and Point 3: 73.14 km</span>"
+                ).replace(
+                    "Distance between Point 1 and Point 3: 37.98 km",
+                    "<span style='color:blue;'>Distance between Point 1 and Point 3: 37.98 km</span>"
+                )
+                st.markdown(highlighted_output, unsafe_allow_html=True)
             else:
                 st.write("No text output captured.")
 
