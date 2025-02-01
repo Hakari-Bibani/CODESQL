@@ -26,6 +26,9 @@ def show():
     if "valid_password" not in st.session_state:
         st.session_state["valid_password"] = False
 
+    # Define db_path globally
+    db_path = st.secrets["general"]["db_path"]
+
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
@@ -36,7 +39,6 @@ def show():
     enter_password = st.button("Enter")
 
     if enter_password and password:
-        db_path = st.secrets["general"]["db_path"]
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM records WHERE password = ?", (password,))
