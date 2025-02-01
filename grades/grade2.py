@@ -1,130 +1,140 @@
-# as2.py - Adapted for password-based login and database storage
-import streamlit as st
+# grade2.py - No changes needed as grading logic remains intact
+import re
+import csv
+import math
 import os
-from grades.grade2 import grade_assignment  # ensure this path is correct in your project
-from database import create_tables
-import sqlite3
-from github_sync import push_db_to_github
+from PIL import Image
 
-def update_grade_in_db(password, grade):
-    db_path = st.secrets["general"]["db_path"]
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("""
-        UPDATE records
-        SET as2 = ?
-        WHERE password = ?
-    """, (grade, password))
-    conn.commit()
-    conn.close()
-    push_db_to_github(db_path)
+def grade_assignment(code, html_path, png_path, csv_path):
+    total_score = 0
+    debug_info = []
 
-def show():
-    apply_custom_styles()  # Applying consistent styles
-    st.title("Assignment 2: Earthquake Data Analysis")
+    ##########################################
+    # 1. Library Imports (20 Points)
+    ##########################################
+    imports_score = 0
+    required_libraries = {
+        'folium': False,
+        'matplotlib_or_seaborn': False,
+        'requests_or_urllib': False,
+        'pandas': False,
+    }
 
-    # Step 1: Validate User Password
-    st.header("Step 1: Enter Your Password")
-    password = st.text_input("Enter Your Password", type="password")
-    verify_button = st.button("Verify Password")
+    if re.search(r"(?i)(import|from)\s+folium\b", code):
+        required_libraries['folium'] = True
+    if re.search(r"(?i)(import|from)\s+matplotlib\b", code) or re.search(r"(?i)(import|from)\s+seaborn\b", code):
+        required_libraries['matplotlib_or_seaborn'] = True
+    if re.search(r"(?i)(import|from)\s+requests\b", code) or re.search(r"(?i)(import|from)\s+urllib\b", code):
+        required_libraries['requests_or_urllib'] = True
+    if re.search(r"(?i)(import|from)\s+pandas\b", code):
+        required_libraries['pandas'] = True
 
-    if verify_button:
-        db_path = st.secrets["general"]["db_path"]
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE password = ?", (password,))
-        user_data = cursor.fetchone()
-        conn.close()
+    for key, found in required_libraries.items():
+        if found:
+            imports_score += 5
+    debug_info.append(f"Imports score: {imports_score:.2f} / 20")
 
-        if user_data:
-            st.success(f"Password verified. Welcome, {user_data[0]}!")
-            st.session_state["verified"] = True
-        else:
-            st.error("Invalid password. Please enter a valid registered password.")
-            st.session_state["verified"] = False
+    ##########################################
+    # 2. Code Quality (20 Points)
+    ##########################################
+    naming_score = 0
+    if re.search(r"\bearthquake_map\b", code):
+        naming_score += 5
+    if re.search(r"\bmagnitude_counts\b", code):
+        naming_score += 5
+    naming_score = min(5, naming_score)
 
-    if st.session_state.get("verified", False):
-        # Step 2: Assignment and Grading Details
-        st.header("Step 2: Review Assignment Details")
-        tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
+    spacing_score = 5 if not re.search(r"\S[=<>+\-/*]{1}\S", code) else 2.5
 
-        with tab1:
-            st.markdown("""
-            ### Objective
-            In this assignment, you will write a Python script that fetches real-time earthquake data from the USGS Earthquake API, processes the data to filter earthquakes with a magnitude greater than 4.0, and plots the earthquake locations on a map.
-            """)
-            with st.expander("See More"):
-                st.markdown("""
-                ### Task Requirements
-                - **Fetch Earthquake Data**: Use the USGS Earthquake API for the date range **January 2nd, 2025, to January 9th, 2025**.
-                - **Filter Data**: Only include earthquakes with magnitude > 4.0.
-                - **Map Visualization**: Create an interactive map using `folium`.
-                - **Bar Chart**: Visualize earthquake frequency by magnitude.
-                - **Text Summary**: Generate a CSV with total earthquakes and magnitude statistics.
-                """)
+    comment_lines = sum(1 for line in code.splitlines() if line.strip().startswith("#"))
+    comments_score = min(5, (comment_lines / 3) * 5)
 
-        with tab2:
-            st.markdown("""
-            ### Detailed Grading Breakdown
-            #### 1. Library Imports (10 Points)
-            - Checks if the required libraries (`folium`, `matplotlib`, `requests`, `pandas`) are imported.
-            """)
-            with st.expander("See More"):
-                st.markdown("""
-                #### 2. Code Quality (20 Points)
-                - **Variable Naming (5 Points)**
-                - **Spacing (5 Points)**
-                - **Comments (5 Points)**
-                - **Code Organization (5 Points)**
-                #### 3. Fetching Data from the API (10 Points)
-                - **Correct API URL (5 Points)**
-                - **Successful Data Retrieval (5 Points)**
-                """)
+    organization_score = 5 if re.search(r"\n\s*\n", code) else 0
 
-        # Step 3: Code Submission and Output
-        st.header("Step 3: Run and Submit Your Code")
-        code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
+    quality_score = naming_score + spacing_score + comments_score + organization_score
+    quality_score = min(20, quality_score)
+    debug_info.append(f"Quality score: {quality_score:.2f} / 20")
 
-        # Step 4: Upload Files
-        st.header("Step 4: Upload Your Outputs")
-        uploaded_html = st.file_uploader("Upload your HTML file (Map)", type=["html"])
-        uploaded_png = st.file_uploader("Upload your PNG file (Bar Chart)", type=["png"])
-        uploaded_csv = st.file_uploader("Upload your CSV file (Summary)", type=["csv"])
+    ##########################################
+    # 3. Fetching Data from the API (5 Points)
+    ##########################################
+    api_score = 5 if re.search(r"(https?://\S+query\?[^'\"]*(starttime|endtime))", code, re.IGNORECASE) else 0
+    debug_info.append(f"API score: {api_score} / 5")
 
-        all_uploaded = all([uploaded_html, uploaded_png, uploaded_csv])
-        st.write("All files uploaded:", "✅ Yes" if all_uploaded else "❌ No")
+    ##########################################
+    # 4. Filtering Earthquakes (5 Points)
+    ##########################################
+    filter_score = 0
+    if re.search(r"magnitude\s*[><=]+\s*4\.0", code):
+        filter_score += 2.5
+    extraction_hits = sum(1 for field in ["latitude", "longitude", "magnitude", "time"] if re.search(field, code, re.IGNORECASE))
+    if extraction_hits >= 4:
+        filter_score += 2.5
+    debug_info.append(f"Filter score: {filter_score} / 5")
 
-        if all_uploaded:
-            submit_button = st.button("Submit Assignment")
+    ##########################################
+    # 5. Map Visualization (HTML) (25 Points)
+    ##########################################
+    map_score = 0
+    try:
+        with open(html_path, "r", encoding="utf-8") as f:
+            html_content = f.read().lower()
+        if "marker(" in html_content:
+            map_score += 10
+        colors_found = sum(1 for color in ["green", "red", "yellow"] if color in html_content)
+        map_score += 10 * (colors_found / 3)
+        popup_hits = sum(1 for keyword in ["magnitude", "location", "time"] if keyword in html_content)
+        map_score += 5 * (popup_hits / 3)
+    except Exception as e:
+        debug_info.append(f"Map visualization check error: {e}")
+    map_score = min(25, map_score)
+    debug_info.append(f"Map visualization score: {map_score} / 25")
 
-            if submit_button:
-                try:
-                    temp_dir = "temp_uploads"
-                    os.makedirs(temp_dir, exist_ok=True)
-                    html_path = os.path.join(temp_dir, "uploaded_map.html")
-                    png_path = os.path.join(temp_dir, "uploaded_chart.png")
-                    csv_path = os.path.join(temp_dir, "uploaded_summary.csv")
+    ##########################################
+    # 6. Bar Chart (PNG) (5 Points)
+    ##########################################
+    bar_chart_score = 0
+    try:
+        if os.path.getsize(png_path) > 0:
+            bar_chart_score = 5
+    except Exception as e:
+        debug_info.append(f"Bar chart file error: {e}")
+    debug_info.append(f"Bar chart score: {bar_chart_score} / 5")
 
-                    with open(html_path, "wb") as f:
-                        f.write(uploaded_html.getvalue())
-                    with open(png_path, "wb") as f:
-                        f.write(uploaded_png.getvalue())
-                    with open(csv_path, "wb") as f:
-                        f.write(uploaded_csv.getvalue())
+    ##########################################
+    # 7. Text Summary (CSV) (20 Points)
+    ##########################################
+    summary_score = 0
+    correct_values = {
+        "Total Earthquakes (>4.0)": (218.0, 1),
+        "Average Magnitude": (4.63, 0.1),
+        "Maximum Magnitude": (7.1, 0.1),
+        "Minimum Magnitude": (4.1, 0.1),
+        "4.0-4.5": (75.0, 1),
+        "4.5-5.0": (106.0, 1),
+        "5.0+": (37.0, 1)
+    }
 
-                    # Grade the assignment
-                    grade = grade_assignment(code_input, html_path, png_path, csv_path)
-                    st.success(f"Your grade for Assignment 2: {grade}/100")
+    found_values = {metric: False for metric in correct_values}
+    try:
+        with open(csv_path, newline="") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                for cell in row:
+                    try:
+                        num = float(cell.strip())
+                        for metric, (expected, tol) in correct_values.items():
+                            if not found_values[metric] and math.isclose(num, expected, abs_tol=tol):
+                                found_values[metric] = True
+                    except ValueError:
+                        continue
+        summary_score = sum(20 / len(correct_values) for metric in correct_values if found_values[metric])
+        summary_score = min(20, summary_score)
+    except Exception as e:
+        debug_info.append(f"CSV summary check error: {e}")
+    debug_info.append(f"Text summary score: {summary_score} / 20")
 
-                    # Update the grade in the SQLite database
-                    update_grade_in_db(password, grade)
-                    st.success("Your grade has been saved in the system.")
+    total_score = imports_score + quality_score + api_score + filter_score + map_score + bar_chart_score + summary_score
+    total_score = round(total_score, 2)
 
-                except Exception as e:
-                    st.error(f"An error occurred during submission: {e}")
-
-        else:
-            st.warning("Please upload all required files to proceed.")
-
-if __name__ == "__main__":
-    show()
+    return total_score
