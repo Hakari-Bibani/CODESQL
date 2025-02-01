@@ -1,8 +1,8 @@
-# style.py - Extra custom styles (animations, text, etc.)
+''' style.py - Extra custom styles (animations, text, etc.) '''
 import streamlit as st
 
 def apply_custom_styles():
-    # Example of custom CSS for animated title, etc.
+    # Example of custom CSS for animated title, footer, and polished text
     st.markdown(
         """
         <style>
@@ -23,13 +23,26 @@ def apply_custom_styles():
             margin-bottom: 1rem;
         }
         
-        /* Footer text */
+        /* Footer polished text styles */
         .footer {
             text-align: center;
             font-size: 1.2rem;
-            color: #bdc3c7;
+            color: #32CD32; /* Light Green */
             margin-top: 2rem;
+            font-weight: bold;
         }
+
+        /* Specific styles for footer messages */
+        .footer-assignments {
+            color: #FFA500 !important; /* Orange color for assignments message */
+            font-size: 1.3rem;
+        }
+
+        .footer-partner {
+            color: #00CED1 !important; /* Turquoise color for partner message */
+            font-size: 1.1rem;
+        }
+
         </style>
         """,
         unsafe_allow_html=True
