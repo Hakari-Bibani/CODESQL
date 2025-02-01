@@ -100,10 +100,10 @@ def show():
 
             **Expected Output:**
             1. A map showing the three coordinates.
-            2. A text summary (Express values to two decimal places.): showing the calculated distances (in kilometers) between:
-               - Point 1 and Point 2.
-               - Point 2 and Point 3.
-               - Point 1 and Point 3.
+            2. A clearly formatted text summary (expressed to two decimal places) showing the calculated distances (in kilometers) between:
+               - **Distance between Point 1 and Point 2:** 59.57 km
+               - **Distance between Point 2 and Point 3:** 73.14 km
+               - **Distance between Point 1 and Point 3:** 37.98 km
             """)
 
         with tab2:
@@ -145,7 +145,7 @@ def show():
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.header("Step 3: Run and Submit Your Code")
-        code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
+        code_input = st.text_area("**📝 Paste Your Python Code Below**", height=300)
 
         # Run Code Button
         run_button = st.button("Run Code", key="run_code_button")
@@ -188,13 +188,13 @@ def show():
         if st.session_state["run_success"]:
             st.markdown("### 📄 Captured Output")
             if st.session_state["captured_output"]:
-                st.text(st.session_state["captured_output"])
+                st.markdown(f"<pre style='color: #32CD32; font-weight: bold;'>{st.session_state['captured_output']}</pre>", unsafe_allow_html=True)
             else:
                 st.write("No text output captured.")
 
             if st.session_state["map_object"]:
                 st.markdown("### 🗘️ Map Output")
-                st_folium(st.session_state["map_object"], width=1000, height=500)
+                st_folium(st.session_state["map_object"], width=700, height=500)
 
             if st.session_state["dataframe_object"] is not None:
                 st.markdown("### 📊 DataFrame Output")
