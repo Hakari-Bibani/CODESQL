@@ -2,9 +2,41 @@
 import requests
 import base64
 import streamlit as st
+import os
+
+def pull_db_from_github(db_file: str):
+    """
+    Pull the remote SQLite DB file from GitHub
+    and overwrite the local db_file if found.
+    """
+    repo = st.secrets["general"]["repo"]
+    token = st.secrets["general"]["token"]
+    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        # File exists in GitHub
+        content = response.json().get("content", "")
+        if content:
+            decoded = base64.b64decode(content)
+            with open(db_file, "wb") as f:
+                f.write(decoded)
+            print(f"Pulled latest {db_file} from GitHub.")
+        else:
+            print(f"No content found in {db_file} on GitHub.")
+    else:
+        print(f"Could not find {db_file} in the GitHub repo. Using local copy if exists.")
 
 def push_db_to_github(db_file: str):
-    """Pushes the local SQLite DB file to GitHub."""
+    """
+    Pushes the local SQLite DB file to GitHub.
+    Overwrites the existing file if it exists.
+    """
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
     
@@ -30,24 +62,3 @@ def push_db_to_github(db_file: str):
         print("Database pushed to GitHub successfully.")
     else:
         print("Error pushing DB to GitHub:", put_response.json())
-
-def pull_db_from_github(db_file: str):
-    """Pulls the SQLite DB file from GitHub and overwrites the local copy."""
-    repo = st.secrets["general"]["repo"]
-    token = st.secrets["general"]["token"]
-    
-    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
-    headers = {
-        "Authorization": f"token {token}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-    
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        content = response.json()["content"]
-        decoded = base64.b64decode(content)
-        with open(db_file, "wb") as f:
-            f.write(decoded)
-        print("Database pulled from GitHub successfully.")
-    else:
-        print("Error pulling DB from GitHub:", response.json())
