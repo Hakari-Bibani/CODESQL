@@ -1,3 +1,4 @@
+
 import pandas as pd
 
 def grade_assignment(code, html_path, excel_path):
@@ -12,19 +13,18 @@ def grade_assignment(code, html_path, excel_path):
 
     # Library Imports (15 Points)
     lib_points = 0
-    if any(lib in code for lib in ["pandas", "openpyxl"]):  # Updated for Excel handling
+    if any(lib in code for lib in ["gspread", "pygsheets", "google-api-python-client"]):
         lib_points += 6
-    if any(lib in code for lib in ["folium", "plotly", "geopandas"]):
-        lib_points += 7
-    if "sqlite3" in code:  # Added for database connection
+    if any(lib in code for lib in ["pandas", "numpy"]):
         lib_points += 2
+    if any(lib in code for lib in ["folium", "plotly", "geopandas", "matplotlib"]):
+        lib_points += 7
     grading_breakdown["Library Imports"] = lib_points
     total_score += lib_points
 
     # Code Quality (20 Points)
     quality_points = 0
-    # Updated descriptive keywords for password system
-    descriptive_keywords = ["password", "temp_dir", "uploaded", "temperature"]
+    descriptive_keywords = ["student_id", "code_input", "temperature", "longitude", "latitude"]
     if any(word in code for word in descriptive_keywords):
         quality_points += 5
     if " = " in code:
@@ -36,12 +36,12 @@ def grade_assignment(code, html_path, excel_path):
     grading_breakdown["Code Quality"] = quality_points
     total_score += quality_points
 
-    # Database Connection Check (5 Points)
-    if "sqlite3.connect" in code:
-        grading_breakdown["Database Connection"] = 5
+    # JSON Path (5 Points)
+    if "json_path" in code:
+        grading_breakdown["JSON Path"] = 5
         total_score += 5
     else:
-        grading_breakdown["Database Connection"] = 0
+        grading_breakdown["JSON Path"] = 0
 
     # Sheet Creation (10 Points)
     sheet_points = 0
@@ -69,9 +69,10 @@ def grade_assignment(code, html_path, excel_path):
     #### Part 3: Excel File Grading (30 Points Total) ####
     excel_points = 0
     try:
+        # Load the uploaded Excel file
         uploaded_xl = pd.ExcelFile(excel_path)
 
-        # Correct Sheets (15 Points)
+        # 1. Correct Sheets (15 Points)
         expected_sheets = ['Sheet1', 'Above_25', 'Below_25']
         uploaded_sheets = [sheet.lower() for sheet in uploaded_xl.sheet_names]
         sheet_points = 0
@@ -81,7 +82,7 @@ def grade_assignment(code, html_path, excel_path):
         excel_points += sheet_points
         grading_breakdown["Correct Sheets"] = sheet_points
 
-        # Correct Columns (15 Points)
+        # 2. Correct Columns (15 Points)
         expected_columns = ['longitude', 'latitude', 'temperature']
         column_points = 0
         for sheet in expected_sheets:
@@ -90,23 +91,24 @@ def grade_assignment(code, html_path, excel_path):
                 uploaded_columns = [col.lower() for col in uploaded_df.columns]
                 for col in expected_columns:
                     if col.lower() in uploaded_columns:
-                        column_points += 5 / len(expected_columns)
+                        column_points += 5 / len(expected_columns)  # Distribute points per column
         excel_points += column_points
         grading_breakdown["Correct Columns"] = column_points
 
-        # Row Count Validation (10 Points)
+        # 3. Row Count for "Above_25" (10 Points)
         row_points = 0
         if "above_25" in uploaded_sheets:
             uploaded_df = uploaded_xl.parse("Above_25")
             if abs(len(uploaded_df) - 237) <= 3:
                 row_points = 10
         excel_points += row_points
-        grading_breakdown["Row Count Validation"] = row_points
+        grading_breakdown["Correct Row Count (Above_25)"] = row_points
 
     except Exception as e:
         print(f"Error processing Excel file: {e}")
     grading_breakdown["Excel File"] = excel_points
     total_score += excel_points
 
-    # Ensure the total score doesn't exceed 100
-    return min(total_score, 100), grading_breakdown
+    # Ensure the total score does not exceed 100
+    total_score = min(total_score, 100)
+    return total_score, grading_breakdown
