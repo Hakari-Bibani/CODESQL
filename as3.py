@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import sqlite3
 from grades.grade3 import grade_assignment
+from github_sync import push_db_to_github  # Added to sync the updated database
 
 def show():
     st.title("Assignment 3: Advanced Earthquake Data Analysis")
@@ -14,7 +15,7 @@ def show():
         st.warning("You cannot resubmit Assignment 3 after submitting Assignment 4.")
         return
 
-    # Step 1: Validate Password (instead of Student ID)
+    # Step 1: Validate Password
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
     password = st.text_input("Enter Your Password", type="password")
     verify_button = st.button("Verify Password")
@@ -49,7 +50,7 @@ def show():
             ### Objective
             In this assignment, students will work with geographical temperature data and apply Python programming to perform data manipulation and visualization. The task is broken into three stages, with each stage encapsulating a specific function. By the end of the assignment, students will merge the functions into one script to complete the task efficiently.
             """)
-            # Add "See More" expandable section
+            # "See More" expandable section
             with st.expander("See More"):
                 st.markdown("""
             ### Stage 1: Filtering Data Below 25°C
@@ -85,7 +86,7 @@ def show():
                 3. Finally, visualize both sets of data on a map.
             - Ensure that the final script runs all the steps seamlessly.
             **Deliverable**: A Python script that completes the entire task, from filtering the data to visualizing it on a map.
-            """)
+                """)
 
         with tab2:
             st.markdown("""
@@ -93,7 +94,7 @@ def show():
             #### 1. Library Imports (10 Points)
             - Checks if the required libraries are imported correctly.
             """)
-            # Add "See More" expandable section
+            # "See More" expandable section
             with st.expander("See More"):
                 st.markdown("""
             #### 2. Code Quality (20 Points)
@@ -135,7 +136,7 @@ def show():
                 - Deducted if the data in the sheets is incorrect or incomplete.
             - **File Format (10 Points)**:
                 - Deducted if the file is not saved in the correct format or structure.
-            """)
+                """)
 
         # Step 3: Assignment Submission
         st.markdown('<h1 style="color: #ADD8E6;">Step 3: Submit Your Assignment</h1>', unsafe_allow_html=True)
@@ -144,14 +145,14 @@ def show():
         # Step 4: Upload Files
         st.markdown('<h1 style="color: #ADD8E6;">Step 4: Upload Your HTML and Excel Files</h1>', unsafe_allow_html=True)
         uploaded_html = st.file_uploader("Upload your HTML file (Map)", type=["html"])
-        uploaded_excel = st.file_uploader("Upload your Excel file (Google Sheet)", type=["xlsx"])
+        uploaded_excel = st.file_uploader("Upload your Excel file", type=["xlsx"])
 
-        # Step 5: Submit Button
+        # Submit Button
         submit_button = st.button("Submit Assignment")
 
         if submit_button:
             try:
-                # Validate required files
+                # Validate required file uploads
                 if not uploaded_html:
                     st.error("Please upload an HTML file for the interactive map.")
                     return
@@ -162,32 +163,28 @@ def show():
                 # Save uploaded files temporarily
                 temp_dir = "temp_uploads"
                 os.makedirs(temp_dir, exist_ok=True)
-
-                # Save HTML file
                 html_path = os.path.join(temp_dir, "uploaded_map.html")
+                excel_path = os.path.join(temp_dir, "uploaded_sheet.xlsx")
+
                 with open(html_path, "wb") as f:
                     f.write(uploaded_html.getvalue())
-
-                # Save Excel file
-                excel_path = os.path.join(temp_dir, "uploaded_sheet.xlsx")
                 with open(excel_path, "wb") as f:
                     f.write(uploaded_excel.getvalue())
 
                 # Grade the assignment
                 total_grade, grading_breakdown = grade_assignment(code_input, html_path, excel_path)
-
-                # Display total grade
                 st.success(f"Your total grade: {total_grade}/100")
 
-                # Update the grade in the records table (in the as3 column) using the password as the identifier
+                # Update the grade in the records table (save in as3 column)
                 db_path = st.secrets["general"]["db_path"]
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
                 cursor.execute("UPDATE records SET as3 = ? WHERE password = ?", (total_grade, password))
                 conn.commit()
-                if cursor.rowcount == 0:
-                    st.error("Grade update failed: No matching record found in the database.")
                 conn.close()
+
+                # Push the updated DB to GitHub
+                push_db_to_github(db_path)
 
             except Exception as e:
                 st.error(f"An error occurred during submission: {e}")
