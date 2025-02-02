@@ -1,13 +1,5 @@
 import streamlit as st
 
-# Configure the page for an enhanced user experience
-st.set_page_config(
-    page_title="Help & Support",  # Browser tab title
-    page_icon="❓",              # Favicon
-    layout="centered",           # Centered layout
-    initial_sidebar_state="auto" # Default sidebar state
-)
-
 def show() -> None:
     """
     Renders the Help & Support interface using Streamlit components.
@@ -22,12 +14,13 @@ def show() -> None:
     )
 
     # Instructions Section
-    instructions = """
-    ### How to Get Help:
-    1. **Check the FAQ section below** for quick answers to common questions.
-    2. **Contact support** for further assistance.
-    """
-    st.markdown(instructions)
+    st.markdown(
+        """
+        ### How to Get Help:
+        1. **Check the FAQ section below** for quick answers to common questions.
+        2. **Contact support** for further assistance.
+        """
+    )
 
     # FAQ Section
     st.markdown("### Frequently Asked Questions (FAQ)")
@@ -48,12 +41,19 @@ def show() -> None:
         )
 
     # Contact Section
-    contact_info = """
-    ### Need More Help?
-    If you have any further questions or concerns, feel free to reach out to us via email at [meermiro299@gmail.com](mailto:meermiro299@gmail.com).
-    """
-    st.markdown(contact_info)
+    st.markdown(
+        """
+        ### Need More Help?
+        If you have any further questions or concerns, feel free to reach out to us via email at [meermiro299@gmail.com](mailto:meermiro299@gmail.com).
+        """
+    )
 
-# Execute the show function to display the Help & Support page
+# Only call st.set_page_config when this module is run directly.
 if __name__ == "__main__":
+    st.set_page_config(
+        page_title="Help & Support",  # Browser tab title
+        page_icon="❓",               # Favicon
+        layout="centered",            # Centered layout
+        initial_sidebar_state="auto"  # Default sidebar state
+    )
     show()
