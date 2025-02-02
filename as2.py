@@ -12,9 +12,8 @@ def show():
     password = st.text_input("Enter Your Password", type="password")
     verify_button = st.button("Verify Password")
 
-    if verify_button:
+    if verify_button and password:
         try:
-            # Connect to the SQLite database
             db_path = st.secrets["general"]["db_path"]
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
@@ -24,11 +23,15 @@ def show():
             user_record = cursor.fetchone()
 
             if user_record:
-                # Check if Assignment 2 has already been submitted
-                if user_record[7] != 0:  # Assuming as2 is the 8th column (index 7)
-                    st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+                # Check if Assignment 3 has been submitted.
+                # If as3 is nonzero, then Assignment 3 is already submitted and resubmission for as2 is locked.
+                cursor.execute("SELECT as3 FROM records WHERE password = ?", (password,))
+                as3_value = cursor.fetchone()[0]
+                if as3_value != 0:
+                    st.error("Assignment 3 has already been submitted. Resubmitting Assignment 2 is not allowed.")
+                    st.session_state["verified"] = False
                 else:
-                    st.success(f"Password verified. Proceed to the next steps.")
+                    st.success("Password verified. Proceed to the next steps.")
                     st.session_state["verified"] = True
             else:
                 st.error("Invalid Password. Please enter a valid password registered before.")
@@ -187,11 +190,11 @@ def show():
                     with open(csv_path, "wb") as f:
                         f.write(uploaded_csv.getvalue())
 
-                    # Get only the numerical grade (0-100)
+                    # Grade the assignment
                     grade = grade_assignment(code_input, html_path, png_path, csv_path)
                     st.success(f"Your grade for Assignment 2: {grade}/100")
 
-                    # Update the grade in the records table for this password
+                    # Update the grade in the records table for this password (in as2 column)
                     db_path = st.secrets["general"]["db_path"]
                     conn = sqlite3.connect(db_path)
                     cursor = conn.cursor()
