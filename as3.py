@@ -1,19 +1,11 @@
 import streamlit as st
 import os
-import sqlite3
 from grades.grade3 import grade_assignment
-from github_sync import push_db_to_github  # Added to sync the updated database
+import sqlite3
+from github_sync import push_db_to_github  # Assuming this is used to sync the database
 
 def show():
     st.title("Assignment 3: Advanced Earthquake Data Analysis")
-
-    # Prevent resubmission of Assignment 3 after Assignment 4 submission
-    if "assignment4_submitted" not in st.session_state:
-        st.session_state["assignment4_submitted"] = False
-
-    if st.session_state["assignment4_submitted"]:
-        st.warning("You cannot resubmit Assignment 3 after submitting Assignment 4.")
-        return
 
     # Step 1: Validate Password
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
@@ -26,15 +18,24 @@ def show():
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM records WHERE password = ?", (password,))
-            record = cursor.fetchone()
-            conn.close()
+            user_record = cursor.fetchone()
 
-            if record:
-                st.success("Password verified. Proceed to the next steps.")
-                st.session_state["verified"] = True
+            if user_record:
+                # Check if Assignment 4 has been submitted.
+                # If as4 is nonzero, then Assignment 4 is already submitted and resubmission for as3 is locked.
+                cursor.execute("SELECT as4 FROM records WHERE password = ?", (password,))
+                as4_value = cursor.fetchone()[0]
+                if as4_value != 0:
+                    st.error("Assignment 4 has already been submitted. Resubmitting Assignment 3 is not allowed.")
+                    st.session_state["verified"] = False
+                else:
+                    st.success("Password verified. Proceed to the next steps.")
+                    st.session_state["verified"] = True
             else:
                 st.error("Invalid password. Please enter a valid, registered password.")
                 st.session_state["verified"] = False
+
+            conn.close()
 
         except Exception as e:
             st.error(f"An error occurred while verifying the password: {e}")
@@ -50,7 +51,6 @@ def show():
             ### Objective
             In this assignment, students will work with geographical temperature data and apply Python programming to perform data manipulation and visualization. The task is broken into three stages, with each stage encapsulating a specific function. By the end of the assignment, students will merge the functions into one script to complete the task efficiently.
             """)
-            # "See More" expandable section
             with st.expander("See More"):
                 st.markdown("""
             ### Stage 1: Filtering Data Below 25°C
@@ -94,7 +94,6 @@ def show():
             #### 1. Library Imports (10 Points)
             - Checks if the required libraries are imported correctly.
             """)
-            # "See More" expandable section
             with st.expander("See More"):
                 st.markdown("""
             #### 2. Code Quality (20 Points)
