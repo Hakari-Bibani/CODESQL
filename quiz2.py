@@ -122,7 +122,7 @@ def show():
             password = st.text_input("Password", placeholder="Enter your password", type="password")
         with col2:
             verify_button = st.button("Verify Password")
-
+    
     # Use a separate session key for quiz2 attempts
     if "quiz2_attempts" not in st.session_state:
         st.session_state["quiz2_attempts"] = 0
@@ -141,7 +141,7 @@ def show():
         if "user_answers_quiz2" not in st.session_state:
             st.session_state["user_answers_quiz2"] = [None] * len(questions)
 
-        # Quiz questions with improved UI
+        # Display quiz questions with improved UI
         for i, question in enumerate(questions):
             with st.container():
                 st.markdown(f"""
@@ -199,10 +199,13 @@ def show():
                 cursor = conn.cursor()
                 cursor.execute("UPDATE records SET quiz2 = ? WHERE password = ?", (score, password))
                 conn.commit()
+                if cursor.rowcount == 0:
+                    st.error("Grade update failed: No matching record found in the database. Please verify your password and database schema.")
+                else:
+                    st.success("Grade successfully saved.")
+                    # Optional: push the updated DB to GitHub
+                    push_db_to_github(db_path)
                 conn.close()
-                st.success("Grade successfully saved.")
-                # Optional: push the updated DB to GitHub
-                push_db_to_github(db_path)
             except Exception as e:
                 st.error(f"Error saving grade: {e}")
 
