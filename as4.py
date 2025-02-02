@@ -6,6 +6,19 @@ from github_sync import push_db_to_github  # Used to sync the updated database
 
 def show():
     st.title("Assignment 4: Image Analysis and Rectangle Detection")
+    
+    # Inject custom CSS to change the color of specific widget labels to white
+    st.markdown(
+        """
+        <style>
+        div[data-baseweb="text-area"] label,
+        div[data-testid="stFileUploader"] label {
+            color: white !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
     # Prevent resubmission of Assignment 4 after submitting the next assignment (Assignment 5)
     if "assignment5_submitted" not in st.session_state:
@@ -16,7 +29,7 @@ def show():
         return
 
     # Step 1: Validate Password (instead of Student ID)
-    st.header("Step 1: Enter Your Password")
+    st.markdown("<h2 style='color: paleblue;'>Step 1: Enter Your Password</h2>", unsafe_allow_html=True)
     password = st.text_input("Enter Your Password", type="password")
     verify_button = st.button("Verify Password")
 
@@ -43,7 +56,7 @@ def show():
 
     if st.session_state.get("verified", False):
         # Step 2: Review Assignment Details
-        st.header("Step 2: Review Assignment Details")
+        st.markdown("<h2 style='color: paleblue;'>Step 2: Review Assignment Details</h2>", unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
@@ -113,24 +126,24 @@ def show():
                 """)
 
         # Step 3: Assignment Submission
-        st.header("Step 3: Submit Your Assignment")
+        st.markdown("<h2 style='color: paleblue;'>Step 3: Submit Your Assignment</h2>", unsafe_allow_html=True)
 
         # Code Input
         code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
 
         # Step 4: Enter Rectangle Coordinates
-        st.header("Step 4: Enter Rectangle Coordinates")
+        st.markdown("<h2 style='color: paleblue;'>Step 4: Enter Rectangle Coordinates</h2>", unsafe_allow_html=True)
         rectangle_coordinates = st.text_area(
             "Paste Rectangle Coordinates (Top-Left and Bottom-Right) Here",
             height=150
         )
 
         # Step 5: Upload Thresholded Image
-        st.header("Step 5: Upload Your Thresholded Image")
+        st.markdown("<h2 style='color: paleblue;'>Step 5: Upload Your Thresholded Image</h2>", unsafe_allow_html=True)
         uploaded_thresholded_image = st.file_uploader("Upload your thresholded image file", type=["png", "jpg", "jpeg"])
 
         # Step 6: Upload Image with Rectangles Outlined
-        st.header("Step 6: Upload Image with Rectangles Outlined")
+        st.markdown("<h2 style='color: paleblue;'>Step 6: Upload Image with Rectangles Outlined</h2>", unsafe_allow_html=True)
         uploaded_outlined_image = st.file_uploader("Upload your image with rectangles outlined", type=["png", "jpg", "jpeg"])
 
         # Submit Button
