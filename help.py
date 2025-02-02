@@ -3,42 +3,30 @@ import streamlit as st
 def show():
     custom_css = """
     <style>
-    /* Pale blue title */
-    h1 {
-        color: #add8e6 !important;
-        font-weight: bold;
-        font-size: 2.5rem;
-    }
-    
-    /* Orange header styling */
-    .orange-header {
-        color: #FFA500 !important;
-        margin-top: 1.5rem;
-    }
+    h1 {color: #add8e6 !important;}
+    .orange-header {color: #FFA500 !important;}
     </style>
     """
     st.markdown(custom_css, unsafe_allow_html=True)
 
-    # Page Title
     st.title("Help & Support")
+    st.write("If you need assistance, we're here to help. Please check the options below.")
 
-    # FAQ Section with orange header
-    st.markdown(
-        '<h3 class="orange-header">Frequently Asked Questions (FAQ)</h3>', 
-        unsafe_allow_html=True
-    )
-    
+    st.markdown("### How to Get Help:")
+    st.markdown("1. **Check the FAQ section below**\n2. **Contact support**")
+
+    # FAQ Section
+    st.markdown('<h3 class="orange-header">Frequently Asked Questions (FAQ)</h3>', unsafe_allow_html=True)
     with st.expander("Can I resubmit assignments?"):
-        st.write("Yes, you can resubmit assignments until the deadline...")
+        st.write("Yes, you can resubmit until the next deadline...")
+    with st.expander("Can I resubmit quizzes?"):
+        st.write("No, quizzes can only be submitted once.")
+    with st.expander("What if I forget my password?"):
+        st.write("Email [meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
 
-    # Rest of your FAQ expanders...
-
-    # Contact Section with orange header
-    st.markdown(
-        '<h3 class="orange-header">Need More Help?</h3>', 
-        unsafe_allow_html=True
-    )
-    st.markdown("If you have any further questions...")
+    # Contact Section
+    st.markdown('<h3 class="orange-header">Need More Help?</h3>', unsafe_allow_html=True)
+    st.markdown("Email us at [meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
 
 if __name__ == "__main__":
     st.set_page_config(page_title="Help & Support", page_icon=":question:", layout="wide")
