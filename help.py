@@ -13,13 +13,18 @@ def show():
     h1 {
         font-weight: bold;
         font-size: 2.5rem;
-        color: #333333;
+        color: #ADD8E6;  /* Changed to pale blue */
         margin-bottom: 1rem;
     }
     /* Subtitle and header styling */
     h3, h2 {
         color: #333333;
         margin-top: 1.5rem;
+    }
+    /* Yellow headers for FAQ and Need More Help */
+    h3:contains("Frequently Asked Questions (FAQ)"), 
+    h3:contains("Need More Help?") {
+        color: #FFD700;  /* Changed to yellow */
     }
     /* Markdown text styling */
     div[data-testid="stMarkdownContainer"] p {
