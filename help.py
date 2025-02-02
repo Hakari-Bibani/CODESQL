@@ -10,7 +10,7 @@ def show():
     st.markdown(custom_css, unsafe_allow_html=True)
 
     st.title("Help & Support")
-    st.write("If you need assistance, we're here to help. Please check the options below.")
+    st.write("If you need assistance, we're here to help. Please check the options below to find a solution to your problem.")
 
     st.markdown("### How to Get Help:")
     st.markdown("1. **Check the FAQ section below**\n2. **Contact support**")
