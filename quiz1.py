@@ -74,21 +74,21 @@ questions = [
         ],
         "answer": "Check if the key exists in the dictionary and handle the error appropriately."
     }
-] 
+]
 
 MAX_ATTEMPTS = 1
 
 def add_custom_css():
     st.markdown("""
         <style>
-        /* Modern container styling */
+        /* Modern container styling with blue outline for each question */
         .question-container {
             background-color: #ffffff;
             border-radius: 12px;
             padding: 24px;
             margin: 20px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid #f0f0f0;
+            border: 1px solid blue;
         }
         
         .question-text {
@@ -171,7 +171,7 @@ def show():
     
     # Step 1: Enter Password
     with st.container():
-        st.header("Step 1: Enter Your Password")
+        st.markdown('<h2 style="color: #ADD8E6;">Step 1: Enter Your Password</h2>', unsafe_allow_html=True)
         col1, col2 = st.columns([3, 1])
         with col1:
             password = st.text_input("Password", placeholder="Enter your password", type="password")
@@ -190,7 +190,7 @@ def show():
             st.session_state["validated"] = False
 
     if st.session_state.get("validated", False):
-        st.header("Step 2: Answer the Questions")
+        st.markdown('<h2 style="color: #ADD8E6;">Step 2: Answer the Questions</h2>', unsafe_allow_html=True)
 
         if "user_answers" not in st.session_state:
             st.session_state["user_answers"] = [None] * len(questions)
