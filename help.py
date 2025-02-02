@@ -18,15 +18,15 @@ def show():
     # FAQ Section
     st.markdown('<h3 class="orange-header">Frequently Asked Questions (FAQ)</h3>', unsafe_allow_html=True)
     with st.expander("Can I resubmit assignments?"):
-        st.write("Yes, you can resubmit until the next deadline...")
+        st.write("Yes, you can resubmit assignments until the deadline for the next assignment. After that, resubmissions for previous assignments will no longer be accepted.")
     with st.expander("Can I resubmit quizzes?"):
         st.write("No, quizzes can only be submitted once.")
     with st.expander("What if I forget my password?"):
-        st.write("Email [meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
+        st.write("If you forget your password, please email [meermiro299@gmail.com](mailto:meermiro299@gmail.com) to request assistance.")
 
     # Contact Section
     st.markdown('<h3 class="orange-header">Need More Help?</h3>', unsafe_allow_html=True)
-    st.markdown("Email us at [meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
+    st.markdown("If you have any further questions or concerns, feel free to reach out to us via email at[meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
 
 if __name__ == "__main__":
     st.set_page_config(page_title="Help & Support", page_icon=":question:", layout="wide")
