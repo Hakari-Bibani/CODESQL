@@ -116,6 +116,8 @@ def add_custom_css():
             color: #495057;
             width: 100%;
             display: block;
+            position: relative;
+            padding-right: 50px; /* extra space for the custom indicator */
         }
         
         .stRadio > div > label:hover {
@@ -124,11 +126,35 @@ def add_custom_css():
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
-        /* Selected state styling */
+        /* Pseudo-element for custom option indicator */
+        .stRadio > div > label::after {
+            content: "";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 4px;  /* square with slightly rounded corners */
+            transition: all 0.2s ease;
+        }
+        
+        /* Selected state styling for the option and its indicator */
         .stRadio > div > label[data-checked="true"] {
             background-color: #0066cc;
             color: white;
             border-color: #0066cc;
+        }
+        
+        .stRadio > div > label[data-checked="true"]::after {
+            content: "✔";
+            background-color: #0066cc;
+            border-color: #0066cc;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 4px;
         }
         
         /* Progress indicator */
