@@ -26,14 +26,14 @@ MAX_ATTEMPTS = 1
 def add_custom_css():
     st.markdown("""
         <style>
-        /* Modern container styling */
+        /* Modern container styling with blue shine border and pale orange background */
         .question-container {
-            background-color: #ffffff;
+            background-color: #FFEFD5; /* Pale orange background */
+            border: 2px solid #007BFF; /* Blue border */
             border-radius: 12px;
             padding: 24px;
             margin: 16px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid #f0f0f0;
+            box-shadow: 0 0 8px #007BFF; /* Blue shine effect */
         }
         
         /* Question text styling */
@@ -114,9 +114,9 @@ def show():
     
     st.title("Quiz 2: Python and Script Management")
     
-    # Step 1: Enter Password
+    # Step 1: Enter Password with pale blue text
     with st.container():
-        st.header("Step 1: Enter Your Password")
+        st.markdown("<h2 style='color: #ADD8E6;'>Step 1: Enter Your Password</h2>", unsafe_allow_html=True)
         col1, col2 = st.columns([3, 1])
         with col1:
             password = st.text_input("Password", placeholder="Enter your password", type="password")
@@ -136,7 +136,8 @@ def show():
             st.session_state["validated"] = False
 
     if st.session_state.get("validated", False):
-        st.header("Step 2: Answer the Questions")
+        # Step 2: Answer Questions with pale blue text
+        st.markdown("<h2 style='color: #ADD8E6;'>Step 2: Answer the Questions</h2>", unsafe_allow_html=True)
 
         if "user_answers_quiz2" not in st.session_state:
             st.session_state["user_answers_quiz2"] = [None] * len(questions)
