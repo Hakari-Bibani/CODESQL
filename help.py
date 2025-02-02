@@ -26,7 +26,7 @@ def show():
         st.write("No, quizzes can only be submitted once.")
 
     with st.expander("What if I forget my password?"):
-        st.write("If you forget your password, please email [support@mywebapp.com](mailto:support@mywebapp.com) to request assistance.")
+        st.write("If you forget your password, please email [meermiro299@gmail.com](mailto:meermiro299@gmail.com) to request assistance.")
 
     # Contact Section
     st.markdown(
