@@ -81,14 +81,14 @@ MAX_ATTEMPTS = 1
 def add_custom_css():
     st.markdown("""
         <style>
-        /* Modern container styling with blue outline for each question */
+        /* Modern container styling for each question with blue shine border and pale orange background */
         .question-container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 20px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid blue;
+            background-color: #FFF3E0 !important; /* pale orange background */
+            border-radius: 12px !important;
+            padding: 24px !important;
+            margin: 20px 0 !important;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important; /* blue shine border effect */
+            border: 2px solid #007BFF !important; /* blue border */
         }
         
         .question-text {
@@ -171,7 +171,7 @@ def show():
     
     # Step 1: Enter Password
     with st.container():
-        st.markdown('<h2 style="color: #ADD8E6;">Step 1: Enter Your Password</h2>', unsafe_allow_html=True)
+        st.header('<span style="color: #ADD8E6;">Step 1: Enter Your Password</span>', unsafe_allow_html=True)
         col1, col2 = st.columns([3, 1])
         with col1:
             password = st.text_input("Password", placeholder="Enter your password", type="password")
@@ -190,7 +190,7 @@ def show():
             st.session_state["validated"] = False
 
     if st.session_state.get("validated", False):
-        st.markdown('<h2 style="color: #ADD8E6;">Step 2: Answer the Questions</h2>', unsafe_allow_html=True)
+        st.header('<span style="color: #ADD8E6;">Step 2: Answer the Questions</span>', unsafe_allow_html=True)
 
         if "user_answers" not in st.session_state:
             st.session_state["user_answers"] = [None] * len(questions)
