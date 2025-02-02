@@ -1,171 +1,186 @@
 import streamlit as st
 
 def show():
-    # Custom CSS for professional styling
-    st.markdown("""
-        <style>
-        /* Global Styles */
-        .stApp {
-            background-color: #f8fafd;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        /* Title Typography */
-        .stTitle {
-            font-size: 2.5rem !important;
-            font-weight: 700 !important;
-            color: #4a90e2 !important;  /* Pale blue color */
-            letter-spacing: -0.02em !important;
-            padding: 2rem 0 !important;
-            border-bottom: 2px solid #e1e8f5;
-            margin-bottom: 2.5rem !important;
-            text-shadow: 1px 1px 2px rgba(74, 144, 226, 0.1);
-        }
-        
-        /* Main Text Styles */
-        p, li {
-            font-size: 1.1rem !important;
-            line-height: 1.7 !important;
-            color: #2c3e50 !important;
-            font-weight: 400 !important;
-        }
-        
-        /* Section Headers */
-        .section-header {
-            color: #2d5b9e;
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin: 2.5rem 0 1.5rem 0;
-            padding-bottom: 0.75rem;
-            border-bottom: 3px solid #4a90e2;
-            display: inline-block;
-            letter-spacing: -0.01em;
-        }
-        
-        /* Content Cards */
-        .content-card {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #e5eef9;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .content-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(74, 144, 226, 0.12);
-        }
-        
-        /* FAQ Section */
-        .streamlit-expanderHeader {
-            background-color: white !important;
-            border: 1px solid #d0e1f9 !important;
-            border-radius: 10px !important;
-            padding: 1.25rem !important;
-            margin-bottom: 0.75rem !important;
-            transition: all 0.2s ease-in-out !important;
-            font-size: 1.1rem !important;
-            font-weight: 500 !important;
-            color: #2d5b9e !important;
-        }
-        
-        .streamlit-expanderHeader:hover {
-            background-color: #f5f9ff !important;
-            border-color: #4a90e2 !important;
-        }
-        
-        .streamlit-expanderContent {
-            background-color: white !important;
-            border: 1px solid #d0e1f9 !important;
-            border-radius: 10px !important;
-            padding: 1.75rem !important;
-            font-size: 1.1rem !important;
-            line-height: 1.7 !important;
-            color: #2c3e50 !important;
-        }
-        
-        /* Contact Section */
-        .contact-section {
-            background: linear-gradient(135deg, #f5f9ff 0%, #edf3fe 100%);
-            padding: 2.5rem;
-            border-radius: 12px;
-            border: 1px solid #d0e1f9;
-            margin-top: 3rem;
-            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.08);
-        }
-        
-        /* Links */
-        a {
-            color: #4a90e2 !important;
-            text-decoration: none !important;
-            font-weight: 500 !important;
-            transition: color 0.2s ease;
-        }
-        
-        a:hover {
-            color: #2d5b9e !important;
-            text-decoration: underline !important;
-        }
-        
-        /* List Styles */
-        ol {
-            padding-left: 1.5rem;
-            margin: 1.25rem 0;
-        }
-        
-        li {
-            margin-bottom: 0.75rem;
-            padding-left: 0.5rem;
-        }
-        
-        strong {
-            color: #2d5b9e !important;
-            font-weight: 600 !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    # Enhanced custom CSS for a more polished and modern interface
+    custom_css = """
+    <style>
+    /* General body styling */
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        line-height: 1.6;
+    }
+
+    /* Main title styling with pale blue */
+    h1 {
+        font-weight: 800;
+        font-size: 3rem;
+        color: #a8d5ff;
+        margin-bottom: 1.5rem;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        letter-spacing: -0.5px;
+    }
+
+    /* Subtitle and section header styling */
+    h2 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+    }
+
+    h3 {
+        color: #34495e;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Enhanced markdown text styling */
+    div[data-testid="stMarkdownContainer"] p {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #3a4f63;
+        margin-bottom: 1rem;
+    }
+
+    /* Modern link styling */
+    a {
+        color: #3498db;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-bottom-color 0.2s ease;
+    }
+
+    a:hover {
+        border-bottom-color: #3498db;
+    }
+
+    /* Enhanced expander styling */
+    div[role="button"][aria-expanded] {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        background-color: #ffffff;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+    }
+
+    div[role="button"][aria-expanded]:hover {
+        background-color: #f8f9fa;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    }
+
+    /* Card styling for content sections */
+    .content-section {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    /* List styling */
+    ol {
+        padding-left: 1.2rem;
+        margin: 1rem 0;
+    }
+
+    ol li {
+        font-size: 1.15rem;
+        color: #3a4f63;
+        margin-bottom: 0.8rem;
+    }
+
+    /* Expander content styling */
+    .st-expander {
+        background-color: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    </style>
+    """
+    st.markdown(custom_css, unsafe_allow_html=True)
 
     # Page Title
     st.title("Help & Support")
     
-    # Introduction Section
-    st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    st.write("If you need assistance, we're here to help. Please check the options below to find a solution to your problem.")
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Introduction Section with enhanced styling
+    st.markdown("""
+    <div class="content-section">
+    We're here to help you succeed. Browse through our comprehensive support resources below 
+    or reach out to our dedicated support team for personalized assistance.
+    </div>
+    """, unsafe_allow_html=True)
 
     # Instructions Section
-    st.markdown('<p class="section-header">How to Get Help</p>', unsafe_allow_html=True)
-    st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    st.markdown("""
-    1. **Check the FAQ section below** for quick answers to common questions.
-    2. **Contact support** for further assistance.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(
+        """
+        ### Getting Started
+        Follow these steps to find the support you need:
+        1. **Browse the FAQ section** - Quick answers to common questions
+        2. **Search specific topics** - Use the expandable sections below
+        3. **Contact our support team** - For personalized assistance
+        """
+    )
 
-    # FAQ Section
-    st.markdown('<p class="section-header">Frequently Asked Questions</p>', unsafe_allow_html=True)
+    # FAQ Section with enhanced styling
+    st.markdown("## Frequently Asked Questions")
     
-    # FAQ Items with improved styling
-    for question, answer in [
-        ("Can I resubmit assignments?", 
-         "Yes, you can resubmit assignments until the deadline for the next assignment. After that, resubmissions for previous assignments will no longer be accepted."),
-        ("Can I resubmit quizzes?", 
-         "No, quizzes can only be submitted once."),
-        ("What if I forget my password?", 
-         "If you forget your password, please email [meermiro299@gmail.com](mailto:meermiro299@gmail.com) to request assistance.")
-    ]:
-        with st.expander(question):
-            st.markdown(answer)
+    with st.expander("📝 Can I resubmit assignments?"):
+        st.markdown("""
+        Yes, you can resubmit assignments until the deadline for the next assignment. Please note:
+        - Each resubmission must include all required components
+        - Previous submissions will be overwritten
+        - Late resubmissions are not accepted after the next assignment's deadline
+        """)
 
-    # Contact Section
-    st.markdown('<div class="contact-section">', unsafe_allow_html=True)
-    st.markdown('<p class="section-header">Need More Help?</p>', unsafe_allow_html=True)
-    st.markdown("""
-        If you have any further questions or concerns, feel free to reach out to us via email at [meermiro299@gmail.com](mailto:meermiro299@gmail.com).
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.expander("📊 Can I resubmit quizzes?"):
+        st.markdown("""
+        No, quizzes can only be submitted once. This policy ensures:
+        - Fair assessment for all students
+        - Accurate progress tracking
+        - Consistent evaluation standards
+        """)
+
+    with st.expander("🔑 What if I forget my password?"):
+        st.markdown("""
+        If you need to reset your password:
+        1. Email our support team at [meermiro299@gmail.com](mailto:meermiro299@gmail.com)
+        2. Include your registered username/email
+        3. You'll receive reset instructions within 24 hours
+        """)
+
+    # Contact Section with enhanced styling
+    st.markdown(
+        """
+        ## Need Additional Support?
+        
+        <div class="content-section">
+        Our support team is ready to assist you with any questions or concerns you may have.
+        
+        📧 Email: [meermiro299@gmail.com](mailto:meermiro299@gmail.com)
+        
+        **Response Time:** We typically respond within 24 hours during business days.
+        </div>
+        """, unsafe_allow_html=True
+    )
 
 if __name__ == "__main__":
+    # Enhanced page configuration
+    st.set_page_config(
+        page_title="Help & Support",
+        page_icon="❓",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
     show()
