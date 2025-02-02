@@ -1,14 +1,8 @@
 import streamlit as st
-from theme import apply_dark_theme
-from style import apply_custom_styles
 
 def show():
-    # Apply the dark theme and custom styles
-    apply_dark_theme()
-    apply_custom_styles()
-
-    # Page Title with Custom Style
-    st.markdown('<div class="title">🆘 Help & Support</div>', unsafe_allow_html=True)
+    # Page Title
+    st.title("Help & Support")
     
     # Introduction Section
     st.write("If you need assistance, we're here to help. Please check the options below to find a solution to your problem.")
@@ -18,12 +12,12 @@ def show():
         """
         ### How to Get Help:
         1. **Check the FAQ section below** for quick answers to common questions.
-        2. **Contact your instructor** for further assistance.
+        2. **Contact support** for further assistance.
         """
     )
 
     # FAQ Section
-    st.markdown('<div class="footer">📚 Frequently Asked Questions (FAQ)</div>', unsafe_allow_html=True)
+    st.markdown("### Frequently Asked Questions (FAQ)")
 
     with st.expander("Can I resubmit assignments?"):
         st.write("Yes, you can resubmit assignments until the deadline for the next assignment. After that, resubmissions for previous assignments will no longer be accepted.")
@@ -32,12 +26,14 @@ def show():
         st.write("No, quizzes can only be submitted once.")
 
     with st.expander("What if I forget my password?"):
-        st.write("If you forget your password, please email [meermiro299@gmail.com](mailto:meermiro299@gmail.com) to request it.")
+        st.write("If you forget your password, please email [support@mywebapp.com](mailto:support@mywebapp.com) to request assistance.")
 
-    # Contact Section with Custom Style
+    # Contact Section
     st.markdown(
-        '<div class="footer footer-partner">✉️ Need More Help? Reach out at <a href="mailto:meermiro299@gmail.com" style="color:#32CD32;">meermiro299@gmail.com</a></div>',
-        unsafe_allow_html=True
+        """
+        ### Need More Help?
+        If you have any further questions or concerns, feel free to reach out to us via email at [support@mywebapp.com](mailto:support@mywebapp.com).
+        """
     )
 
 # Call the show function to display the interface
