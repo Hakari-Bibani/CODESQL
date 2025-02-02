@@ -26,7 +26,7 @@ def show():
 
     # Contact Section
     st.markdown('<h3 class="orange-header">Need More Help?</h3>', unsafe_allow_html=True)
-    st.markdown("If you have any further questions or concerns, feel free to reach out to us via email at[meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
+    st.markdown("If you have any further questions or concerns, feel free to reach out to us via email at [meermiro299@gmail.com](mailto:meermiro299@gmail.com)")
 
 if __name__ == "__main__":
     st.set_page_config(page_title="Help & Support", page_icon=":question:", layout="wide")
