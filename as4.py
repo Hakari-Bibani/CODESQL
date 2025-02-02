@@ -16,7 +16,7 @@ def show():
         return
 
     # Step 1: Validate Password (instead of Student ID)
-    st.markdown('<h3 style="color: #ADD8E6;">Step 1: Enter Your Password</h3>', unsafe_allow_html=True)
+    st.markdown("<h2 style='color:#ADD8E6;'>Step 1: Enter Your Password</h2>", unsafe_allow_html=True)
     password = st.text_input("Enter Your Password", type="password")
     verify_button = st.button("Verify Password")
 
@@ -43,7 +43,7 @@ def show():
 
     if st.session_state.get("verified", False):
         # Step 2: Review Assignment Details
-        st.markdown('<h3 style="color: #ADD8E6;">Step 2: Review Assignment Details</h3>', unsafe_allow_html=True)
+        st.markdown("<h2 style='color:#ADD8E6;'>Step 2: Review Assignment Details</h2>", unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
@@ -113,33 +113,26 @@ def show():
                 """)
 
         # Step 3: Assignment Submission
-        st.markdown('<h3 style="color: #ADD8E6;">Step 3: Submit Your Assignment</h3>', unsafe_allow_html=True)
+        st.markdown("<h2 style='color:#ADD8E6;'>Step 3: Submit Your Assignment</h2>", unsafe_allow_html=True)
 
         # Code Input
-        code_input = st.text_area("**<span style='color: white;'>📝 Paste Your Code Here</span>**", height=300, unsafe_allow_html=True)
+        st.markdown("<p style='color:white; font-weight:bold;'>📝 Paste Your Code Here</p>", unsafe_allow_html=True)
+        code_input = st.text_area("", height=300)
 
         # Step 4: Enter Rectangle Coordinates
-        st.markdown('<h3 style="color: #ADD8E6;">Step 4: Enter Rectangle Coordinates</h3>', unsafe_allow_html=True)
-        rectangle_coordinates = st.text_area(
-            "<span style='color: white;'>Paste Rectangle Coordinates (Top-Left and Bottom-Right) Here</span>",
-            height=150, unsafe_allow_html=True
-        )
+        st.markdown("<h2 style='color:#ADD8E6;'>Step 4: Enter Rectangle Coordinates</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color:white;'>Paste Rectangle Coordinates (Top-Left and Bottom-Right) Here</p>", unsafe_allow_html=True)
+        rectangle_coordinates = st.text_area("", height=150)
 
         # Step 5: Upload Thresholded Image
-        st.markdown('<h3 style="color: #ADD8E6;">Step 5: Upload Your Thresholded Image</h3>', unsafe_allow_html=True)
-        uploaded_thresholded_image = st.file_uploader(
-            "<span style='color: white;'>Upload your thresholded image file</span>",
-            type=["png", "jpg", "jpeg"], 
-            unsafe_allow_html=True
-        )
+        st.markdown("<h2 style='color:#ADD8E6;'>Step 5: Upload Your Thresholded Image</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color:white;'>Upload your thresholded image file</p>", unsafe_allow_html=True)
+        uploaded_thresholded_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
 
         # Step 6: Upload Image with Rectangles Outlined
-        st.markdown('<h3 style="color: #ADD8E6;">Step 6: Upload Image with Rectangles Outlined</h3>', unsafe_allow_html=True)
-        uploaded_outlined_image = st.file_uploader(
-            "<span style='color: white;'>Upload your image with rectangles outlined</span>",
-            type=["png", "jpg", "jpeg"],
-            unsafe_allow_html=True
-        )
+        st.markdown("<h2 style='color:#ADD8E6;'>Step 6: Upload Image with Rectangles Outlined</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color:white;'>Upload your image with rectangles outlined</p>", unsafe_allow_html=True)
+        uploaded_outlined_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
 
         # Submit Button
         submit_button = st.button("Submit Assignment")
