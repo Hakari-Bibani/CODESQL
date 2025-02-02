@@ -127,12 +127,12 @@ def show():
         # Step 5: Upload Thresholded Image
         st.markdown("<h2 style='color:#ADD8E6;'>Step 5: Upload Your Thresholded Image</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color:white;'>Upload your thresholded image file</p>", unsafe_allow_html=True)
-        uploaded_thresholded_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
+        uploaded_thresholded_image = st.file_uploader("", type=["png", "jpg", "jpeg"], key="file_uploader_thresholded")
 
         # Step 6: Upload Image with Rectangles Outlined
         st.markdown("<h2 style='color:#ADD8E6;'>Step 6: Upload Image with Rectangles Outlined</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color:white;'>Upload your image with rectangles outlined</p>", unsafe_allow_html=True)
-        uploaded_outlined_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
+        uploaded_outlined_image = st.file_uploader("", type=["png", "jpg", "jpeg"], key="file_uploader_outlined")
 
         # Submit Button
         submit_button = st.button("Submit Assignment")
