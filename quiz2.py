@@ -123,8 +123,9 @@ def show():
         with col2:
             verify_button = st.button("Verify Password")
 
-    if "attempts" not in st.session_state:
-        st.session_state["attempts"] = 0
+    # Use a separate session key for quiz2 attempts
+    if "quiz2_attempts" not in st.session_state:
+        st.session_state["quiz2_attempts"] = 0
 
     if verify_button:
         if validate_password(password):
@@ -137,8 +138,8 @@ def show():
     if st.session_state.get("validated", False):
         st.header("Step 2: Answer the Questions")
 
-        if "user_answers" not in st.session_state:
-            st.session_state["user_answers"] = [None] * len(questions)
+        if "user_answers_quiz2" not in st.session_state:
+            st.session_state["user_answers_quiz2"] = [None] * len(questions)
 
         # Quiz questions with improved UI
         for i, question in enumerate(questions):
@@ -154,11 +155,11 @@ def show():
                 answer = st.radio(
                     "",  # Empty label
                     options=["True", "False"],
-                    key=f"question_{i}",
+                    key=f"question_quiz2_{i}",
                     horizontal=True,
                     label_visibility="collapsed"
                 )
-                st.session_state["user_answers"][i] = answer == "True"
+                st.session_state["user_answers_quiz2"][i] = answer == "True"
 
         # Submit Button with improved styling
         col1, col2, col3 = st.columns([1, 2, 1])
@@ -170,21 +171,21 @@ def show():
             )
 
         if submit_button:
-            if st.session_state["attempts"] >= MAX_ATTEMPTS:
+            if st.session_state["quiz2_attempts"] >= MAX_ATTEMPTS:
                 st.error("❌ You have reached the maximum number of attempts for this quiz.")
                 return
 
-            if None in st.session_state["user_answers"]:
+            if None in st.session_state["user_answers_quiz2"]:
                 st.error("❌ Please answer all questions before submitting.")
                 return
 
             score = sum(
                 question["points"]
                 for i, question in enumerate(questions)
-                if st.session_state["user_answers"][i] == question["answer"]
+                if st.session_state["user_answers_quiz2"][i] == question["answer"]
             )
 
-            st.session_state["attempts"] += 1
+            st.session_state["quiz2_attempts"] += 1
             
             # Display score with progress bar
             st.markdown("### Quiz Results")
