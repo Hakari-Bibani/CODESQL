@@ -6,6 +6,18 @@ from github_sync import push_db_to_github  # Assuming this is used to sync the d
 
 def show():
     st.title("Assignment 3: Advanced Earthquake Data Analysis")
+    
+    # Inject CSS to make specific widget labels white
+    st.markdown(
+        """
+        <style>
+        .stTextArea label, .stFileUploader label {
+            color: white !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
     # Step 1: Validate Password
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
