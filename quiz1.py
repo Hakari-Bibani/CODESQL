@@ -171,7 +171,7 @@ def show():
     
     # Step 1: Enter Password
     with st.container():
-        st.header('<span style="color: #ADD8E6;">Step 1: Enter Your Password</span>', unsafe_allow_html=True)
+        st.markdown('<h2 style="color: #ADD8E6;">Step 1: Enter Your Password</h2>', unsafe_allow_html=True)
         col1, col2 = st.columns([3, 1])
         with col1:
             password = st.text_input("Password", placeholder="Enter your password", type="password")
@@ -190,7 +190,7 @@ def show():
             st.session_state["validated"] = False
 
     if st.session_state.get("validated", False):
-        st.header('<span style="color: #ADD8E6;">Step 2: Answer the Questions</span>', unsafe_allow_html=True)
+        st.markdown('<h2 style="color: #ADD8E6;">Step 2: Answer the Questions</h2>', unsafe_allow_html=True)
 
         if "user_answers" not in st.session_state:
             st.session_state["user_answers"] = [None] * len(questions)
