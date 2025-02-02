@@ -1,229 +1,216 @@
 
 import streamlit as st
-import folium
-import pandas as pd
-from geopy.distance import geodesic
-from io import StringIO
-from streamlit_folium import st_folium
-from utils.style1 import set_page_style
+import os
+from grades.grade2 import grade_assignment  # ensure this path is correct in your project
 import sqlite3
-from github_sync import push_db_to_github
+from github_sync import push_db_to_github  # Assuming this is used to sync the database
 
 def show():
-    # Apply the custom page style
-    set_page_style()
+    st.title("Assignment 2: Earthquake Data Analysis")
 
-    # Initialize session state variables
-    if "run_success" not in st.session_state:
-        st.session_state["run_success"] = False
-    if "map_object" not in st.session_state:
-        st.session_state["map_object"] = None
-    if "dataframe_object" not in st.session_state:
-        st.session_state["dataframe_object"] = None
-    if "captured_output" not in st.session_state:
-        st.session_state["captured_output"] = ""
-    if "password_entered" not in st.session_state:
-        st.session_state["password_entered"] = False
-    if "valid_password" not in st.session_state:
-        st.session_state["valid_password"] = False
-
-    # Define db_path globally
-    db_path = st.secrets["general"]["db_path"]
-
-    st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
-
-    # ─────────────────────────────────────────────────────────────────
-    # STEP 1: ENTER YOUR PASSWORD
-    # ─────────────────────────────────────────────────────────────────
+    # Step 1: Validate Password
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
-    password = st.text_input("Password", type="password", key="as1_password")
-    enter_password = st.button("Enter")
+    password = st.text_input("Enter Your Password", type="password")
+    verify_button = st.button("Verify Password")
 
-    if enter_password and password:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM records WHERE password = ?", (password,))
-        user_record = cursor.fetchone()
+    if verify_button:
+        try:
+            # Connect to the SQLite database
+            db_path = st.secrets["general"]["db_path"]
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
 
-        if user_record:
-            # Check if Assignment 2 has already been submitted
-            if user_record[6] != 0:  # Assuming as2 is the 7th column (index 6)
-                st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+            # Check if the password exists in the records table
+            cursor.execute("SELECT * FROM records WHERE password = ?", (password,))
+            user_record = cursor.fetchone()
+
+            if user_record:
+                # Check if Assignment 2 has already been submitted
+                if user_record[7] != 0:  # Assuming as2 is the 8th column (index 7)
+                    st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
+                else:
+                    st.success(f"Password verified. Proceed to the next steps.")
+                    st.session_state["verified"] = True
             else:
-                st.session_state["password_entered"] = True
-                st.session_state["valid_password"] = True
-        else:
-            st.error("Invalid password. Please enter the correct password registered before.")
-        conn.close()
+                st.error("Invalid Password. Please enter a valid password registered before.")
+                st.session_state["verified"] = False
 
-    if st.session_state["password_entered"] and st.session_state["valid_password"]:
-        # ─────────────────────────────────────────────────────────────────
-        # STEP 2: REVIEW ASSIGNMENT DETAILS
-        # ─────────────────────────────────────────────────────────────────
+            conn.close()
+
+        except Exception as e:
+            st.error(f"An error occurred while verifying password: {e}")
+            st.session_state["verified"] = False
+
+    if st.session_state.get("verified", False):
+        # Step 2: Assignment and Grading Details
         st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
             st.markdown("""
             ### Objective
-            In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
-
-            ### Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python
-            **Objective:**
-            In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+            In this assignment, you will write a Python script that fetches real-time earthquake data from the USGS Earthquake API, processes the data to filter earthquakes with a magnitude greater than 4.0, and plots the earthquake locations on a map. Additionally, you will calculate the number of earthquakes in different magnitude ranges and present the results visually.
             """)
+            # Add "See More" expandable section
             with st.expander("See More"):
                 st.markdown("""
-            **Task Requirements:**
-            1. **Plot the Three Coordinates on a Map:**
-               - The coordinates represent three locations in the Kurdistan Region.
-               - You will use Python libraries to plot these points on a map.
-               - The map should visually display the exact locations of the coordinates.
-            2. **Calculate the Distance Between Each Pair of Points:**
-               - You will calculate the distances between the three points in kilometers.
-               - Specifically, calculate:
-                 - The distance between Point 1 and Point 2.
-                 - The distance between Point 2 and Point 3.
-                 - The distance between Point 1 and Point 3.
-               - Add Markers to the map for each coordinate.
-               - Add polylines to connect the points.
-               - Add popups to display information about the distance.
-
-            **Coordinates:**
-            - Point 1: Latitude: 36.325735, Longitude: 43.928414
-            - Point 2: Latitude: 36.393432, Longitude: 44.586781
-            - Point 3: Latitude: 36.660477, Longitude: 43.840174
-
-            **Python Libraries You Will Use:**
-            - geopy for calculating the distance between two coordinates.
-            - folium for plotting the points on an interactive map.
-            - pandas to create a DataFrame that displays the distances between the points.
-
-            **Expected Output:**
-            1. A map showing the three coordinates.
-            2. A text summary (Express values to two decimal places.): showing the calculated distances (in kilometers) between:
-               - Point 1 and Point 2.
-               - Point 2 and Point 3.
-               - Point 1 and Point 3.
+            ### Task Requirements
+            - **Fetch Earthquake Data**:
+                - Use the USGS Earthquake API to fetch data for the date range **January 2nd, 2025, to January 9th, 2025**.
+                - The API URL is:  
+                  https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=YYYY-MM-DD&endtime=YYYY-MM-DD.  
+                  Replace YYYY-MM-DD with the appropriate dates.
+            - **Filter Data**:
+                - Filter the data to include only earthquakes with a magnitude greater than 4.0.
+            - **Map Visualization**:
+                - Create an interactive map using folium to show the locations of the filtered earthquakes.
+                - Mark the earthquake locations with markers, using different colors based on their magnitude:
+                    - **Green** for magnitude 4.0-5.0
+                    - **Yellow** for magnitude 5.0-5.5
+                    - **Red** for magnitude 5.5+
+                - Add popups to display additional information about each earthquake (magnitude, location, and time).
+            - **Bar Chart**:
+                - Create a bar chart using matplotlib or seaborn to visualize earthquake frequency by magnitude, within the following ranges:
+                    - 4.0-4.5
+                    - 4.5-5.0
+                    - 5.0+
+            - **Text Summary**:
+                - Generate a CSV file containing:
+                    - Total number of earthquakes with magnitude > 4.0.
+                    - Average, maximum, and minimum magnitudes (rounded to 2 decimal places).
+                    - Number of earthquakes in each magnitude range (4.0-4.5, 4.5-5.0, 5.0+).
+            ### Python Libraries You Will Use
+            - folium for the map.
+            - matplotlib or seaborn for the bar chart.
+            - requests or urllib for API calls.
+            - pandas for data processing.
+            ### Expected Output
+            1. A map showing earthquake locations.
+            2. A bar chart showing earthquake frequency by magnitude.
+            3. A text summary in CSV format.
             """)
 
         with tab2:
             st.markdown("""
             ### Detailed Grading Breakdown
-            #### 1. Code Structure and Implementation (30 points)
-            - **Library Imports (5 points):**
-                - Checks if the required libraries (folium, geopy, geodesic) are imported.
-            - **Coordinate Handling (5 points):**
-                - Checks if the correct coordinates are defined in the code.
-            - **Code Execution (10 points):**
-                - Checks if the code runs without errors.
-            - **Code Quality (10 points):**
-                - **Variable Naming:** 2 points (deducted if single-letter variables are used).
-                - **Spacing:** 2 points (deducted if improper spacing is found, e.g., no space after =).
-                - **Comments:** 2 points (deducted if no comments are present).
-                - **Code Organization:** 2 points (deducted if no blank lines are used for separation).
+            #### 1. Library Imports (10 Points)
+            - Checks if the required libraries (folium, matplotlib, requests, pandas) are imported.
             """)
+            # Add "See More" expandable section
             with st.expander("See More"):
                 st.markdown("""
-            #### 2. Map Visualization (40 points)
-            - **Map Generation (15 points):**
-                - Checks if the folium.Map is correctly initialized.
-            - **Markers (15 points):**
-                - Checks if markers are added to the map for each coordinate.
-            - **Polylines (5 points):**
-                - Checks if polylines are used to connect the points.
-            - **Popups (5 points):**
-                - Checks if popups are added to the markers.
-
-            #### 3. Distance Calculations (30 points)
-            - **Geodesic Implementation (10 points):**
-                - Checks if the geodesic function is used correctly to calculate distances.
-            - **Distance Accuracy (20 points):**
-                - Checks if the calculated distances are accurate within a 100-meter tolerance.
+            #### 2. Code Quality (20 Points)
+            - **Variable Naming (5 Points)**:
+                - Deducted if non-descriptive variable names are used (e.g., x, y).
+            - **Spacing (5 Points)**:
+                - Deducted if improper spacing is found (e.g., no space after =, >, <).
+            - **Comments (5 Points)**:
+                - Deducted if no comments are present to explain major steps.
+            - **Code Organization (5 Points)**:
+                - Deducted if code blocks are not logically separated with blank lines.
+            #### 3. Fetching Data from the API (10 Points)
+            - **Correct API URL (5 Points)**:
+                - Deducted if the URL is incorrect or the date range is invalid.
+            - **Successful Data Retrieval (5 Points)**:
+                - Deducted if the data is not fetched successfully or error handling is missing.
+            #### 4. Filtering Earthquakes (10 Points)
+            - **Correct Filtering (5 Points)**:
+                - Deducted if earthquakes with magnitude ≤ 4.0 are included.
+            - **Data Extraction (5 Points)**:
+                - Deducted if relevant data (latitude, longitude, magnitude, time) is not extracted.
+            #### 5. Map Visualization (20 Points)
+            - **Map Generation (5 Points)**:
+                - Deducted if the map is not generated or displayed.
+            - **Color-Coded Markers (9 Points)**:
+                - Deducted if markers are not color-coded based on magnitude:
+                    - Green for 4.0-5.0: 3 points
+                    - Yellow for 5.0-5.5: 3 points
+                    - Red for 5.5+: 3 points
+            - **Popups (6 Points)**:
+                - Deducted if popups do not display:
+                    - Magnitude: 2 points
+                    - Latitude and Longitude: 2 points
+                    - Time in readable format: 2 points
+            #### 6. Bar Chart (15 Points)
+            - **Chart Generation (5 Points)**:
+                - Deducted if the bar chart is not generated or displayed.
+            - **Magnitude Ranges (5 Points)**:
+                - Deducted if the magnitude ranges are incorrect:
+                    - 4.0-4.5
+                    - 4.5-5.0
+                    - 5.0+
+            - **Labeling (5 Points)**:
+                - Deducted if the chart is not properly labeled (title, x-axis, y-axis).
+            #### 7. Text Summary (15 Points)
+            - **Total Earthquakes (3 Points)**:
+                - Deducted if the total number of earthquakes with magnitude > 4.0 is incorrect.
+            - **Average Magnitude (3 Points)**:
+                - Deducted if the average magnitude is not rounded to 2 decimal places.
+            - **Maximum Magnitude (3 Points)**:
+                - Deducted if the maximum magnitude is not rounded to 2 decimal places.
+            - **Minimum Magnitude (3 Points)**:
+                - Deducted if the minimum magnitude is not rounded to 2 decimal places.
+            - **Magnitude Ranges (3 Points)**:
+                - Deducted if the number of earthquakes in each range is incorrect:
+                    - 4.0-4.5
+                    - 4.5-5.0
+                    - 5.0+
             """)
 
-        # ─────────────────────────────────────────────────────────────────
-        # STEP 3: RUN AND SUBMIT YOUR CODE
-        # ─────────────────────────────────────────────────────────────────
+        # Step 3: Code Submission and Output
         st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
-        st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-        code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+        code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
 
-        # Run Code Button
-        run_button = st.button("Run Code", key="run_code_button")
-        if run_button and code_input:
-            st.session_state["run_success"] = False
-            st.session_state["captured_output"] = ""
-            try:
-                from io import StringIO
-                import sys
+        # Step 4: Upload Files
+        st.markdown('<h1 style="color: #ADD8E6;">Step 4: Upload Your Outputs</h1>', unsafe_allow_html=True)
+        uploaded_html = st.file_uploader("Upload your HTML file (Map)", type=["html"])
+        uploaded_png = st.file_uploader("Upload your PNG file (Bar Chart)", type=["png"])
+        uploaded_csv = st.file_uploader("Upload your CSV file (Summary)", type=["csv"])
 
-                captured_output = StringIO()
-                sys.stdout = captured_output
+        all_uploaded = all([uploaded_html, uploaded_png, uploaded_csv])
+        st.write("All files uploaded:", "✅ Yes" if all_uploaded else "❌ No")
 
-                # Execute the user's code in a controlled environment
-                local_context = {}
-                exec(code_input, {}, local_context)
+        if all_uploaded:
+            submit_button = st.button("Submit Assignment")
 
-                # Restore stdout
-                sys.stdout = sys.__stdout__
+            if submit_button:
+                try:
+                    temp_dir = "temp_uploads"
+                    os.makedirs(temp_dir, exist_ok=True)
+                    html_path = os.path.join(temp_dir, "uploaded_map.html")
+                    png_path = os.path.join(temp_dir, "uploaded_chart.png")
+                    csv_path = os.path.join(temp_dir, "uploaded_summary.csv")
 
-                # Capture printed output
-                st.session_state["captured_output"] = captured_output.getvalue()
+                    with open(html_path, "wb") as f:
+                        f.write(uploaded_html.getvalue())
+                    with open(png_path, "wb") as f:
+                        f.write(uploaded_png.getvalue())
+                    with open(csv_path, "wb") as f:
+                        f.write(uploaded_csv.getvalue())
 
-                # Look for specific outputs (folium.Map, pandas.DataFrame)
-                map_object = next((obj for obj in local_context.values() if isinstance(obj, folium.Map)), None)
-                dataframe_object = next((obj for obj in local_context.values() if isinstance(obj, pd.DataFrame)), None)
+                    # Get only the numerical grade (0-100)
+                    grade = grade_assignment(code_input, html_path, png_path, csv_path)
+                    st.success(f"Your grade for Assignment 2: {grade}/100")
 
-                # Store outputs in session state
-                st.session_state["map_object"] = map_object
-                st.session_state["dataframe_object"] = dataframe_object
+                    # Update the grade in the records table for this password
+                    db_path = st.secrets["general"]["db_path"]
+                    conn = sqlite3.connect(db_path)
+                    cursor = conn.cursor()
+                    cursor.execute("UPDATE records SET as2 = ? WHERE password = ?", (grade, password))
+                    conn.commit()
+                    conn.close()
 
-                # Mark the run as successful
-                st.session_state["run_success"] = True
+                    # Push the updated DB to GitHub
+                    push_db_to_github(db_path)
 
-            except Exception as e:
-                sys.stdout = sys.__stdout__
-                st.error(f"An error occurred while running your code: {e}")
+                except Exception as e:
+                    st.error(f"An error occurred during submission: {e}")
 
-        # Display Outputs
-        if st.session_state["run_success"]:
-            st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
-            if st.session_state["captured_output"]:
-                # Format the output with preserved whitespace and line breaks
-                formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
-                st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
-            else:
-                st.markdown('<p style="color: white;">No text output captured.</p>', unsafe_allow_html=True)
+        else:
+            st.warning("Please upload all required files to proceed.")
 
-            if st.session_state["map_object"]:
-                st.markdown("### 🗺️ Map Output")
-                st_folium(st.session_state["map_object"], width=1000, height=500)
+if __name__ == "__main__":
+    show()
 
-            if st.session_state["dataframe_object"] is not None:
-                st.markdown("### 📊 DataFrame Output")
-                st.dataframe(st.session_state["dataframe_object"])
 
-        # Submit Code Button
-        submit_button = st.button("Submit Code", key="submit_code_button")
-        if submit_button:
-            if not st.session_state.get("run_success", False):
-                st.error("Please run your code successfully before submitting.")
-            elif password:
-                # Grade the submission
-                from grades.grade1 import grade_assignment
-                grade = grade_assignment(code_input)
 
-                # Update the grade in the records table for this password
-                conn = sqlite3.connect(db_path)
-                cursor = conn.cursor()
-                cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
-                conn.commit()
-                conn.close()
-
-                # Push the updated DB to GitHub
-                push_db_to_github(db_path)
-
-                st.success(f"Submission successful! Your grade: {grade}/100")
-            else:
-                st.error("Please enter your password to submit.")
