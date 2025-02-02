@@ -116,22 +116,23 @@ def show():
         st.header("Step 3: Submit Your Assignment")
 
         # Code Input
-        code_input = st.text_area("**📝 Paste Your Code Here**", height=300)
+        st.markdown("<span style='color: white;'>📝 Paste Your Code Here</span>", unsafe_allow_html=True)
+        code_input = st.text_area("", height=300)
 
         # Step 4: Enter Rectangle Coordinates
         st.header("Step 4: Enter Rectangle Coordinates")
-        rectangle_coordinates = st.text_area(
-            "Paste Rectangle Coordinates (Top-Left and Bottom-Right) Here",
-            height=150
-        )
+        st.markdown("<span style='color: white;'>Paste Rectangle Coordinates (Top-Left and Bottom-Right) Here</span>", unsafe_allow_html=True)
+        rectangle_coordinates = st.text_area("", height=150)
 
         # Step 5: Upload Thresholded Image
         st.header("Step 5: Upload Your Thresholded Image")
-        uploaded_thresholded_image = st.file_uploader("Upload your thresholded image file", type=["png", "jpg", "jpeg"])
+        st.markdown("<span style='color: white;'>Upload your thresholded image file</span>", unsafe_allow_html=True)
+        uploaded_thresholded_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
 
         # Step 6: Upload Image with Rectangles Outlined
         st.header("Step 6: Upload Image with Rectangles Outlined")
-        uploaded_outlined_image = st.file_uploader("Upload your image with rectangles outlined", type=["png", "jpg", "jpeg"])
+        st.markdown("<span style='color: white;'>Upload your image with rectangles outlined</span>", unsafe_allow_html=True)
+        uploaded_outlined_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
 
         # Submit Button
         submit_button = st.button("Submit Assignment")
