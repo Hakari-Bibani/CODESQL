@@ -1,14 +1,50 @@
-# login.py - Manages user authentication and registration
+# login.py - Manages user authentication, registration, and password recovery
 import streamlit as st
 import sqlite3
+import smtplib
+from email.message import EmailMessage
 from database import create_tables
 from theme import apply_dark_theme
 from github_sync import push_db_to_github
 
+def send_password_email(recipient_email, username, password):
+    """
+    Sends an email with the user's password to the recipient.
+    Returns True if the email was sent successfully, otherwise False.
+    """
+    try:
+        # Get SMTP configuration from secrets
+        smtp_server = st.secrets["smtp"]["server"]
+        smtp_port = st.secrets["smtp"]["port"]
+        smtp_username = st.secrets["smtp"]["username"]
+        smtp_password = st.secrets["smtp"]["password"]
+
+        # Create the email message
+        msg = EmailMessage()
+        msg.set_content(
+            f"Hi {username},\n\n"
+            "We received a request to send you back your password.\n"
+            f"Here is your password: {password}\n\n"
+            "If you have any questions or need further assistance, please don't hesitate to contact us.\n\n"
+            "AI For Impact team"
+        )
+        msg["Subject"] = "Password Recovery"
+        msg["From"] = smtp_username
+        msg["To"] = recipient_email
+
+        # Send the email using a secure SSL connection
+        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+            server.login(smtp_username, smtp_password)
+            server.send_message(msg)
+        return True
+    except Exception as e:
+        st.error(f"Error sending email: {e}")
+        return False
+
 def register_user(fullname, email, phone, username, password):
     """
     Registers a new user in the database. Returns True on success,
-    False if username already exists (i.e., IntegrityError).
+    False if the username already exists (i.e., IntegrityError).
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
@@ -46,17 +82,17 @@ def login_user(username, password):
 
 def show_login_create_account():
     """
-    Renders the login and create account tabs in dark mode.
-    Pulls the existing DB (via create_tables) and pushes updates on registration.
+    Renders the login, create account, and forgot password tabs in dark mode.
+    Ensures the database is created/pulled from GitHub.
     """
-    # Apply theme first
+    # Apply the dark theme
     apply_dark_theme()
 
-    # Ensure the database is created / pulled from GitHub
+    # Ensure the database is created / updated
     create_tables()
 
-    # Render two tabs: [Login] and [Create Account]
-    tabs = st.tabs(["Login", "Create Account"])
+    # Render three tabs: [Login], [Create Account], [Forgot Password]
+    tabs = st.tabs(["Login", "Create Account", "Forgot Password"])
 
     # ─────────────────────────────────────────────────────────────────
     # LOGIN TAB
@@ -122,3 +158,29 @@ def show_login_create_account():
                     '<p class="error-text">⚠️ Please fill out all fields.</p>',
                     unsafe_allow_html=True
                 )
+
+    # ─────────────────────────────────────────────────────────────────
+    # FORGOT PASSWORD TAB
+    # ─────────────────────────────────────────────────────────────────
+    with tabs[2]:
+        st.subheader("🔒 Forgot Password")
+
+        forgot_email = st.text_input("Enter your registered email", key="forgot_email")
+        if st.button("Retrieve Password"):
+            if forgot_email:
+                conn = sqlite3.connect(st.secrets["general"]["db_path"])
+                cursor = conn.cursor()
+                cursor.execute("SELECT username, password FROM users WHERE email=?", (forgot_email,))
+                user_data = cursor.fetchone()
+                conn.close()
+
+                if user_data:
+                    username, password = user_data
+                    if send_password_email(forgot_email, username, password):
+                        st.success("Your password has been sent to your email address.")
+                    else:
+                        st.error("Failed to send email. Please try again later.")
+                else:
+                    st.error("This email is not registered in our system.")
+            else:
+                st.error("Please enter an email address.")
