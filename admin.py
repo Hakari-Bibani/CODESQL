@@ -1,8 +1,9 @@
 # admin.py
 import streamlit as st
 import sqlite3
+from github_sync import push_db_to_github
 
-# Function to get a connection to your database using the path from st.secrets
+# Function to get a connection to your SQLite database.
 def get_connection():
     db_path = st.secrets["general"]["db_path"]
     conn = sqlite3.connect(db_path)
@@ -18,7 +19,7 @@ def admin_login():
         username = st.text_input("Admin Username")
         password = st.text_input("Admin Password", type="password")
         if st.button("Login"):
-            # Check credentials against your st.secrets values
+            # Check credentials against st.secrets
             if (username == st.secrets["admin"]["username"] and
                     password == st.secrets["admin"]["password"]):
                 st.session_state["admin_logged_in"] = True
@@ -28,12 +29,18 @@ def admin_login():
 
     return st.session_state["admin_logged_in"]
 
+# Function to push local database changes to GitHub
+def push_changes():
+    db_path = st.secrets["general"]["db_path"]
+    push_db_to_github(db_path)
+    st.success("Database pushed to GitHub successfully.")
+
 # Main admin interface
 if admin_login():
     st.title("Admin Dashboard")
     st.write("Use this dashboard to modify your database structure and data.")
-
-    # Let admin select an operation
+    
+    # Choose an operation
     operation = st.selectbox(
         "Select Operation",
         [
@@ -57,7 +64,7 @@ if admin_login():
                 cursor.execute(sql_command)
                 conn.commit()
                 st.success("SQL executed successfully.")
-                # If a SELECT query, display results.
+                # If it was a SELECT query, display results.
                 if sql_command.strip().lower().startswith("select"):
                     results = cursor.fetchall()
                     st.write("Results:", results)
@@ -65,12 +72,14 @@ if admin_login():
                 st.error(f"Error executing SQL: {e}")
             finally:
                 conn.close()
+        if st.button("Push changes to GitHub"):
+            push_changes()
 
-    # Option 2: Insert a new row into one of the tables.
+    # Option 2: Insert a new row into a table.
     elif operation == "Insert Row":
         st.subheader("Insert Row into Table")
         table = st.selectbox("Select Table", ["users", "records", "admin"])
-        # Fetch table schema (column names) dynamically.
+        # Retrieve table schema (column names) dynamically.
         try:
             conn = get_connection()
             cursor = conn.cursor()
@@ -81,14 +90,9 @@ if admin_login():
         except Exception as e:
             st.error(f"Error fetching table info: {e}")
             conn.close()
-        finally:
-            pass
-
-        # Create inputs for each column.
         new_data = {}
         for col in col_names:
             new_data[col] = st.text_input(f"Enter value for '{col}'", key=col)
-
         if st.button("Insert Row"):
             try:
                 conn = get_connection()
@@ -96,13 +100,18 @@ if admin_login():
                 placeholders = ", ".join(["?"] * len(col_names))
                 col_names_str = ", ".join(col_names)
                 values = [new_data[col] for col in col_names]
-                cursor.execute(f"INSERT INTO {table} ({col_names_str}) VALUES ({placeholders})", values)
+                cursor.execute(
+                    f"INSERT INTO {table} ({col_names_str}) VALUES ({placeholders})",
+                    values
+                )
                 conn.commit()
                 st.success("Row inserted successfully.")
             except Exception as e:
                 st.error(f"Error inserting row: {e}")
             finally:
                 conn.close()
+        if st.button("Push changes to GitHub"):
+            push_changes()
 
     # Option 3: Delete rows from a table based on a WHERE clause.
     elif operation == "Delete Row":
@@ -125,6 +134,8 @@ if admin_login():
                     st.error(f"Error deleting row(s): {e}")
                 finally:
                     conn.close()
+        if st.button("Push changes to GitHub"):
+            push_changes()
 
     # Option 4: Add a new column to a table.
     elif operation == "Add Column":
@@ -144,6 +155,8 @@ if admin_login():
                 st.error(f"Error adding column: {e}")
             finally:
                 conn.close()
+        if st.button("Push changes to GitHub"):
+            push_changes()
 
     # Option 5: Display table data.
     elif operation == "Show Table Data":
@@ -154,7 +167,7 @@ if admin_login():
             cursor = conn.cursor()
             cursor.execute(f"SELECT * FROM {table}")
             rows = cursor.fetchall()
-            st.write("Data from table", table)
+            st.write(f"Data from table '{table}':")
             st.write(rows)
         except Exception as e:
             st.error(f"Error fetching data: {e}")
