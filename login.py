@@ -48,10 +48,17 @@ def send_password_email(recipient_email, username, password):
 def register_user(fullname, email, phone, username, password):
     """
     Registers a new user in the database.
-    Returns True on success, or False if the username already exists.
+    Returns True on success, or False if the username or password already exists.
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
+
+    # Check if the password is already taken by another user.
+    cursor.execute("SELECT 1 FROM users WHERE password = ?", (password,))
+    if cursor.fetchone() is not None:
+        conn.close()
+        return False
+
     try:
         cursor.execute(
             "INSERT INTO users (fullname, email, phone, username, password) VALUES (?, ?, ?, ?, ?)",
@@ -109,7 +116,9 @@ def show_login_create_account():
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = username
                 st.success("✅ Login successful!")
-                st.experimental_rerun()
+                # Call st.experimental_rerun() only if it exists.
+                if hasattr(st, "experimental_rerun"):
+                    st.experimental_rerun()
             else:
                 st.error("❌ Invalid username or password.")
 
@@ -130,7 +139,7 @@ def show_login_create_account():
                     st.error("❌ Please enter a valid phone number (digits only).")
                     return
                 if not register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password):
-                    st.error("⚠️ Username already exists. Choose a different one.")
+                    st.error("⚠️ Username or Password already exists. Choose a different one.")
                 else:
                     st.success("✅ Account created successfully! You can now log in.")
                     push_db_to_github(st.secrets["general"]["db_path"])
