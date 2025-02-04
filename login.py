@@ -9,11 +9,11 @@ from github_sync import push_db_to_github
 
 def send_password_email(recipient_email, username, password):
     """
-    Sends an email with the user's password to the recipient.
+    Sends an email with the user's password to the recipient using TLS on port 587.
     Returns True if the email was sent successfully, otherwise False.
     """
     try:
-        # Get SMTP configuration from st.secrets; adjust these keys as needed.
+        # Get SMTP configuration from st.secrets.
         smtp_server = st.secrets["smtp"]["server"]
         smtp_port = st.secrets["smtp"]["port"]
         smtp_username = st.secrets["smtp"]["username"]
@@ -32,8 +32,11 @@ def send_password_email(recipient_email, username, password):
         msg["From"] = smtp_username
         msg["To"] = recipient_email
 
-        # Send the email via a secure SSL connection.
-        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+        # Connect using TLS on port 587.
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.ehlo()  # Identify ourselves to the SMTP server
+            server.starttls()  # Secure the connection with TLS
+            server.ehlo()  # Re-identify over the secure connection
             server.login(smtp_username, smtp_password)
             server.send_message(msg)
         return True
