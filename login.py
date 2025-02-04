@@ -27,7 +27,7 @@ def send_password_email(recipient_email, username, password):
             "We received a request to send you back your password.\n"
             f"Here is your password: {password}\n\n"
             "If you have any questions or need further assistance, please don't hesitate to contact us.\n\n"
-            "AI For Code team"
+            "AI For Impact team"
         )
         msg["Subject"] = "Password Recovery"
         msg["From"] = smtp_email
