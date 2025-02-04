@@ -1,22 +1,8 @@
-# admin.py - Admin dashboard for managing the app’s data
+# admin.py - Admin dashboard without login prompt
 import streamlit as st
 import sqlite3
 from database import create_tables
 from github_sync import push_db_to_github
-
-def admin_login(username, password):
-    """
-    Authenticate an admin user based on credentials stored in the admin table.
-    """
-    conn = sqlite3.connect(st.secrets["general"]["db_path"])
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT * FROM admin WHERE username=? AND password=?", 
-        (username, password)
-    )
-    admin_user = cursor.fetchone()
-    conn.close()
-    return admin_user
 
 def view_users():
     """
@@ -55,27 +41,15 @@ def main():
     
     # Ensure the database and required tables are created
     create_tables()
-
-    # Check for admin login status
-    if "admin_logged_in" not in st.session_state:
-        st.session_state["admin_logged_in"] = False
-
-    if not st.session_state["admin_logged_in"]:
-        st.subheader("Admin Login")
-        admin_username = st.text_input("Admin Username")
-        admin_password = st.text_input("Admin Password", type="password")
-        if st.button("Login"):
-            if admin_login(admin_username, admin_password):
-                st.session_state["admin_logged_in"] = True
-                st.success("Admin login successful!")
-            else:
-                st.error("Invalid admin credentials")
-        return  # Stop further rendering until logged in
-
-    # Once logged in, provide a sidebar with different admin options
+    
+    # Since there is no admin in the admin table,
+    # we are bypassing the login functionality.
+    st.info("**Note:** Login has been bypassed in this demo version.")
+    
+    # Sidebar with admin options
     st.sidebar.title("Admin Options")
     option = st.sidebar.radio("Select an option", ("View Users", "View Records", "Database Operations"))
-
+    
     if option == "View Users":
         st.header("Registered Users")
         users = view_users()
@@ -90,7 +64,7 @@ def main():
                     st.experimental_rerun()
         else:
             st.info("No users found.")
-
+    
     elif option == "View Records":
         st.header("User Records")
         records = view_records()
@@ -99,7 +73,7 @@ def main():
                 st.write(record)
         else:
             st.info("No records found.")
-
+    
     elif option == "Database Operations":
         st.header("Database Operations")
         st.write("**Warning:** These operations can modify your database schema. Proceed with caution!")
@@ -118,7 +92,7 @@ def main():
                     cursor.execute(sql)
                     st.success(f"Column '{column_name}' added to {table}.")
                 elif operation == "Delete Column":
-                    st.error("SQLite does not support DROP COLUMN directly. Consider alternative approaches such as creating a new table without the column.")
+                    st.error("SQLite does not support DROP COLUMN directly. Consider alternative approaches.")
                 elif operation == "Execute Custom SQL":
                     cursor.execute(custom_sql)
                     st.success("Custom SQL executed successfully.")
