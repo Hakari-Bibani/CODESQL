@@ -16,7 +16,8 @@ def send_password_email(recipient_email, username, password):
         # Get SMTP configuration from st.secrets.
         smtp_server = st.secrets["smtp"]["server"]
         smtp_port = st.secrets["smtp"]["port"]
-        smtp_username = st.secrets["smtp"]["username"]
+        # Use the 'email' key from your secrets file instead of 'username'
+        smtp_email = st.secrets["smtp"]["email"]
         smtp_password = st.secrets["smtp"]["password"]
 
         # Create the email message with a polite recovery message.
@@ -29,15 +30,15 @@ def send_password_email(recipient_email, username, password):
             "AI For Code team"
         )
         msg["Subject"] = "Password Recovery"
-        msg["From"] = smtp_username
+        msg["From"] = smtp_email
         msg["To"] = recipient_email
 
         # Connect using TLS on port 587.
         with smtplib.SMTP(smtp_server, smtp_port) as server:
-            server.ehlo()  # Identify ourselves to the SMTP server
-            server.starttls()  # Secure the connection with TLS
-            server.ehlo()  # Re-identify over the secure connection
-            server.login(smtp_username, smtp_password)
+            server.ehlo()             # Identify to the server
+            server.starttls()         # Secure the connection with TLS
+            server.ehlo()             # Re-identify as an encrypted connection
+            server.login(smtp_email, smtp_password)
             server.send_message(msg)
         return True
     except Exception as e:
