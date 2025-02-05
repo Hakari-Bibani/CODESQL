@@ -1,44 +1,42 @@
-# sidebar.py
+# sidebar.py - Handles sidebar navigation with an expander/accordion style
 import streamlit as st
 
 def show_sidebar():
-    selection = None  # To track the selected page
-    
-    # Sidebar title
-    st.sidebar.title("🎈 Okld's Gallery")
-    
-    # Home button
-    if st.sidebar.button("Home"):
-        selection = "home"
+    selected = None
 
-    # Expander for Assignments
-    with st.sidebar.expander("Assignments", expanded=True):
-        if st.button("Assignment 1", key="as1"):
-            selection = "as1"
-        if st.button("Assignment 2", key="as2"):
-            selection = "as2"
-        if st.button("Assignment 3", key="as3"):
-            selection = "as3"
-        if st.button("Assignment 4", key="as4"):
-            selection = "as4"
-    
-    # Expander for Quizzes
-    with st.sidebar.expander("Quizzes", expanded=True):
-        if st.button("Quiz 1", key="quiz1"):
-            selection = "quiz1"
-        if st.button("Quiz 2", key="quiz2"):
-            selection = "quiz2"
-    
-    # Help button
-    if st.sidebar.button("Help"):
-        selection = "help"
-    
-    # Logout button
-    if st.sidebar.button("Logout"):
-        selection = "logout"
+    with st.sidebar:
+        st.title("AI For Impact")
 
-    # Default to home if nothing was clicked
-    if selection is None:
-        selection = "home"
-    
-    return selection
+        # Home button (directly visible)
+        if st.button("Home"):
+            selected = "home"
+
+        # Expandable section for Assignments
+        with st.expander("Assignments", expanded=True):
+            if st.button("Assignment 1"):
+                selected = "as1"
+            if st.button("Assignment 2"):
+                selected = "as2"
+            if st.button("Assignment 3"):
+                selected = "as3"
+            if st.button("Assignment 4"):
+                selected = "as4"
+
+        # Expandable section for Quizzes
+        with st.expander("Quizzes", expanded=True):
+            if st.button("Quiz 1"):
+                selected = "quiz1"
+            if st.button("Quiz 2"):
+                selected = "quiz2"
+
+        # Help and Logout buttons
+        if st.button("Help"):
+            selected = "help"
+        if st.button("Logout"):
+            selected = "logout"
+
+    # Fallback in case no button was clicked; default to home
+    if selected is None:
+        selected = "home"
+
+    return selected
