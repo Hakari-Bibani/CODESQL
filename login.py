@@ -1,3 +1,96 @@
+# login.py - Manages user authentication, registration, and password recovery
+import streamlit as st
+import sqlite3
+import smtplib
+from email.message import EmailMessage
+from database import create_tables
+from theme import apply_dark_theme
+from github_sync import push_db_to_github  # Ensure this function uses st.secrets["general"]["repo"] and st.secrets["general"]["token"]
+
+def send_password_email(recipient_email, username, password):
+    """
+    Sends an email with the user's password using TLS on port 587.
+    """
+    try:
+        # Get SMTP configuration from st.secrets.
+        smtp_server = st.secrets["smtp"]["server"]
+        smtp_port = st.secrets["smtp"]["port"]
+        smtp_email = st.secrets["smtp"]["email"]
+        smtp_password = st.secrets["smtp"]["password"]
+
+        msg = EmailMessage()
+        msg.set_content(
+            f"Hi {username},\n\n"
+            "We received a request to send you back your password.\n"
+            f"Here is your password: {password}\n\n"
+            "If you have any questions, please contact us.\n\n"
+            "AI For Impact team"
+        )
+        msg["Subject"] = "Password Recovery"
+        msg["From"] = smtp_email
+        msg["To"] = recipient_email
+
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(smtp_email, smtp_password)
+            server.send_message(msg)
+        return True
+    except Exception as e:
+        st.error(f"Error sending email: {e}")
+        return False
+
+def register_user(fullname, email, phone, username, password):
+    """
+    Registers a new user in the database with approved=0.
+    """
+    conn = sqlite3.connect(st.secrets["general"]["db_path"])
+    cursor = conn.cursor()
+
+    # Check if the password is already taken.
+    cursor.execute("SELECT 1 FROM users WHERE password = ?", (password,))
+    if cursor.fetchone() is not None:
+        conn.close()
+        return False
+
+    try:
+        cursor.execute(
+            "INSERT INTO users (fullname, email, phone, username, password) VALUES (?, ?, ?, ?, ?)",
+            (fullname, email, phone, username, password)
+        )
+        conn.commit()
+    except sqlite3.IntegrityError:
+        conn.close()
+        return False
+
+    # Initialize a record in the 'records' table with zeroed scores.
+    cursor.execute(
+        "INSERT INTO records (password, fullname, email, as1, as2, as3, as4, quiz1, quiz2, total) VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0, 0)",
+        (password, fullname, email)
+    )
+    conn.commit()
+    conn.close()
+    return True
+
+def login_user(username, password):
+    """
+    Validates username/password and checks if the user is approved.
+    Returns the user row if valid and approved, "not_approved" if the user exists but is not approved,
+    or None if credentials are invalid.
+    """
+    conn = sqlite3.connect(st.secrets["general"]["db_path"])
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+    user = cursor.fetchone()
+    conn.close()
+    
+    if user:
+        approved = user[5]  # Assuming 6th column is 'approved'
+        if approved != 1:
+            return "not_approved"
+    return user
+
 def show_login_create_account():
     """
     Renders the login, create account, and forgot password tabs.
@@ -5,24 +98,15 @@ def show_login_create_account():
     apply_dark_theme()
     create_tables()  # Ensure database and tables exist
 
-    # Center the tabs using a 3-column layout
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        tabs = st.tabs(["Login", "Create Account", "Forgot Password"])
+    tabs = st.tabs(["Login", "Create Account", "Forgot Password"])
 
     # ─────────────────────────
     # LOGIN TAB
     with tabs[0]:
         st.subheader("🔑 Login")
-        with st.container():
-            # Create two columns for input fields
-            c1, c2 = st.columns([1, 1])
-            with c1:
-                username = st.text_input("Username", key="login_username")
-                password = st.text_input("Password", type="password", key="login_password")
-        
-        # Login button remains full width but centered
-        if st.button("Login", key="login_btn"):
+        username = st.text_input("Username", key="login_username")
+        password = st.text_input("Password", type="password", key="login_password")
+        if st.button("Login"):
             user = login_user(username, password)
             if user == "not_approved":
                 st.error("Your account has not been approved yet. Please wait for admin approval.")
@@ -39,17 +123,12 @@ def show_login_create_account():
     # CREATE ACCOUNT TAB
     with tabs[1]:
         st.subheader("🆕 Create Account")
-        with st.container():
-            c1, c2 = st.columns([1, 1])
-            with c1:
-                reg_fullname = st.text_input("Full Name", key="reg_fullname")
-                reg_email = st.text_input("Email", key="reg_email")
-                reg_phone = st.text_input("Mobile Number", key="reg_phone")
-                reg_username = st.text_input("Username", key="reg_username")
-                reg_password = st.text_input("Password", type="password", key="reg_password")
-
-        # Registration button
-        if st.button("Register", key="reg_btn"):
+        reg_fullname = st.text_input("Full Name", key="reg_fullname")
+        reg_email = st.text_input("Email", key="reg_email")
+        reg_phone = st.text_input("Mobile Number", key="reg_phone")
+        reg_username = st.text_input("Username", key="reg_username")
+        reg_password = st.text_input("Password", type="password", key="reg_password")
+        if st.button("Register"):
             if all([reg_fullname, reg_email, reg_phone, reg_username, reg_password]):
                 try:
                     phone_int = int(reg_phone)
@@ -60,6 +139,7 @@ def show_login_create_account():
                     st.error("⚠️ Username or Password already exists. Choose a different one.")
                 else:
                     st.success("✅ Account created! Please wait for admin approval before logging in.")
+                    # Push changes to GitHub; ensure push_db_to_github uses the repo and token from st.secrets
                     push_db_to_github(st.secrets["general"]["db_path"])
             else:
                 st.error("⚠️ Please fill out all fields.")
@@ -68,13 +148,8 @@ def show_login_create_account():
     # FORGOT PASSWORD TAB
     with tabs[2]:
         st.subheader("🔒 Forgot Password")
-        with st.container():
-            c1, c2 = st.columns([1, 1])
-            with c1:
-                forgot_email = st.text_input("Enter your registered email", key="forgot_email")
-
-        # Password recovery button
-        if st.button("Retrieve Password", key="pwd_btn"):
+        forgot_email = st.text_input("Enter your registered email", key="forgot_email")
+        if st.button("Retrieve Password"):
             if not forgot_email:
                 st.error("Please enter an email address.")
             else:
@@ -95,3 +170,4 @@ def show_login_create_account():
 
 if __name__ == '__main__':
     show_login_create_account()
+
