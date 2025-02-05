@@ -1,12 +1,9 @@
 # control.py - Admin Control Panel for User Approvals
 import streamlit as st
 import sqlite3
-from github_sync import push_db_to_github  # This should use st.secrets["general"]["repo"] and st.secrets["general"]["token"]
+from github_sync import push_db_to_github  # Ensure this function uses st.secrets["general"]["repo"] and st.secrets["general"]["token"]
 
 def admin_login():
-    """
-    Displays an admin login form and returns True if the entered credentials are correct.
-    """
     st.subheader("Admin Login")
     admin_username = st.text_input("Admin Username", key="admin_username")
     admin_password = st.text_input("Admin Password", type="password", key="admin_password")
@@ -19,10 +16,6 @@ def admin_login():
             st.error("Invalid admin credentials.")
 
 def get_pending_users():
-    """
-    Retrieves users pending approval (approved = 0).
-    Returns a list of tuples: (rowid, fullname, email, phone, username).
-    """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("SELECT rowid, fullname, email, phone, username FROM users WHERE approved = 0")
@@ -31,10 +24,6 @@ def get_pending_users():
     return pending
 
 def update_user_approval(rowid, new_status):
-    """
-    Updates the 'approved' field for the user with the given rowid.
-    new_status should be 1 (approve) or -1 (reject).
-    """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("UPDATE users SET approved = ? WHERE rowid = ?", (new_status, rowid))
@@ -44,9 +33,6 @@ def update_user_approval(rowid, new_status):
     push_db_to_github(st.secrets["general"]["db_path"])
 
 def show_admin_panel():
-    """
-    Displays the admin control panel for approving or rejecting user accounts.
-    """
     st.title("Admin Control Panel")
     st.write("Approve or Reject new user accounts")
 
@@ -63,18 +49,23 @@ def show_admin_panel():
                 if st.button("Approve", key=f"approve_{rowid}"):
                     update_user_approval(rowid, 1)
                     st.success(f"User {username} has been approved.")
-                    st.experimental_rerun()
+                    if hasattr(st, "experimental_rerun"):
+                        st.experimental_rerun()
+                    else:
+                        st.info("Please refresh the page manually.")
             with col2:
                 if st.button("Reject", key=f"reject_{rowid}"):
                     update_user_approval(rowid, -1)
                     st.error(f"User {username} has been rejected.")
-                    st.experimental_rerun()
+                    if hasattr(st, "experimental_rerun"):
+                        st.experimental_rerun()
+                    else:
+                        st.info("Please refresh the page manually.")
             st.markdown("---")
     else:
         st.info("No pending users for approval.")
 
 def main():
-    # Check if admin is logged in; if not, show login form.
     if "admin_logged_in" not in st.session_state or not st.session_state["admin_logged_in"]:
         admin_login()
     else:
