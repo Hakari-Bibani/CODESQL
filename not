@@ -350,44 +350,40 @@ if admin_login():
 
 
 
-
-Summary of Options Available in This Updated admin.py
+Summary of All Options in This Updated admin.py
 Execute SQL:
 
 Run any valid SQL command.
-View results (for queries like SELECT).
-Caution: Use this option carefully since it can run any SQL.
+See results for queries (e.g., SELECT).
 View Schema:
 
-List all tables in the database.
-Expand each table to view its columns and data types.
+List all tables and view each table’s schema (columns and types).
 Create Table:
 
-Define and create a new table by specifying its name and column definitions (one per line).
+Define and create a new table by specifying its name and columns.
 Drop Table:
 
-Select and permanently delete a table from the database.
-Requires confirmation to proceed.
+Permanently delete a table from the database (with a confirmation step).
 Insert Row:
 
-Choose a table and insert a new row by filling out fields for each column based on the current schema.
+Insert a new row into a selected table by filling in values for each column.
 Edit Row:
 
-Fetch rows by specifying a WHERE clause.
-Update the values of the selected row(s).
+Fetch and update rows in a table based on a provided WHERE clause.
 Delete Row:
 
-Delete one or more rows by specifying a WHERE clause.
-Alter Table (Add Column):
+Remove rows from a table using a specified WHERE clause.
+Alter Table:
 
-Select an existing table.
-View the current schema for reference.
-Add a new column by specifying its name and data type.
-Note: SQLite supports adding columns but has limitations (e.g., new columns cannot be defined as NOT NULL without a default value).
+Add Column:
+Select a table and add a new column by specifying its name and data type.
+Delete Column:
+Select a table and choose an existing column to delete.
+The process recreates the table without the chosen column (data for remaining columns is preserved).
 Backup/Restore:
 
-Backup: Create a local backup copy of the current database file.
-Restore: Replace the current database with an uploaded backup file.
+Create a backup of the database file locally.
+Restore the database from an uploaded backup file.
 Push Changes to GitHub:
 
-For most operations, there is an option to push the local database changes to GitHub, ensuring your remote repository stays in sync.
+After many operations, you can push your local database changes to GitHub.
