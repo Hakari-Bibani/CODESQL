@@ -1,4 +1,5 @@
 # login.py - Manages user authentication, registration, and password recovery
+
 import streamlit as st
 import sqlite3
 import smtplib
@@ -16,11 +17,9 @@ def send_password_email(recipient_email, username, password):
         # Get SMTP configuration from st.secrets.
         smtp_server = st.secrets["smtp"]["server"]
         smtp_port = st.secrets["smtp"]["port"]
-        # Use the 'email' key from your secrets file instead of 'username'
         smtp_email = st.secrets["smtp"]["email"]
         smtp_password = st.secrets["smtp"]["password"]
 
-        # Create the email message with a polite recovery message.
         msg = EmailMessage()
         msg.set_content(
             f"Hi {username},\n\n"
@@ -33,7 +32,6 @@ def send_password_email(recipient_email, username, password):
         msg["From"] = smtp_email
         msg["To"] = recipient_email
 
-        # Connect using TLS on port 587.
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.ehlo()             # Identify to the server
             server.starttls()         # Secure the connection with TLS
@@ -47,7 +45,7 @@ def send_password_email(recipient_email, username, password):
 
 def register_user(fullname, email, phone, username, password):
     """
-    Registers a new user in the database.
+    Registers a new user in the database with approved status set to 0 (pending).
     Returns True on success, or False if the username or password already exists.
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
@@ -61,7 +59,7 @@ def register_user(fullname, email, phone, username, password):
 
     try:
         cursor.execute(
-            "INSERT INTO users (fullname, email, phone, username, password) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO users (fullname, email, phone, username, password, approved) VALUES (?, ?, ?, ?, ?, 0)",
             (fullname, email, phone, username, password)
         )
         conn.commit()
@@ -81,14 +79,27 @@ def register_user(fullname, email, phone, username, password):
 def login_user(username, password):
     """
     Validates the username/password against the database.
-    Returns the user row if valid, otherwise None.
+    Only returns the user if the account is approved.
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
     user = cursor.fetchone()
     conn.close()
-    return user
+
+    if user:
+        # Assuming the columns are:
+        # (fullname, email, phone, username, password, approved)
+        approved_status = user[5]
+        if approved_status == 1:
+            return user
+        elif approved_status == 0:
+            st.error("Your account is pending approval. Please wait for an administrator to approve your registration.")
+            return None
+        elif approved_status == -1:
+            st.error("Your registration has been rejected. Please contact support for more information.")
+            return None
+    return None
 
 def show_login_create_account():
     """
@@ -116,7 +127,6 @@ def show_login_create_account():
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = username
                 st.success("✅ Login successful!")
-                # Call st.experimental_rerun() only if it exists.
                 if hasattr(st, "experimental_rerun"):
                     st.experimental_rerun()
             else:
@@ -141,7 +151,7 @@ def show_login_create_account():
                 if not register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password):
                     st.error("⚠️ Username or Password already exists. Choose a different one.")
                 else:
-                    st.success("✅ Account created successfully! You can now log in.")
+                    st.success("✅ Account created successfully! Your account is pending approval.")
                     push_db_to_github(st.secrets["general"]["db_path"])
             else:
                 st.error("⚠️ Please fill out all fields.")
@@ -155,13 +165,11 @@ def show_login_create_account():
             if not forgot_email:
                 st.error("Please enter an email address.")
             else:
-                # Look up the email in the users table.
                 conn = sqlite3.connect(st.secrets["general"]["db_path"])
                 cursor = conn.cursor()
                 cursor.execute("SELECT username, password FROM users WHERE email=?", (forgot_email,))
                 result = cursor.fetchone()
                 conn.close()
-
                 if result:
                     username, password = result
                     if send_password_email(forgot_email, username, password):
@@ -170,3 +178,6 @@ def show_login_create_account():
                         st.error("Failed to send email. Please try again later.")
                 else:
                     st.error("This email is not registered in our system.")
+
+if __name__ == "__main__":
+    show_login_create_account()
