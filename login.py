@@ -115,6 +115,13 @@ def show_login_create_account():
         .stCheckbox > label {
             width: 50% !important;
             margin-left: 0 !important;
+            padding-left: 0 !important;
+        }
+        /* Ensure checkbox container is not centered */
+        .stCheckbox {
+            width: 50% !important;
+            margin-left: 0 !important;
+            padding-left: 0 !important;
         }
         </style>
         """,
