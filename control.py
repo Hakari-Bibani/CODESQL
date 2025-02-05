@@ -1,4 +1,3 @@
-just say ok if you understand . 
 # control.py - Admin Control Panel for User Approvals
 import streamlit as st
 import sqlite3
