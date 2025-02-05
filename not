@@ -343,3 +343,51 @@ if admin_login():
                 if st.button("Restore Backup"):
                     restore_database(uploaded_file)
                     st.button("Push changes to GitHub", on_click=push_changes)
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+
+
+Summary of Options Available in This Updated admin.py
+Execute SQL:
+
+Run any valid SQL command.
+View results (for queries like SELECT).
+Caution: Use this option carefully since it can run any SQL.
+View Schema:
+
+List all tables in the database.
+Expand each table to view its columns and data types.
+Create Table:
+
+Define and create a new table by specifying its name and column definitions (one per line).
+Drop Table:
+
+Select and permanently delete a table from the database.
+Requires confirmation to proceed.
+Insert Row:
+
+Choose a table and insert a new row by filling out fields for each column based on the current schema.
+Edit Row:
+
+Fetch rows by specifying a WHERE clause.
+Update the values of the selected row(s).
+Delete Row:
+
+Delete one or more rows by specifying a WHERE clause.
+Alter Table (Add Column):
+
+Select an existing table.
+View the current schema for reference.
+Add a new column by specifying its name and data type.
+Note: SQLite supports adding columns but has limitations (e.g., new columns cannot be defined as NOT NULL without a default value).
+Backup/Restore:
+
+Backup: Create a local backup copy of the current database file.
+Restore: Replace the current database with an uploaded backup file.
+Push Changes to GitHub:
+
+For most operations, there is an option to push the local database changes to GitHub, ensuring your remote repository stays in sync.
