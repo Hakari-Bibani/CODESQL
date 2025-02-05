@@ -1,3 +1,4 @@
+# login.py - Manages user authentication, registration, and password recovery
 import streamlit as st
 import sqlite3
 import smtplib
@@ -83,7 +84,7 @@ def login_user(username, password):
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
     user = cursor.fetchone()
     conn.close()
-
+    
     if user:
         approved = user[5]  # Assuming 6th column is 'approved'
         if approved != 1:
@@ -97,28 +98,28 @@ def show_login_create_account():
     apply_dark_theme()
     create_tables()  # Ensure database and tables exist
 
-    with st.container():
-        st.markdown("""
-            <style>
-                .center-tabs > div {
-                    display: flex;
-                    justify-content: center;
-                }
-                .stTabs [data-baseweb='tab-list'] {
-                    justify-content: center;
-                }
-                .stTextInput > div > div > input {
-                    width: 250px;
-                }
-                .stButton > button {
-                    width: 250px;
-                }
-            </style>
-        """, unsafe_allow_html=True)
+    # Inject CSS to center tabs and reduce input box width
+    st.markdown(
+        """
+        <style>
+        .stTabs > div > div > button {
+            margin: 0 auto;
+            display: block;
+        }
+        .stTextInput input, .stTextInput input:focus {
+            width: 50% !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
+    # Use columns to center the tabs
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
         tabs = st.tabs(["Login", "Create Account", "Forgot Password"])
 
-        # ──────────────────────────────────────
+        # ─────────────────────────
         # LOGIN TAB
         with tabs[0]:
             st.subheader("🔑 Login")
@@ -137,7 +138,7 @@ def show_login_create_account():
                 else:
                     st.error("❌ Invalid username or password.")
 
-        # ──────────────────────────────────────
+        # ─────────────────────────
         # CREATE ACCOUNT TAB
         with tabs[1]:
             st.subheader("🆕 Create Account")
@@ -162,7 +163,7 @@ def show_login_create_account():
                 else:
                     st.error("⚠️ Please fill out all fields.")
 
-        # ──────────────────────────────────────
+        # ─────────────────────────
         # FORGOT PASSWORD TAB
         with tabs[2]:
             st.subheader("🔒 Forgot Password")
