@@ -12,7 +12,7 @@ def get_connection():
     """Return a connection to the SQLite database."""
     db_path = st.secrets["general"]["db_path"]
     conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row  # to return rows as dictionaries
+    conn.row_factory = sqlite3.Row  # Return rows as dictionaries
     return conn
 
 def push_changes():
@@ -93,6 +93,7 @@ if admin_login():
             "Insert Row",
             "Edit Row",
             "Delete Row",
+            "Alter Table",      # Option for schema alteration (e.g., add column)
             "Backup/Restore",
         ])
 
@@ -282,12 +283,10 @@ if admin_login():
                         cursor = conn.cursor()
                         set_clause = ", ".join([f"{col} = ?" for col in updated_data.keys()])
                         values = list(updated_data.values())
-                        # Updating the first row that matched the WHERE clause.
                         update_query = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
                         cursor.execute(update_query, values)
                         conn.commit()
                         st.success("Row updated successfully.")
-                        # Clear stored edit rows
                         st.session_state.pop("edit_rows")
                     except Exception as e:
                         st.error(f"Error updating row: {e}")
@@ -328,7 +327,42 @@ if admin_login():
                         conn.close()
         st.button("Push changes to GitHub", on_click=push_changes)
 
-    # --- 8. Backup / Restore ---
+    # --- 8. Alter Table (Add Column) ---
+    elif nav_option == "Alter Table":
+        st.subheader("Alter Table: Add Column")
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            tables = [row["name"] for row in cursor.fetchall()]
+            conn.close()
+        except Exception as e:
+            st.error(f"Error fetching tables: {e}")
+            tables = []
+        if tables:
+            table = st.selectbox("Select Table to Alter", tables, key="alter_table")
+            schema = get_table_schema(table)
+            st.write("Current schema:", [f"{col['name']} ({col['type']})" for col in schema])
+            new_column_name = st.text_input("New Column Name", key="new_column_name")
+            new_column_type = st.text_input("Data Type (e.g., TEXT, INTEGER, REAL)", key="new_column_type")
+            if st.button("Add Column"):
+                if new_column_name.strip() == "" or new_column_type.strip() == "":
+                    st.error("Both the column name and data type are required.")
+                else:
+                    try:
+                        alter_query = f"ALTER TABLE {table} ADD COLUMN {new_column_name} {new_column_type}"
+                        conn = get_connection()
+                        cursor = conn.cursor()
+                        cursor.execute(alter_query)
+                        conn.commit()
+                        st.success(f"Column '{new_column_name}' added to '{table}' successfully!")
+                    except Exception as e:
+                        st.error(f"Error adding column: {e}")
+                    finally:
+                        conn.close()
+        st.button("Push changes to GitHub", on_click=push_changes)
+
+    # --- 9. Backup / Restore ---
     elif nav_option == "Backup/Restore":
         st.subheader("Backup / Restore Database")
         col1, col2 = st.columns(2)
