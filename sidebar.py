@@ -1,42 +1,45 @@
-# sidebar.py - Handles sidebar navigation with an expander/accordion style
 import streamlit as st
+from streamlit_option_menu import option_menu
 
 def show_sidebar():
-    selected = None
-
     with st.sidebar:
-        st.title("AI For Impact")
+        # Sidebar Title
+        st.markdown("### 🎈 Code for Impact")
 
-        # Home button (directly visible)
-        if st.button("Home"):
-            selected = "home"
+        # Main Menu Options
+        selected = option_menu(
+            menu_title=None,
+            options=["Home", "Assignments", "Quizzes", "Help", "Logout"],
+            icons=["house", "book", "pencil-square", "question-circle", "box-arrow-right"],
+            menu_icon="cast",
+            default_index=0,
+            orientation="vertical",
+            styles={
+                "container": {"padding": "5px", "background-color": "#1e1e1e"},
+                "icon": {"color": "orange", "font-size": "20px"}, 
+                "nav-link": {
+                    "font-size": "16px",
+                    "text-align": "left",
+                    "margin": "5px",
+                    "color": "white",
+                    "border-radius": "10px"
+                },
+                "nav-link-selected": {
+                    "background-color": "#4b4b4b",
+                    "color": "white",
+                    "font-weight": "bold"
+                }
+            }
+        )
 
-        # Expandable section for Assignments
-        with st.expander("Assignments", expanded=True):
-            if st.button("Assignment 1"):
-                selected = "as1"
-            if st.button("Assignment 2"):
-                selected = "as2"
-            if st.button("Assignment 3"):
-                selected = "as3"
-            if st.button("Assignment 4"):
-                selected = "as4"
+        # Handle Sub-Menus
+        if selected == "Assignments":
+            assignment = st.selectbox("Select Assignment", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"])
+            return {"Assignment 1": "as1", "Assignment 2": "as2", "Assignment 3": "as3", "Assignment 4": "as4"}[assignment]
 
-        # Expandable section for Quizzes
-        with st.expander("Quizzes", expanded=True):
-            if st.button("Quiz 1"):
-                selected = "quiz1"
-            if st.button("Quiz 2"):
-                selected = "quiz2"
+        elif selected == "Quizzes":
+            quiz = st.selectbox("Select Quiz", ["Quiz 1", "Quiz 2"])
+            return {"Quiz 1": "quiz1", "Quiz 2": "quiz2"}[quiz]
 
-        # Help and Logout buttons
-        if st.button("Help"):
-            selected = "help"
-        if st.button("Logout"):
-            selected = "logout"
-
-    # Fallback in case no button was clicked; default to home
-    if selected is None:
-        selected = "home"
-
-    return selected
+        # Return the selection for other options
+        return selected.lower()
