@@ -1,53 +1,59 @@
 
-''' sidebar.py - Handles sidebar navigation '''
 import streamlit as st
-from streamlit_option_menu import option_menu
 
 def show_sidebar():
+    # Custom CSS for the sidebar styling
+    st.markdown("""
+        <style>
+        .stExpander {
+            border: 1px solid #4B4B4B !important;
+            border-radius: 5px !important;
+            margin-bottom: 10px !important;
+        }
+        .stExpander > div:first-child {
+            background-color: #2E2E2E !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     with st.sidebar:
         st.title("AI For Impact")
         
-        menu_options = {
-            "Home": "home",
-            "Assignments": {
-                "Assignment 1": "as1",
-                "Assignment 2": "as2",
-                "Assignment 3": "as3",
-                "Assignment 4": "as4",
-            },
-            "Quizzes": {
-                "Quiz 1": "quiz1",
-                "Quiz 2": "quiz2",
-            },
-            "Help": "help",
-            "Logout": "logout"
-        }
+        # Home section
+        with st.expander("🏠 HOME", expanded=False):
+            if st.button("Home Page", key="home", use_container_width=True):
+                st.session_state["page"] = "home"
         
-        selected = option_menu(
-            menu_title=None,
-            options=list(menu_options.keys()),
-            icons=["house", "book", "pencil-square", "question-circle", "box-arrow-right"],
-            menu_icon="cast",
-            default_index=0,
-            orientation="vertical",
-        )
-
-        if selected in ["Assignments", "Quizzes"]:
-            sub_options = ["Select"] + list(menu_options[selected].keys())
-            sub_selected = st.selectbox(f"Select a {selected[:-1]}", sub_options, key=f"{selected}_selection")
-            if sub_selected != "Select":
-                return menu_options[selected][sub_selected]  # Return selected sub-option
-            else:
-                return "home"  # Stay on home page if no selection
+        # Assignments section
+        with st.expander("📚 ASSIGNMENTS", expanded=False):
+            if st.button("Assignment 1", key="as1", use_container_width=True):
+                st.session_state["page"] = "as1"
+            if st.button("Assignment 2", key="as2", use_container_width=True):
+                st.session_state["page"] = "as2"
+            if st.button("Assignment 3", key="as3", use_container_width=True):
+                st.session_state["page"] = "as3"
+            if st.button("Assignment 4", key="as4", use_container_width=True):
+                st.session_state["page"] = "as4"
         
-        return menu_options[selected]  # Return main selection if not Assignments/Quizzes
+        # Quizzes section
+        with st.expander("📝 QUIZZES", expanded=False):
+            if st.button("Quiz 1", key="quiz1", use_container_width=True):
+                st.session_state["page"] = "quiz1"
+            if st.button("Quiz 2", key="quiz2", use_container_width=True):
+                st.session_state["page"] = "quiz2"
+        
+        # Help section
+        with st.expander("❓ HELP", expanded=False):
+            if st.button("Help Center", key="help", use_container_width=True):
+                st.session_state["page"] = "help"
+        
+        # Logout section
+        with st.expander("🚪 LOGOUT", expanded=False):
+            if st.button("Logout", key="logout", use_container_width=True):
+                st.session_state["page"] = "logout"
 
-
-
-
-
-...........................................................
-
+        # Return the current page
+        return st.session_state.get("page", "home")
 
 
 
