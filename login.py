@@ -1,5 +1,4 @@
 # login.py - Manages user authentication, registration, and password recovery
-
 import streamlit as st
 import sqlite3
 import smtplib
@@ -20,6 +19,7 @@ def send_password_email(recipient_email, username, password):
         smtp_email = st.secrets["smtp"]["email"]
         smtp_password = st.secrets["smtp"]["password"]
 
+        # Create the email message with a polite recovery message.
         msg = EmailMessage()
         msg.set_content(
             f"Hi {username},\n\n"
@@ -32,6 +32,7 @@ def send_password_email(recipient_email, username, password):
         msg["From"] = smtp_email
         msg["To"] = recipient_email
 
+        # Connect using TLS on port 587.
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.ehlo()             # Identify to the server
             server.starttls()         # Secure the connection with TLS
@@ -45,8 +46,9 @@ def send_password_email(recipient_email, username, password):
 
 def register_user(fullname, email, phone, username, password):
     """
-    Registers a new user in the database with approved status set to 0 (pending).
+    Registers a new user in the database.
     Returns True on success, or False if the username or password already exists.
+    Note: The user is registered with approved = 0 by default.
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
@@ -59,7 +61,7 @@ def register_user(fullname, email, phone, username, password):
 
     try:
         cursor.execute(
-            "INSERT INTO users (fullname, email, phone, username, password, approved) VALUES (?, ?, ?, ?, ?, 0)",
+            "INSERT INTO users (fullname, email, phone, username, password) VALUES (?, ?, ?, ?, ?)",
             (fullname, email, phone, username, password)
         )
         conn.commit()
@@ -79,27 +81,24 @@ def register_user(fullname, email, phone, username, password):
 def login_user(username, password):
     """
     Validates the username/password against the database.
-    Only returns the user if the account is approved.
+    Returns the user row if valid and approved, otherwise:
+       - returns the string "not_approved" if the user exists but is not approved,
+       - returns None if credentials are invalid.
+       
+    Assumes the users table columns are as follows:
+    (fullname, email, phone, username, password, approved)
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
     user = cursor.fetchone()
     conn.close()
-
+    
     if user:
-        # Assuming the columns are:
-        # (fullname, email, phone, username, password, approved)
-        approved_status = user[5]
-        if approved_status == 1:
-            return user
-        elif approved_status == 0:
-            st.error("Your account is pending approval. Please wait for an administrator to approve your registration.")
-            return None
-        elif approved_status == -1:
-            st.error("Your registration has been rejected. Please contact support for more information.")
-            return None
-    return None
+        approved = user[5]  # Assuming the 6th column is 'approved'
+        if approved != 1:
+            return "not_approved"
+    return user
 
 def show_login_create_account():
     """
@@ -123,7 +122,9 @@ def show_login_create_account():
         password = st.text_input("Password", type="password", key="login_password")
         if st.button("Login"):
             user = login_user(username, password)
-            if user:
+            if user == "not_approved":
+                st.error("Your account has not been approved yet. Please wait for admin approval.")
+            elif user:
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = username
                 st.success("✅ Login successful!")
@@ -151,7 +152,7 @@ def show_login_create_account():
                 if not register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password):
                     st.error("⚠️ Username or Password already exists. Choose a different one.")
                 else:
-                    st.success("✅ Account created successfully! Your account is pending approval.")
+                    st.success("✅ Account created successfully! Please wait for admin approval before logging in.")
                     push_db_to_github(st.secrets["general"]["db_path"])
             else:
                 st.error("⚠️ Please fill out all fields.")
@@ -170,6 +171,7 @@ def show_login_create_account():
                 cursor.execute("SELECT username, password FROM users WHERE email=?", (forgot_email,))
                 result = cursor.fetchone()
                 conn.close()
+
                 if result:
                     username, password = result
                     if send_password_email(forgot_email, username, password):
@@ -179,5 +181,6 @@ def show_login_create_account():
                 else:
                     st.error("This email is not registered in our system.")
 
-if __name__ == "__main__":
+# When this module is run, display the login/create account UI.
+if __name__ == '__main__':
     show_login_create_account()
