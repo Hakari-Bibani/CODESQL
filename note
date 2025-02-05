@@ -1,0 +1,103 @@
+
+# database.py
+import sqlite3
+import streamlit as st
+import os
+from github_sync import pull_db_from_github
+
+def create_tables():
+    """Create the required tables in the database if they don't exist."""
+    db_path = st.secrets["general"]["db_path"]
+
+    # 1) Pull the DB from GitHub to ensure local is updated
+    pull_db_from_github(db_path)
+
+    # 2) Now proceed with table creation
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            fullname TEXT,
+            email TEXT,
+            phone INTEGER,
+            username TEXT UNIQUE,
+            password TEXT
+        )
+    """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS records (
+            password TEXT,
+            fullname TEXT,
+            email TEXT,
+            as1 REAL,
+            as2 REAL,
+            as3 REAL,
+            as4 REAL,
+            quiz1 REAL,
+            quiz2 REAL,
+            total REAL
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS admin (
+            fullname TEXT,
+            email TEXT,
+            phone INTEGER,
+            username TEXT,
+            password TEXT,
+            total REAL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
+
+----------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
+
+
+Summary of All Options in This Updated admin.py
+Execute SQL:
+
+Run any valid SQL command.
+See results for queries (e.g., SELECT).
+View Schema:
+
+List all tables and view each table’s schema (columns and types).
+Create Table:
+
+Define and create a new table by specifying its name and columns.
+Drop Table:
+
+Permanently delete a table from the database (with a confirmation step).
+Insert Row:
+
+Insert a new row into a selected table by filling in values for each column.
+Edit Row:
+
+Fetch and update rows in a table based on a provided WHERE clause.
+Delete Row:
+
+Remove rows from a table using a specified WHERE clause.
+Alter Table:
+
+Add Column:
+Select a table and add a new column by specifying its name and data type.
+Delete Column:
+Select a table and choose an existing column to delete.
+The process recreates the table without the chosen column (data for remaining columns is preserved).
+Backup/Restore:
+
+Create a backup of the database file locally.
+Restore the database from an uploaded backup file.
+Push Changes to GitHub:
+
+After many operations, you can push your local database changes to GitHub.
