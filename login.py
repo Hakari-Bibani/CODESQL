@@ -102,15 +102,19 @@ def show_login_create_account():
     st.markdown(
         """
         <style>
+        /* Center the tabs */
         .stTabs > div > div > button {
             margin: 0 auto;
             display: block;
         }
+        /* Reduce input field width */
         .stTextInput input, .stTextInput input:focus {
             width: 50% !important;
         }
+        /* Align checkbox with input fields */
         .stCheckbox > label {
-            width: auto !important;
+            width: 50% !important;
+            margin-left: 0 !important;
         }
         </style>
         """,
