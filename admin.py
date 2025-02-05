@@ -55,6 +55,64 @@ def get_table_schema(table):
         st.error(f"Error fetching schema for {table}: {e}")
         return []
 
+def drop_column_from_table(table, col_to_drop):
+    """
+    Delete a column from a table by:
+      1. Creating a new table without the unwanted column.
+      2. Copying data from the old table to the new table.
+      3. Dropping the old table.
+      4. Renaming the new table to the old table name.
+    """
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # 1. Get current table schema
+        cursor.execute(f"PRAGMA table_info({table})")
+        schema_info = cursor.fetchall()
+        if not schema_info:
+            st.error(f"Could not retrieve schema for {table}.")
+            return
+
+        # Build a list of columns to keep (excluding col_to_drop)
+        columns_to_keep = [col["name"] for col in schema_info if col["name"] != col_to_drop]
+        if len(columns_to_keep) == len(schema_info):
+            st.error(f"Column '{col_to_drop}' not found in table '{table}'.")
+            return
+
+        # 2. Create a new table schema (we will use a temporary name)
+        new_table = f"{table}_temp"
+        # Build column definitions (this is a simplified approach; constraints and defaults may be lost)
+        new_columns_def = []
+        for col in schema_info:
+            if col["name"] == col_to_drop:
+                continue
+            col_def = f"{col['name']} {col['type']}"
+            if col["pk"]:
+                col_def += " PRIMARY KEY"
+            new_columns_def.append(col_def)
+        new_columns_def_str = ", ".join(new_columns_def)
+        create_new_table_sql = f"CREATE TABLE {new_table} ({new_columns_def_str});"
+        cursor.execute(create_new_table_sql)
+
+        # 3. Copy data from old table to new table
+        cols_str = ", ".join(columns_to_keep)
+        copy_data_sql = f"INSERT INTO {new_table} ({cols_str}) SELECT {cols_str} FROM {table};"
+        cursor.execute(copy_data_sql)
+
+        # 4. Drop old table
+        cursor.execute(f"DROP TABLE {table};")
+
+        # 5. Rename new table to the old table name
+        cursor.execute(f"ALTER TABLE {new_table} RENAME TO {table};")
+
+        conn.commit()
+        st.success(f"Column '{col_to_drop}' deleted successfully from table '{table}'.")
+    except Exception as e:
+        st.error(f"Error deleting column: {e}")
+    finally:
+        conn.close()
+
 # ---------------------------------
 # Admin Authentication
 # ---------------------------------
@@ -93,7 +151,7 @@ if admin_login():
             "Insert Row",
             "Edit Row",
             "Delete Row",
-            "Alter Table",      # Option for schema alteration (e.g., add column)
+            "Alter Table",      # For schema changes (add or delete column)
             "Backup/Restore",
         ])
 
@@ -327,9 +385,12 @@ if admin_login():
                         conn.close()
         st.button("Push changes to GitHub", on_click=push_changes)
 
-    # --- 8. Alter Table (Add Column) ---
+    # --- 8. Alter Table (Add or Delete Column) ---
     elif nav_option == "Alter Table":
-        st.subheader("Alter Table: Add Column")
+        st.subheader("Alter Table Options")
+        alter_option = st.radio("Choose an alteration:", ["Add Column", "Delete Column"])
+
+        # Get list of tables
         try:
             conn = get_connection()
             cursor = conn.cursor()
@@ -339,28 +400,42 @@ if admin_login():
         except Exception as e:
             st.error(f"Error fetching tables: {e}")
             tables = []
+
         if tables:
             table = st.selectbox("Select Table to Alter", tables, key="alter_table")
+            # Get current schema for reference
             schema = get_table_schema(table)
             st.write("Current schema:", [f"{col['name']} ({col['type']})" for col in schema])
-            new_column_name = st.text_input("New Column Name", key="new_column_name")
-            new_column_type = st.text_input("Data Type (e.g., TEXT, INTEGER, REAL)", key="new_column_type")
-            if st.button("Add Column"):
-                if new_column_name.strip() == "" or new_column_type.strip() == "":
-                    st.error("Both the column name and data type are required.")
-                else:
-                    try:
-                        alter_query = f"ALTER TABLE {table} ADD COLUMN {new_column_name} {new_column_type}"
-                        conn = get_connection()
-                        cursor = conn.cursor()
-                        cursor.execute(alter_query)
-                        conn.commit()
-                        st.success(f"Column '{new_column_name}' added to '{table}' successfully!")
-                    except Exception as e:
-                        st.error(f"Error adding column: {e}")
-                    finally:
-                        conn.close()
-        st.button("Push changes to GitHub", on_click=push_changes)
+
+            if alter_option == "Add Column":
+                new_column_name = st.text_input("New Column Name", key="new_column_name")
+                new_column_type = st.text_input("Data Type (e.g., TEXT, INTEGER, REAL)", key="new_column_type")
+                if st.button("Add Column"):
+                    if new_column_name.strip() == "" or new_column_type.strip() == "":
+                        st.error("Both the column name and data type are required.")
+                    else:
+                        try:
+                            alter_query = f"ALTER TABLE {table} ADD COLUMN {new_column_name} {new_column_type}"
+                            conn = get_connection()
+                            cursor = conn.cursor()
+                            cursor.execute(alter_query)
+                            conn.commit()
+                            st.success(f"Column '{new_column_name}' added to '{table}' successfully!")
+                        except Exception as e:
+                            st.error(f"Error adding column: {e}")
+                        finally:
+                            conn.close()
+                st.button("Push changes to GitHub", on_click=push_changes)
+
+            elif alter_option == "Delete Column":
+                # Provide a dropdown to select which column to delete.
+                # (We do not allow deletion of all columns.)
+                col_names = [col["name"] for col in schema]
+                col_to_delete = st.selectbox("Select Column to Delete", col_names, key="col_to_delete")
+                st.warning("Deleting a column will recreate the table without the selected column. This operation is irreversible.")
+                if st.button("Delete Column"):
+                    drop_column_from_table(table, col_to_delete)
+                st.button("Push changes to GitHub", on_click=push_changes)
 
     # --- 9. Backup / Restore ---
     elif nav_option == "Backup/Restore":
