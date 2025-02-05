@@ -1,42 +1,44 @@
-''' sidebar.py - Handles sidebar navigation '''
+# sidebar.py
 import streamlit as st
-from streamlit_option_menu import option_menu
 
 def show_sidebar():
-    with st.sidebar:
-        st.title("AI For Impact")
-        
-        menu_options = {
-            "Home": "home",
-            "Assignments": {
-                "Assignment 1": "as1",
-                "Assignment 2": "as2",
-                "Assignment 3": "as3",
-                "Assignment 4": "as4",
-            },
-            "Quizzes": {
-                "Quiz 1": "quiz1",
-                "Quiz 2": "quiz2",
-            },
-            "Help": "help",
-            "Logout": "logout"
-        }
-        
-        selected = option_menu(
-            menu_title=None,
-            options=list(menu_options.keys()),
-            icons=["house", "book", "pencil-square", "question-circle", "box-arrow-right"],
-            menu_icon="cast",
-            default_index=0,
-            orientation="vertical",
-        )
+    selection = None  # To track the selected page
+    
+    # Sidebar title
+    st.sidebar.title("🎈 Okld's Gallery")
+    
+    # Home button
+    if st.sidebar.button("Home"):
+        selection = "home"
 
-        if selected in ["Assignments", "Quizzes"]:
-            sub_options = ["Select"] + list(menu_options[selected].keys())
-            sub_selected = st.selectbox(f"Select a {selected[:-1]}", sub_options, key=f"{selected}_selection")
-            if sub_selected != "Select":
-                return menu_options[selected][sub_selected]  # Return selected sub-option
-            else:
-                return "home"  # Stay on home page if no selection
-        
-        return menu_options[selected]  # Return main selection if not Assignments/Quizzes
+    # Expander for Assignments
+    with st.sidebar.expander("Assignments", expanded=True):
+        if st.button("Assignment 1", key="as1"):
+            selection = "as1"
+        if st.button("Assignment 2", key="as2"):
+            selection = "as2"
+        if st.button("Assignment 3", key="as3"):
+            selection = "as3"
+        if st.button("Assignment 4", key="as4"):
+            selection = "as4"
+    
+    # Expander for Quizzes
+    with st.sidebar.expander("Quizzes", expanded=True):
+        if st.button("Quiz 1", key="quiz1"):
+            selection = "quiz1"
+        if st.button("Quiz 2", key="quiz2"):
+            selection = "quiz2"
+    
+    # Help button
+    if st.sidebar.button("Help"):
+        selection = "help"
+    
+    # Logout button
+    if st.sidebar.button("Logout"):
+        selection = "logout"
+
+    # Default to home if nothing was clicked
+    if selection is None:
+        selection = "home"
+    
+    return selection
