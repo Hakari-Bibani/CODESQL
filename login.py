@@ -109,6 +109,9 @@ def show_login_create_account():
         .stTextInput input, .stTextInput input:focus {
             width: 50% !important;
         }
+        .stCheckbox > label {
+            width: auto !important;
+        }
         </style>
         """,
         unsafe_allow_html=True
@@ -125,6 +128,9 @@ def show_login_create_account():
             st.subheader("🔑 Login")
             username = st.text_input("Username", key="login_username")
             password = st.text_input("Password", type="password", key="login_password")
+            show_password = st.checkbox("Show Password", key="show_password_login")
+            if show_password:
+                st.text_input("Password (visible)", value=password, key="login_password_visible", disabled=True)
             if st.button("Login"):
                 user = login_user(username, password)
                 if user == "not_approved":
@@ -147,6 +153,9 @@ def show_login_create_account():
             reg_phone = st.text_input("Mobile Number", key="reg_phone")
             reg_username = st.text_input("Username", key="reg_username")
             reg_password = st.text_input("Password", type="password", key="reg_password")
+            show_password_reg = st.checkbox("Show Password", key="show_password_reg")
+            if show_password_reg:
+                st.text_input("Password (visible)", value=reg_password, key="reg_password_visible", disabled=True)
             if st.button("Register"):
                 if all([reg_fullname, reg_email, reg_phone, reg_username, reg_password]):
                     try:
