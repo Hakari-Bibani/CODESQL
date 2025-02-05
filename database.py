@@ -22,6 +22,7 @@ def create_tables():
             phone INTEGER,
             username TEXT UNIQUE,
             password TEXT
+            approved INTEGER DEFAULT 0
         )
     """)
     
