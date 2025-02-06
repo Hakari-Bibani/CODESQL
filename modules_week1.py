@@ -4,7 +4,7 @@ def show():
     st.title("Week 1: Introduction to Coding")
     st.write("This week covers the basics of coding. Get ready to dive into fundamental programming concepts!")
 
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13 = st.tabs([
+    tab_names = [
         "Introduction to Python",
         "You made it!",
         "What is Python?",
@@ -18,9 +18,11 @@ def show():
         "Tab 11",
         "Tab 12",
         "Tab 13"
-    ])
+    ]
 
-    with tab1:
+    tabs = st.tabs(tab_names)
+
+    with tabs[0]:
         st.header("1.1 Introduction to Python - Recorded Session")
         st.video("https://www.youtube.com/watch?v=Scem9sKTtJo")
         st.markdown("**[ChatGPT Prompts](https://chatgpt.com/share/6733c214-7ac4-8004-92f1-227d11b644ff)**")
@@ -28,11 +30,11 @@ def show():
         **Content**: In this session, we’ll introduce you to the basics of Python and how it can be a powerful tool for enhancing personal impact, whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios.
         """)
 
-    with tab2:
+    with tabs[1]:
         st.header("1.2 You made it! Be prepared for your final project")
         st.video("https://www.youtube.com/watch?v=fD73oMb4NRg")
 
-    with tab3:
+    with tabs[2]:
         st.header("1.3 What is Python? Why We Chose It for Learning")
         st.write("Python is a powerful, high-level programming language known for its readability and versatility. Used in everything from web development to scientific research, Python's syntax is clean and intuitive, making it a preferred language for both beginners and experts.")
         st.write("Here’s why Python is ideal for learning:")
@@ -69,32 +71,6 @@ def show():
         st.markdown("[https://www.bocasay.com/7-applications-python-programming/](https://www.bocasay.com/7-applications-python-programming/)")
         st.markdown("[https://trio.dev/python-applications/](https://trio.dev/python-applications/)")
 
-    with tab4:
-        st.write("Content for Tab 4")
-
-    with tab5:
-        st.write("Content for Tab 5")
-
-    with tab6:
-        st.write("Content for Tab 6")
-
-    with tab7:
-        st.write("Content for Tab 7")
-
-    with tab8:
-        st.write("Content for Tab 8")
-
-    with tab9:
-        st.write("Content for Tab 9")
-
-    with tab10:
-        st.write("Content for Tab 10")
-
-    with tab11:
-        st.write("Content for Tab 11")
-
-    with tab12:
-        st.write("Content for Tab 12")
-
-    with tab13:
-        st.write("Content for Tab 13")
+    for i in range(3, len(tab_names)):
+        with tabs[i]:
+            st.write(f"Content for {tab_names[i]}")
