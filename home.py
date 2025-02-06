@@ -15,10 +15,34 @@ def show_home():
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Load and Display Lottie Animation
+    # Load Lottie Animation
     animation_path = "8BJkB4IiSL.json"  # Ensure this file is in the repository and accessible
     lottie_animation = load_lottie_animation(animation_path)
-    st_lottie(lottie_animation, speed=1, loop=True, height=300, width=300)
+
+    # Custom CSS for Centering Animation in Black Background Box
+    st.markdown(
+        """
+        <style>
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 350px;
+            background-color: black;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 60%;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Display Lottie Animation in Centered Black Box
+    st.markdown('<div class="animation-container">', unsafe_allow_html=True)
+    st_lottie(lottie_animation, speed=1, loop=True, height=250, width=250)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Polished Footer Messages with Custom Colors
     st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
