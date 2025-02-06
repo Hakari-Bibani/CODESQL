@@ -10,10 +10,10 @@ def load_lottie_animation(filepath):
         return json.load(file)
 
 def show_home():
-    apply_dark_theme()  # ensures dark background
-    apply_custom_styles()  # custom styles
+    apply_dark_theme()      # ensures background is dark
+    apply_custom_styles()   # ensures animated title/footer style
 
-    # Custom CSS to center animation & remove white background
+    # Custom CSS to center animation
     st.markdown(
         """
         <style>
@@ -24,10 +24,7 @@ def show_home():
                 height: 100vh;
             }
             iframe {
-                background: transparent !important;
-            }
-            .stApp {
-                background-color: black !important;  /* Force full black background */
+                background: none !important;
             }
         </style>
         """,
@@ -36,13 +33,13 @@ def show_home():
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Load and Display Lottie Animation
+    # Load and Display Lottie Animation with Transparent Background
     animation_path = "8BJkB4IiSL.json"
     lottie_animation = load_lottie_animation(animation_path)
 
-    # Centering the animation
+    # Centering the animation and setting transparent background
     st.markdown('<div class="lottie-container">', unsafe_allow_html=True)
-    st_lottie(lottie_animation, speed=1, loop=True, height=300, width=300, key="animation")  # Removed background="transparent"
+    st_lottie(lottie_animation, speed=1, loop=True, height=300, width=300, key="animation", background_color="rgba(0,0,0,0)")
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Footer messages
