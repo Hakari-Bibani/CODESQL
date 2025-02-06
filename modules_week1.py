@@ -1,5 +1,7 @@
+import modules_week1
 import streamlit as st
 import pandas as pd
+def main():
 
 def show():
     st.title("Week 1: Introduction to Coding")
