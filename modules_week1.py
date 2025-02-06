@@ -280,8 +280,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
     with tab7:
         st.header("Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python")
-        st.write("For Assignment 1, please visit the following link to access the assignment page:")
-        st.markdown('[Click here to view Assignment 1](https://codesql-xaj5cya5ac2ydtwmyv2zqv.streamlit.app/)', unsafe_allow_html=True)
+        st.markdown('<p style="color: red;">Select Assignment 1 from the sidebar in the Assignments section.</p>', unsafe_allow_html=True)
 
     with tab8:
         st.write("Content for Tab 8")
