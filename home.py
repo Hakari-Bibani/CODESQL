@@ -9,12 +9,10 @@ def load_lottie_from_file(filepath):
 def show_home():
     st.markdown("""
         <style>
-            .stApp { background-color: black; }
-            .lottie-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            .stApp { background-color: black !important; }
+            iframe {
                 background: none !important;
+                box-shadow: none !important;
             }
         </style>
     """, unsafe_allow_html=True)
