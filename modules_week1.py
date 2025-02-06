@@ -331,7 +331,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         st.markdown('<p style="color: red; font-size: 20px;">📝 Select Assignment 2 from the sidebar in the Assignments section.</p>', unsafe_allow_html=True)
 
     with tab10:
-        st.header("1.10 Real-Time Applications of Google Colab")
+        st.markdown("<h1 style='color:gold;'>1.10 Real-Time Applications of Google Colab</h1>", unsafe_allow_html=True)
         st.write(
             "Google Colab is a powerful cloud-based platform that enables researchers, students, and professionals to execute Python code directly in their browsers. "
             "Its versatility makes it a valuable tool for solving real-world problems in various fields. Below are some fascinating real-time applications of Google Colab:"
