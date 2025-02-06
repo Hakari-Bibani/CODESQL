@@ -109,7 +109,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         st.header("1.5 Introduction to Python Libraries")
         st.write(
             "Python libraries extend the functionality of the language, making it easier to perform complex tasks with simple commands. "
-            "Below is a polished overview of essential Python libraries, their primary purposes, and examples of projects where they can be applied."
+            "Below is an overview of essential Python libraries, their primary purposes, and examples of projects where they can be applied."
         )
 
         # Data for the table
@@ -165,8 +165,34 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
         df = pd.DataFrame(data)
 
-        # Display the polished table using st.table for a static view that shows complete sentences
-        st.table(df)
+        # Convert the DataFrame to an HTML table with custom CSS for better visibility.
+        html_table = df.to_html(classes="styled-table", index=False, escape=False)
+        custom_css = """
+        <style>
+        .styled-table {
+            font-size: 16px;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .styled-table th {
+            background-color: #f2f2f2;
+        }
+        .styled-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .styled-table tr:hover {
+            background-color: #eaeaea;
+        }
+        </style>
+        """
+        st.markdown(custom_css + html_table, unsafe_allow_html=True)
 
     with tab6:
         st.write("Content for Tab 6")
@@ -192,6 +218,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
     with tab13:
         st.write("Content for Tab 13")
 
-# To run the app, make sure to call the show() function in your main block
+# To run the app, make sure to call the show() function
 if __name__ == "__main__":
     show()
