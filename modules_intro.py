@@ -19,7 +19,7 @@ def show():
         * **Weeks 1–3:** Focus on learning foundational concepts and developing your Python skills through tutorials, assignments, and guided exercises.
         * **Weeks 4–5:** Dedicated to working on your personalized project, applying what you've learned to create a meaningful and impactful application.
 
-        ## Weekly Structure:
+        st.markdown("<h2 style='color: gold;'>Weekly Structure:</h2>", unsafe_allow_html=True)
         1. Each week begins with a **video tutorial** that introduces the core concepts.
         2. Follow up with related materials, assignments, and discussions to deepen your understanding.
 
