@@ -10,9 +10,9 @@ def show_home():
     st.markdown("""
         <style>
             .stApp { background-color: black !important; }
-            iframe {
+            .lottie-container iframe {
                 background: none !important;
-                box-shadow: none !important;
+                filter: brightness(1) contrast(1);
             }
         </style>
     """, unsafe_allow_html=True)
