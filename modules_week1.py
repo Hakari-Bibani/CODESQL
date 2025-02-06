@@ -119,9 +119,9 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         df = pd.DataFrame(data)
 
         # Display the DataFrame as a table in Streamlit
-        st.dataframe(df, height=800) # Set a fixed height for the dataframe
+        st.dataframe(df)
 
-        # Apply CSS to make the table text larger and wrap
+        # Apply CSS to make the table text larger and wrap, and increase table width
         st.markdown(
             """
             <style>
@@ -130,6 +130,9 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             }
             .dataframe td {
                 white-space: pre-wrap !important; /* Wrap text in cells */
+            }
+            .stDataFrame { /* Target the container div of the dataframe */
+                width: 100% !important; /* Set width to 100% of its parent */
             }
             </style>
             """,
