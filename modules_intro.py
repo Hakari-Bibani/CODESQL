@@ -12,7 +12,7 @@ def show():
         st.video("https://www.youtube.com/watch?v=G8BC2NIfpAs")
     
     with tab2:
-        st.title("Course Instructions")
+        st.markdown("<h1 style='color: gold;'>Course Instructions</h1>", unsafe_allow_html=True)
         st.markdown("""
         This course is designed to span **5 weeks**, structured to provide you with a comprehensive learning and hands-on experience:
 
