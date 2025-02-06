@@ -67,6 +67,33 @@ def main():
             import help
             help.show()
 
+        # ─────────────────────────────────────────────────────────────────
+        # Handle Modules
+        # ─────────────────────────────────────────────────────────────────
+        elif selected == "modules_intro":
+            import modules_intro
+            modules_intro.show()
+
+        elif selected == "modules_week1":
+            import modules_week1
+            modules_week1.show()
+
+        elif selected == "modules_week2":
+            import modules_week2
+            modules_week2.show()
+
+        elif selected == "modules_week3":
+            import modules_week3
+            modules_week3.show()
+
+        elif selected == "modules_week4":
+            import modules_week4
+            modules_week4.show()
+
+        elif selected == "modules_week5":
+            import modules_week5
+            modules_week5.show()
+
         else:
             st.warning("Unknown selection.")
 
