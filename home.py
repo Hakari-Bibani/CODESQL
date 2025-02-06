@@ -25,7 +25,7 @@ def show_home():
     lottie_animation = load_lottie_from_file("8BJkB4IiSL.json")
     
     if lottie_animation:
-        st_lottie(lottie_animation, height=300, width=300)
+        st_lottie(lottie_animation, height=300, width=100)
     else:
         st.error("Failed to load animation.")
 
