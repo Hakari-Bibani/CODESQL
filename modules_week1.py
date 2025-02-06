@@ -28,7 +28,11 @@ def show():
         st.subheader("**ChatGPT Prompts**")
         st.markdown("[Links to an external site](https://chatgpt.com/share/6733c214-7ac4-8004-92f1-227d11b644ff)")
         st.subheader("**Content**:")
-        st.write("In this session, we’ll introduce you to the basics of Python and how it can be a powerful tool for enhancing personal impact, whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios.")
+        st.write(
+            "In this session, we’ll introduce you to the basics of Python and how it can be a powerful tool for enhancing personal impact, "
+            "whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as "
+            "setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios."
+        )
 
     with tab2:
         st.header("1.2 You made it! Be prepared for your final project")
@@ -36,7 +40,11 @@ def show():
 
     with tab3:
         st.header("1.3 What is Python? Why We Chose It for Learning")
-        st.write("Python is a powerful, high-level programming language known for its readability and versatility. Used in everything from web development to scientific research, Python's syntax is clean and intuitive, making it a preferred language for both beginners and experts. Here’s why Python is ideal for learning:")
+        st.write(
+            "Python is a powerful, high-level programming language known for its readability and versatility. Used in everything from web "
+            "development to scientific research, Python's syntax is clean and intuitive, making it a preferred language for both beginners and experts. "
+            "Here’s why Python is ideal for learning:"
+        )
         st.markdown("* **Ease of Learning**: Python's syntax closely resembles human language, making it straightforward to pick up even if you're new to coding.")
         st.markdown("* **Wide Application**: Python powers a range of projects – from data analysis and machine learning to web apps and automation.")
         st.markdown("* **Strong Community Support**: With a large and active community, Python offers extensive resources, libraries, and frameworks for almost every purpose, so you’re never alone when troubleshooting or exploring new concepts.")
@@ -63,7 +71,11 @@ def show():
 
     with tab4:
         st.header("1.4 What is in the Python Script?")
-        st.write("A Python script combines libraries, variables, functions, and loops to create structured workflows. In a Python script, you’ll find a set of instructions written in the Python programming language. These instructions, also called code, tell the computer exactly what to do, step by step. Think of a Python script like a recipe in a cookbook, where each line of code is an instruction for completing part of the overall task. Here’s a breakdown of the main parts in a typical Python script, explained simply:")
+        st.write(
+            "A Python script combines libraries, variables, functions, and loops to create structured workflows. In a Python script, you’ll find a set of instructions "
+            "written in the Python programming language. These instructions, also called code, tell the computer exactly what to do, step by step. "
+            "Think of a Python script like a recipe in a cookbook, where each line of code is an instruction for completing part of the overall task."
+        )
         st.write("**Importing Libraries:** Often, the script starts by importing libraries. Libraries are collections of pre-built code that allow the script to perform specific tasks—like handling data, creating visuals, or connecting to the internet—without needing to write these functions from scratch.")
         st.write("Example: `import pandas as pd` – this line imports a library for handling data tables.")
         st.write("**Defining Variables:** Variables are like labeled containers that store information, such as numbers or text. These containers hold data that might be needed later in the script.")
@@ -74,7 +86,8 @@ def show():
         st.write("Example: Cleaning data or calculating averages using built-in functions.")
         st.write("**Output and Visualization:** Finally, scripts often display results to the user by printing text, creating charts, or saving files.")
         st.write("Example: `print(\"The average temperature is:\", average_temp)` displays the result.")
-        st.code("""
+        st.code(
+            """
 # 1. Importing Libraries
 import pandas as pd  # This library helps manage and analyze data in tables
 import matplotlib.pyplot as plt  # This library helps create visualizations like charts
@@ -103,20 +116,22 @@ plt.show()
 
 # 6. Output the Result
 print(f"The average temperature in {city} is {average_temp}°F.")
-""", language="python")
+            """,
+            language="python",
+        )
 
     with tab5:
         st.header("1.5 Introduction to Python Libraries")
         st.write(
             "Python libraries extend the functionality of the language, making it easier to perform complex tasks with simple commands. "
-            "Below is an overview of essential Python libraries, their primary purposes, and examples of projects where they can be applied."
+            "Below is a polished overview of essential Python libraries, their primary purposes, and examples of projects where they can be applied."
         )
 
         # Data for the table
         data = {
             'Library': [
-                'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn', 'TensorFlow', 'Keras', 
-                'NLTK', 'SpaCy', 'OpenCV', 'BeautifulSoup', 'Requests', 'Flask', 'Django', 
+                'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn', 'TensorFlow', 'Keras',
+                'NLTK', 'SpaCy', 'OpenCV', 'BeautifulSoup', 'Requests', 'Flask', 'Django',
                 'Streamlit', 'Pygame', 'PySpark', 'Plotly', 'SQLAlchemy'
             ],
             'Purpose': [
@@ -165,34 +180,18 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
         df = pd.DataFrame(data)
 
-        # Convert the DataFrame to an HTML table with custom CSS for better visibility.
-        html_table = df.to_html(classes="styled-table", index=False, escape=False)
-        custom_css = """
-        <style>
-        .styled-table {
-            font-size: 16px;
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .styled-table th, .styled-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            vertical-align: top;
-        }
-        .styled-table th {
-            background-color: #f2f2f2;
-        }
-        .styled-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .styled-table tr:hover {
-            background-color: #eaeaea;
-        }
-        </style>
-        """
-        st.markdown(custom_css + html_table, unsafe_allow_html=True)
+        # Style the DataFrame: white text, blue borders, and a dark background for contrast.
+        styled_df = (
+            df.style
+              .set_table_styles([
+                  {"selector": "th", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]},
+                  {"selector": "td", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]}
+              ])
+              .set_properties(**{'text-align': 'left'})
+        )
+
+        # Render the styled table. st.table supports displaying a pandas Styler.
+        st.table(styled_df)
 
     with tab6:
         st.write("Content for Tab 6")
@@ -218,6 +217,5 @@ print(f"The average temperature in {city} is {average_temp}°F.")
     with tab13:
         st.write("Content for Tab 13")
 
-# To run the app, make sure to call the show() function
 if __name__ == "__main__":
     show()
