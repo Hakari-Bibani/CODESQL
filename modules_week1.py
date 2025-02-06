@@ -15,7 +15,7 @@ def show():
         "Google Colab",
         "Assignment 1",
         "APIs",
-        "Tab 9",
+        "Assignment 2",
         "Tab 10",
         "Tab 11",
         "Tab 12",
@@ -327,7 +327,8 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         )
 
     with tab9:
-        st.write("Content for Tab 9")
+        st.header("Assignment: Week 1 – Analyzing Real-Time Earthquake Data")
+        st.markdown('<p style="color: red; font-size: 20px;">📝 Select Assignment 2 from the sidebar in the Assignments section.</p>', unsafe_allow_html=True)
 
     with tab10:
         st.write("Content for Tab 10")
