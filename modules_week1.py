@@ -16,7 +16,7 @@ def show():
         "Assignment 1",
         "APIs",
         "Assignment 2",
-        "Tab 10",
+        "Real Time",
         "Tab 11",
         "Tab 12",
         "Tab 13"
