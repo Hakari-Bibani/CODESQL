@@ -119,7 +119,22 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         df = pd.DataFrame(data)
 
         # Display the DataFrame as a table in Streamlit
-        st.dataframe(df)
+        st.dataframe(df, height=800) # Set a fixed height for the dataframe
+
+        # Apply CSS to make the table text larger and wrap
+        st.markdown(
+            """
+            <style>
+            .dataframe {
+                font-size: 14px !important; /* Increase font size */
+            }
+            .dataframe td {
+                white-space: pre-wrap !important; /* Wrap text in cells */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
     with tab6:
