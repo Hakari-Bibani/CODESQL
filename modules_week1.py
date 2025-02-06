@@ -1,7 +1,5 @@
-import modules_week1
 import streamlit as st
 import pandas as pd
-def main():
 
 def show():
     st.title("Week 1: Introduction to Coding")
@@ -108,69 +106,38 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 """, language="python")
 
     with tab5:
-    st.header("1.5 Introduction to Python Libraries")
-    st.write(
-        "Python libraries enhance programming functionality and efficiency by handling tasks such as data manipulation, visualization, and machine learning. "
-        "Below is a table of essential Python libraries along with their primary purposes and example projects where they might be applied."
-    )
+        st.header("1.5 Introduction to Python Libraries")
+        st.write("Python libraries enhance programming functionality and efficiency. Libraries cover applications such as data manipulation, visualization, and machine learning. For more on essential Python libraries.")
 
-    # Define polished data for the table
-    data = {
-        "Library": [
-            "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-Learn", 
-            "TensorFlow", "Keras", "NLTK", "SpaCy", "OpenCV", 
-            "BeautifulSoup", "Requests", "Flask", "Django", "Streamlit", 
-            "Pygame", "PySpark", "Plotly", "SQLAlchemy"
-        ],
-        "Purpose": [
-            "Data manipulation and analysis",
-            "Numerical and matrix computations",
-            "Data visualization",
-            "Statistical data visualization",
-            "Machine learning and data modeling",
-            "Deep learning and neural networks",
-            "Simplified neural network modeling",
-            "Natural language processing (NLP)",
-            "Advanced NLP for large-scale data processing",
-            "Computer vision and image processing",
-            "Web scraping from HTML/XML",
-            "Sending HTTP requests to access APIs and web content",
-            "Lightweight web development framework",
-            "Full-stack web development framework",
-            "Rapid development of interactive data applications",
-            "Game development and interactive simulations",
-            "Distributed data processing and analytics",
-            "Interactive and web-based visualizations",
-            "Database access and Object Relational Mapping (ORM)"
-        ],
-        "Project Examples": [
-            "Using Pandas to clean and analyze large datasets, transform CSV files, and perform data aggregation tasks.",
-            "Leveraging NumPy for complex numerical computations and efficient manipulation of large arrays and matrices.",
-            "Creating dynamic charts and graphs to visualize trends and patterns in data using Matplotlib.",
-            "Designing aesthetically pleasing statistical graphics with Seaborn to uncover data insights.",
-            "Developing predictive models and clustering algorithms with Scikit-Learn to address real-world problems.",
-            "Building and training deep learning models for image recognition and natural language processing with TensorFlow.",
-            "Prototyping neural network architectures quickly using Keras to simplify model development.",
-            "Processing and analyzing text data for sentiment analysis, tokenization, and classification with NLTK.",
-            "Implementing advanced NLP features such as entity recognition and dependency parsing using SpaCy.",
-            "Creating computer vision applications like object detection and facial recognition with OpenCV.",
-            "Extracting and parsing data from web pages by using BeautifulSoup for effective web scraping.",
-            "Interacting with web services and consuming APIs to retrieve data using the Requests library.",
-            "Developing small web applications and RESTful APIs quickly with Flask.",
-            "Building scalable, secure, and robust web applications using Django’s full-stack framework.",
-            "Rapidly deploying data science applications and interactive dashboards using Streamlit.",
-            "Designing engaging 2D games and interactive simulations with Pygame.",
-            "Processing and analyzing large-scale datasets efficiently in distributed computing environments with PySpark.",
-            "Creating interactive visualizations and dashboards for data exploration using Plotly.",
-            "Managing databases and constructing complex queries seamlessly with SQLAlchemy as an ORM tool."
-        ]
-    }
+        # Data for the table
+        data = {
+            'Library': ['Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn', 'TensorFlow', 'Keras', 'NLTK', 'SpaCy', 'OpenCV', 'BeautifulSoup', 'Requests', 'Flask', 'Django', 'Streamlit', 'Pygame', 'PySpark', 'Plotly', 'SQLAlchemy'],
+            'Purpose': ['Data manipulation and analysis', 'Numerical and matrix computations', 'Data visualization', 'Statistical data visualization', 'Machine learning and data modeling', 'Deep learning and neural networks', 'Simplified neural network modeling', 'Natural language processing (NLP)', 'Advanced NLP for large-scale data', 'Computer vision and image processing', 'Web scraping for extracting data', 'Sending HTTP requests to access APIs', 'Web development framework', 'Full-stack web development framework', 'Interactive web applications for data apps', 'Game development', 'Distributed data processing', 'Interactive and web-based visualizations', 'Database access and ORM'],
+            'Project Examples': ['Data cleaning and analysis, financial data processing, CSV and Excel data transformations', 'Scientific computing, large-scale data processing, linear algebra applications', 'Plotting and visualizing data trends, creating line/bar/pie charts, and data exploration visuals', 'Statistical analysis with visualizations, building heatmaps, pair plots, and visual reports for data insights', 'Classification models, predictive modeling, clustering, and building recommendation engines', 'Image recognition, natural language processing (NLP), object detection, and sentiment analysis', 'Quick prototyping of deep learning models, image recognition, and text classification', 'Text analysis, language translation, sentiment analysis, and chatbot development', 'Entity recognition, language modeling, document classification, and sentiment analysis', 'Face recognition, object detection, motion tracking, and augmented reality applications', 'Web scraping projects to gather data from websites, news aggregation, and real-time data collection', 'Accessing public APIs for data (e.g., weather, stock prices), automation tasks, and data integration', 'Building small web applications, REST APIs, dashboards, and lightweight web services', 'Large-scale web applications, e-commerce platforms, and content management systems (CMS)', 'Rapidly developing data science dashboards, interactive charts, and model visualizations', 'Developing 2D games, interactive simulations, and educational game projects', 'Big data processing, real-time analytics, and large-scale data transformations', 'Dashboards, 3D visualizations, interactive graphs, and data analysis with interactive reports', 'Database management, building CRUD (Create, Read, Update, Delete) applications, and backend data handling']
+        }
 
-    # Create the DataFrame
-    df = pd.DataFrame(data)
+        df = pd.DataFrame(data)
 
-    # Display the DataFrame as a polished table
-    st.table(df)
+        # Display the DataFrame as a table in Streamlit
+        st.dataframe(df)
+
+        # Apply CSS to make the table text larger and wrap, and increase table width
+        st.markdown(
+            """
+            <style>
+            .dataframe {
+                font-size: 14px !important; /* Increase font size */
+            }
+            .dataframe td {
+                white-space: pre-wrap !important; /* Wrap text in cells */
+            }
+            .stDataFrame { /* Target the container div of the dataframe */
+                width: 100% !important; /* Set width to 100% of its parent */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
     with tab6:
