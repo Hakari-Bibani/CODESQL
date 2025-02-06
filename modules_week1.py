@@ -9,7 +9,7 @@ def show():
         "Introduction to Python",
         "You made it!",
         "What is Python?",
-        "Tab 4",
+        "Python Script?",
         "Tab 5",
         "Tab 6",
         "Tab 7",
@@ -60,9 +60,49 @@ def show():
         st.markdown("[https://www.bocasay.com/7-applications-python-programming/Links to an external site.](https://www.bocasay.com/7-applications-python-programming/Links to an external site.)")
         st.markdown("[https://trio.dev/python-applications/Links to an external site.](https://trio.dev/python-applications/Links to an external site.)")
 
-
     with tab4:
-        st.write("Content for Tab 4")
+        st.header("1.4 What is in the Python Script?")
+        st.write("A Python script combines libraries, variables, functions, and loops to create structured workflows. In a Python script, you’ll find a set of instructions written in the Python programming language. These instructions, also called code, tell the computer exactly what to do, step by step. Think of a Python script like a recipe in a cookbook, where each line of code is an instruction for completing part of the overall task. Here’s a breakdown of the main parts in a typical Python script, explained simply:")
+        st.write("Importing Libraries: Often, the script starts by “importing libraries.” Libraries are collections of pre-built code that allow the script to do specific tasks, like handling data, creating visuals, or connecting to the internet. By importing them, the script can use these functions without needing to write them from scratch.")
+        st.write("Example: `import pandas as pd` – this line imports a library for handling data tables.")
+        st.write("Defining Variables: Variables are like labeled containers that store information, such as numbers or text. Throughout the script, these containers are used to keep track of information or settings that might be needed later.")
+        st.write("Example: `temperature = 72` – stores the number 72 in a variable called “temperature.”")
+        st.write("Functions and Loops: Functions are small, reusable chunks of code that perform a specific task. For example, a function might calculate an average or convert text to uppercase. Loops, on the other hand, are instructions that repeat a task multiple times. Both are used to make the code more efficient and reduce repetition.")
+        st.write("Example: `for item in list:` – this starts a loop that goes through each item in a list one by one.")
+        st.write("Data Processing and Analysis: Many Python scripts work with data, processing it to make it easier to analyze. This part of the script could involve cleaning data (e.g., removing empty spaces), calculating results (e.g., averages, totals), or organizing data to prepare it for the next steps.")
+        st.write("Output and Visualization: Finally, a script might show results to the user by creating a chart, printing out text, or even saving the output to a file. This makes the information easy to understand and share.")
+        st.write("Example: `print(\"The average temperature is:\", average_temp)` – this line displays a message with the average temperature.")
+        st.write("Each of these parts works together in a Python script to achieve the final goal – whether that’s analyzing data, creating a web app, or generating visuals. The entire process runs from the top of the script to the bottom, following each step just like you would follow the steps in a recipe.")
+        st.code("""
+# 1. Importing Libraries
+import pandas as pd  # This library helps manage and analyze data in tables
+import matplotlib.pyplot as plt  # This library helps create visualizations like charts
+
+# 2. Defining Variables
+data = {'Temperature': [70, 75, 80, 85, 90], 'Humidity': [30, 45, 50, 60, 70]}  # Creating some sample data
+city = "Kurdistan"  # Name of the location for the data
+
+# 3. Creating a DataFrame (Data Table) and Calculating the Average Temperature
+df = pd.DataFrame(data)  # Turning the data dictionary into a table
+average_temp = df['Temperature'].mean()  # Calculating the average temperature
+
+# 4. Loop through Data to Print Each Temperature
+print(f"Weather data for {city}:")
+for temp in df['Temperature']:
+    print(f"- Temperature: {temp}°F")  # Prints each temperature on a new line
+
+# 5. Visualize Data: Plotting Temperature and Humidity
+plt.plot(df['Temperature'], label='Temperature', color='red')  # Plot temperature in red
+plt.plot(df['Humidity'], label='Humidity', color='blue')  # Plot humidity in blue
+plt.xlabel('Day')  # Label x-axis
+plt.ylabel('Value')  # Label y-axis
+plt.title(f"Weather Data for {city}")  # Title for the chart
+plt.legend()  # Show legend to differentiate between temperature and humidity
+plt.show()  # Display the chart
+
+# 6. Output the Result
+print(f"The average temperature in {city} is {average_temp}°F.")
+""", language="python")
 
     with tab5:
         st.write("Content for Tab 5")
