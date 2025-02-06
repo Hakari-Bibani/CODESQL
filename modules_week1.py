@@ -179,22 +179,36 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         }
 
         df = pd.DataFrame(data)
-        # Replace the index with empty strings to hide row numbers.
-        df.index = ['' for _ in range(len(df))]
 
-        # Style the DataFrame: white text, blue borders, dark background, and left-aligned text.
-        styled_df = (
-            df.style
-              .set_table_styles([
-                  {"selector": "th", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]},
-                  {"selector": "td", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]}
-              ])
-              .set_properties(**{'text-align': 'left'})
-        )
+        # Build an HTML table from the DataFrame without the index
+        table_html = df.to_html(index=False, classes="my-table", escape=False)
 
-        # Convert the styled DataFrame to HTML and render it with st.markdown.
-        html_table = styled_df.to_html()
-        st.markdown(html_table, unsafe_allow_html=True)
+        # Define custom CSS for the table
+        css = """
+        <style>
+        .my-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: black;
+        }
+        .my-table th {
+            color: white;
+            border: 2px solid blue;
+            background-color: black;
+            padding: 8px;
+        }
+        .my-table td {
+            color: white;
+            border: 2px solid blue;
+            background-color: black;
+            padding: 8px;
+            text-align: left;
+        }
+        </style>
+        """
+
+        # Display the styled HTML table
+        st.markdown(css + table_html, unsafe_allow_html=True)
 
     with tab6:
         st.write("Content for Tab 6")
