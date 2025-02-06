@@ -17,7 +17,7 @@ def show():
         "APIs",
         "Assignment 2",
         "Real-Time",
-        "Tab 11",
+        "Quiz",
         "Tab 12",
         "Tab 13"
     ])
