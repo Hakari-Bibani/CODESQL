@@ -1,25 +1,36 @@
 import streamlit as st
-import json
-from streamlit_lottie import st_lottie
-
-def load_lottie_from_file(filepath):
-    with open(filepath, "r") as f:
-        return json.load(f)
+from theme import apply_dark_theme
+from style import apply_custom_styles
 
 def show_home():
-    st.markdown("""
-        <style>
-            .stApp { background-color: black !important; }
-            .lottie-container iframe {
-                background: none !important;
-                filter: brightness(1) contrast(1);
-            }
-        </style>
-    """, unsafe_allow_html=True)
+    apply_dark_theme()      # ensures background is dark
+    apply_custom_styles()   # ensures animated title/footer style
 
-    lottie_animation = load_lottie_from_file("8BJkB4IiSL.json")
+    st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    if lottie_animation:
-        st_lottie(lottie_animation, key="animation", height=300, width=300)
-    else:
-        st.error("Failed to load animation.")
+    # Video
+    video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
+    st.video(video_url)
+
+    # Polished Footer Messages with Custom Colors
+    st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="footer footer-partner">💡 AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
+
+
+import streamlit as st
+from theme import apply_dark_theme
+from style import apply_custom_styles
+
+def show_home():
+    apply_dark_theme()      # ensures background is dark
+    apply_custom_styles()   # ensures animated title/footer style
+
+    st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
+
+    # Video
+    video_url = "https://www.youtube.com/watch?v=YOUR_REAL_VIDEO_LINK"
+    st.video(video_url)
+
+    # Polished Footer Messages with Custom Colors
+    st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="footer footer-partner">💡 AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
