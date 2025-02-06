@@ -61,11 +61,14 @@ def show():
             }
             </style>
         """,
-        "plain": "" # No styling
+        "plain": """<style>.plain-list { list-style: disc outside; padding-left: 1.5em; }</style>""" # No styling
     }
 
     # Choose the list style you want to use (make this changeable via a selectbox if needed)
     selected_list_style = st.sidebar.selectbox("Select List Style", list(list_styles.keys()))
+
+    # Print the selected style to the console for debugging
+    print(f"Selected list style: {selected_list_style}")
 
     # Apply the selected list style
     st.markdown(list_styles[selected_list_style], unsafe_allow_html=True)  # Put styling here so it applies to all lists.
@@ -74,8 +77,19 @@ def show():
         st.header("1.3 What is Python? Why We Chose It for Learning")
         st.write("Python is a powerful, high-level programming language known for its readability and versatility. Used in everything from web development to scientific research, Python's syntax is clean and intuitive, making it a preferred language for both beginners and experts.")
         st.write("Here’s why Python is ideal for learning:")
+        list_class = ""
+        if selected_list_style == 'roundy':
+            list_class = "roundy-list"
+        elif selected_list_style == 'square':
+            list_class = "square-list"
+        elif selected_list_style == 'checkmark':
+            list_class = "checkmark-list"
+        elif selected_list_style == 'plain':
+            list_class = "plain-list"
+
+
         st.markdown(f"""
-            <ul class="{'roundy-list' if selected_list_style == 'roundy' else ('square-list' if selected_list_style == 'square' else ('checkmark-list' if selected_list_style == 'checkmark' else ''))}">
+            <ul class="{list_class}">
                 <li>Ease of Learning: Python's syntax closely resembles human language, making it straightforward to pick up even if you're new to coding.</li>
                 <li>Wide Application: Python powers a range of projects – from data analysis and machine learning to web apps and automation.</li>
                 <li>Strong Community Support: With a large and active community, Python offers extensive resources, libraries, and frameworks for almost every purpose, so you’re never alone when troubleshooting or exploring new concepts.</li>
