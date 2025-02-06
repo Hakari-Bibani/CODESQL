@@ -5,7 +5,7 @@ def show():
     tab1, tab2, tab3 = st.tabs(["Welcome", "Course Instructions", "Stay Connected"])
     
     with tab1:
-        st.title("Welcome")
+        st.markdown("<h1 style='color: gold;'>Welcome</h1>", unsafe_allow_html=True)
         st.write("Welcome to the introduction module. Here you'll get an overview of the course and what to expect.")
         
         # Embed YouTube video
