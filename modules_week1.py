@@ -20,6 +20,34 @@ def show():
         "Tab 13"
     ]
 
+    # Styling the tabs with CSS (Roundy look)
+    st.markdown(
+        """
+        <style>
+        div[data-baseweb="tab-list"] > div {
+            gap: 1rem;
+        }
+        div[data-baseweb="tab"] {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            background-color: #f0f2f6; /* Adjust to your liking */
+            border: 1px solid #ccc;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        div[data-baseweb="tab"]:hover {
+            background-color: #e2e5ea;
+        }
+
+        div[aria-selected="true"][data-baseweb="tab"] {
+            background-color: #d4e3fc; /* Selected tab color */
+            color: black;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     tabs = st.tabs(tab_names)
 
     with tabs[0]:
