@@ -14,7 +14,7 @@ def show():
         "Libraries",
         "Google Colab",
         "Assignment 1",
-        "Tab 8",
+        "APIs",
         "Tab 9",
         "Tab 10",
         "Tab 11",
