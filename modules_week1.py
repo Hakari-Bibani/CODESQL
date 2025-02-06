@@ -180,9 +180,10 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
         df = pd.DataFrame(data)
 
-        # Style the DataFrame: white text, blue borders, and a dark background for contrast.
+        # Style the DataFrame: white text, blue borders, dark background, and hide the index.
         styled_df = (
             df.style
+              .hide_index()
               .set_table_styles([
                   {"selector": "th", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]},
                   {"selector": "td", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]}
@@ -190,7 +191,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
               .set_properties(**{'text-align': 'left'})
         )
 
-        # Render the styled table. st.table supports displaying a pandas Styler.
+        # Render the styled table without the index.
         st.table(styled_df)
 
     with tab6:
