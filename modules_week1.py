@@ -43,7 +43,7 @@ def show():
         st.markdown("* **Career Relevance**: Python is one of the most in-demand skills in tech, highly sought after in roles related to data science, AI, web development, and more.")
         st.subheader("**Python’s Applications Across Various Fields**")
         st.write("1. **Geosciences**")
-        st.write("*Example:* Geoscientists use Python for **earthquake analysis, climate modeling, and geological surveys**. Tools like **GeoPandas** and **GDAL** help analyze spatial data and visualize geological information, while APIs like the **USGS Earthquake API** (https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojsonLinks to an external site.) allow researchers to retrieve real-time earthquake data for analysis and predictions.")
+        st.write("*Example:* Geoscientists use Python for **earthquake analysis, climate modeling, and geological surveys**. Tools like **GeoPandas** and **GDAL** help analyze spatial data and visualize geological information, while APIs like the **USGS Earthquake API** allow researchers to retrieve real-time earthquake data for analysis and predictions.")
         st.write("2. **Medical and Health Sciences**")
         st.write("*Example:* Python is applied in **medical image analysis**, patient data management, and drug discovery. Libraries like **SimpleITK** and **OpenCV** aid in analyzing X-rays, MRIs, and other medical images, supporting radiologists in diagnosing conditions faster and with greater accuracy.")
         st.write("3. **Finance**")
@@ -55,51 +55,51 @@ def show():
         st.write("6. **Entertainment and Media**")
         st.write("*Example:* In media, Python is widely used for **game development, animation, and content recommendation systems**. Libraries like **Pygame** support game development, while **Machine Learning** with **TensorFlow** and **Keras** enables platforms to recommend personalized content to users.")
         st.write("7. **Agriculture**")
-        st.write("*Example:* Python helps in **crop yield predictions, soil health analysis, and pest detection**. Using **remote sensing data and libraries like NDVI calculations**, Python can analyze plant health and provide actionable insights to farmers.")
+        st.write("*Example:* Python helps in **crop yield predictions, soil health analysis, and pest detection**. Using remote sensing data and specialized libraries for NDVI calculations, Python can analyze plant health and provide actionable insights to farmers.")
         st.subheader("**More References**")
-        st.markdown("[https://www.geeksforgeeks.org/python-applications-in-real-world/Links to an external site.](https://www.geeksforgeeks.org/python-applications-in-real-world/Links to an external site.)")
-        st.markdown("[https://www.bocasay.com/7-applications-python-programming/Links to an external site.](https://www.bocasay.com/7-applications-python-programming/Links to an external site.)")
-        st.markdown("[https://trio.dev/python-applications/Links to an external site.](https://trio.dev/python-applications/Links to an external site.)")
+        st.markdown("[GeeksforGeeks – Python Applications in Real World](https://www.geeksforgeeks.org/python-applications-in-real-world/)")
+        st.markdown("[Bocasay – 7 Applications of Python Programming](https://www.bocasay.com/7-applications-python-programming/)")
+        st.markdown("[Trio – Python Applications](https://trio.dev/python-applications/)")
 
     with tab4:
         st.header("1.4 What is in the Python Script?")
         st.write("A Python script combines libraries, variables, functions, and loops to create structured workflows. In a Python script, you’ll find a set of instructions written in the Python programming language. These instructions, also called code, tell the computer exactly what to do, step by step. Think of a Python script like a recipe in a cookbook, where each line of code is an instruction for completing part of the overall task. Here’s a breakdown of the main parts in a typical Python script, explained simply:")
-        st.write("Importing Libraries: Often, the script starts by “importing libraries.” Libraries are collections of pre-built code that allow the script to do specific tasks, like handling data, creating visuals, or connecting to the internet. By importing them, the script can use these functions without needing to write them from scratch.")
+        st.write("**Importing Libraries:** Often, the script starts by importing libraries. Libraries are collections of pre-built code that allow the script to perform specific tasks—like handling data, creating visuals, or connecting to the internet—without needing to write these functions from scratch.")
         st.write("Example: `import pandas as pd` – this line imports a library for handling data tables.")
-        st.write("Defining Variables: Variables are like labeled containers that store information, such as numbers or text. Throughout the script, these containers are used to keep track of information or settings that might be needed later.")
-        st.write("Example: `temperature = 72` – stores the number 72 in a variable called “temperature.”")
-        st.write("Functions and Loops: Functions are small, reusable chunks of code that perform a specific task. For example, a function might calculate an average or convert text to uppercase. Loops, on the other hand, are instructions that repeat a task multiple times. Both are used to make the code more efficient and reduce repetition.")
-        st.write("Example: `for item in list:` – this starts a loop that goes through each item in a list one by one.")
-        st.write("Data Processing and Analysis: Many Python scripts work with data, processing it to make it easier to analyze. This part of the script could involve cleaning data (e.g., removing empty spaces), calculating results (e.g., averages, totals), or organizing data to prepare it for the next steps.")
-        st.write("Output and Visualization: Finally, a script might show results to the user by creating a chart, printing out text, or even saving the output to a file. This makes the information easy to understand and share.")
-        st.write("Example: `print(\"The average temperature is:\", average_temp)` – this line displays a message with the average temperature.")
-        st.write("Each of these parts works together in a Python script to achieve the final goal – whether that’s analyzing data, creating a web app, or generating visuals. The entire process runs from the top of the script to the bottom, following each step just like you would follow the steps in a recipe.")
+        st.write("**Defining Variables:** Variables are like labeled containers that store information, such as numbers or text. These containers hold data that might be needed later in the script.")
+        st.write("Example: `temperature = 72` – stores the number 72 in a variable called `temperature`.")
+        st.write("**Functions and Loops:** Functions are small, reusable chunks of code that perform specific tasks, while loops are instructions that repeat tasks multiple times. They make your code more efficient and reduce repetition.")
+        st.write("Example: `for item in list:` – starts a loop that goes through each item in a list.")
+        st.write("**Data Processing and Analysis:** Many scripts work with data—cleaning, calculating, or organizing it to prepare for further analysis.")
+        st.write("Example: Cleaning data or calculating averages using built-in functions.")
+        st.write("**Output and Visualization:** Finally, scripts often display results to the user by printing text, creating charts, or saving files.")
+        st.write("Example: `print(\"The average temperature is:\", average_temp)` displays the result.")
         st.code("""
 # 1. Importing Libraries
 import pandas as pd  # This library helps manage and analyze data in tables
 import matplotlib.pyplot as plt  # This library helps create visualizations like charts
 
 # 2. Defining Variables
-data = {'Temperature': [70, 75, 80, 85, 90], 'Humidity': [30, 45, 50, 60, 70]}  # Creating some sample data
+data = {'Temperature': [70, 75, 80, 85, 90], 'Humidity': [30, 45, 50, 60, 70]}  # Creating sample data
 city = "Kurdistan"  # Name of the location for the data
 
-# 3. Creating a DataFrame (Data Table) and Calculating the Average Temperature
-df = pd.DataFrame(data)  # Turning the data dictionary into a table
-average_temp = df['Temperature'].mean()  # Calculating the average temperature
+# 3. Creating a DataFrame and Calculating the Average Temperature
+df = pd.DataFrame(data)  # Convert the data dictionary into a table
+average_temp = df['Temperature'].mean()  # Calculate the average temperature
 
 # 4. Loop through Data to Print Each Temperature
 print(f"Weather data for {city}:")
 for temp in df['Temperature']:
-    print(f"- Temperature: {temp}°F")  # Prints each temperature on a new line
+    print(f"- Temperature: {temp}°F")
 
 # 5. Visualize Data: Plotting Temperature and Humidity
-plt.plot(df['Temperature'], label='Temperature', color='red')  # Plot temperature in red
-plt.plot(df['Humidity'], label='Humidity', color='blue')  # Plot humidity in blue
-plt.xlabel('Day')  # Label x-axis
-plt.ylabel('Value')  # Label y-axis
-plt.title(f"Weather Data for {city}")  # Title for the chart
-plt.legend()  # Show legend to differentiate between temperature and humidity
-plt.show()  # Display the chart
+plt.plot(df['Temperature'], label='Temperature', color='red')
+plt.plot(df['Humidity'], label='Humidity', color='blue')
+plt.xlabel('Day')
+plt.ylabel('Value')
+plt.title(f"Weather Data for {city}")
+plt.legend()
+plt.show()
 
 # 6. Output the Result
 print(f"The average temperature in {city} is {average_temp}°F.")
@@ -107,38 +107,66 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
     with tab5:
         st.header("1.5 Introduction to Python Libraries")
-        st.write("Python libraries enhance programming functionality and efficiency. Libraries cover applications such as data manipulation, visualization, and machine learning. For more on essential Python libraries.")
+        st.write(
+            "Python libraries extend the functionality of the language, making it easier to perform complex tasks with simple commands. "
+            "Below is a polished overview of essential Python libraries, their primary purposes, and examples of projects where they can be applied."
+        )
 
         # Data for the table
         data = {
-            'Library': ['Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn', 'TensorFlow', 'Keras', 'NLTK', 'SpaCy', 'OpenCV', 'BeautifulSoup', 'Requests', 'Flask', 'Django', 'Streamlit', 'Pygame', 'PySpark', 'Plotly', 'SQLAlchemy'],
-            'Purpose': ['Data manipulation and analysis', 'Numerical and matrix computations', 'Data visualization', 'Statistical data visualization', 'Machine learning and data modeling', 'Deep learning and neural networks', 'Simplified neural network modeling', 'Natural language processing (NLP)', 'Advanced NLP for large-scale data', 'Computer vision and image processing', 'Web scraping for extracting data', 'Sending HTTP requests to access APIs', 'Web development framework', 'Full-stack web development framework', 'Interactive web applications for data apps', 'Game development', 'Distributed data processing', 'Interactive and web-based visualizations', 'Database access and ORM'],
-            'Project Examples': ['Data cleaning and analysis, financial data processing, CSV and Excel data transformations', 'Scientific computing, large-scale data processing, linear algebra applications', 'Plotting and visualizing data trends, creating line/bar/pie charts, and data exploration visuals', 'Statistical analysis with visualizations, building heatmaps, pair plots, and visual reports for data insights', 'Classification models, predictive modeling, clustering, and building recommendation engines', 'Image recognition, natural language processing (NLP), object detection, and sentiment analysis', 'Quick prototyping of deep learning models, image recognition, and text classification', 'Text analysis, language translation, sentiment analysis, and chatbot development', 'Entity recognition, language modeling, document classification, and sentiment analysis', 'Face recognition, object detection, motion tracking, and augmented reality applications', 'Web scraping projects to gather data from websites, news aggregation, and real-time data collection', 'Accessing public APIs for data (e.g., weather, stock prices), automation tasks, and data integration', 'Building small web applications, REST APIs, dashboards, and lightweight web services', 'Large-scale web applications, e-commerce platforms, and content management systems (CMS)', 'Rapidly developing data science dashboards, interactive charts, and model visualizations', 'Developing 2D games, interactive simulations, and educational game projects', 'Big data processing, real-time analytics, and large-scale data transformations', 'Dashboards, 3D visualizations, interactive graphs, and data analysis with interactive reports', 'Database management, building CRUD (Create, Read, Update, Delete) applications, and backend data handling']
+            'Library': [
+                'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn', 'TensorFlow', 'Keras', 
+                'NLTK', 'SpaCy', 'OpenCV', 'BeautifulSoup', 'Requests', 'Flask', 'Django', 
+                'Streamlit', 'Pygame', 'PySpark', 'Plotly', 'SQLAlchemy'
+            ],
+            'Purpose': [
+                'Data manipulation and analysis',
+                'Numerical computations and matrix operations',
+                'Creating static visualizations and charts',
+                'Statistical data visualization and exploratory analysis',
+                'Building machine learning models and data modeling',
+                'Developing deep learning models and neural networks',
+                'Simplified deep learning model prototyping',
+                'Natural language processing (NLP) tasks and text analysis',
+                'Advanced NLP for large-scale text processing',
+                'Computer vision and image processing applications',
+                'Web scraping to extract data from websites',
+                'Sending HTTP requests to access and interact with APIs',
+                'Lightweight web development and creating RESTful APIs',
+                'Full-stack web development for large-scale applications',
+                'Developing interactive data applications and dashboards',
+                'Game development and interactive simulations',
+                'Distributed data processing and large-scale analytics',
+                'Interactive, web-based visualizations and dashboards',
+                'Database management and object-relational mapping (ORM)'
+            ],
+            'Project Examples': [
+                'Cleaning and analyzing CSV/Excel data, financial data processing, and generating reports.',
+                'Scientific computing, handling large-scale datasets, and performing linear algebra operations.',
+                'Plotting trends, creating line/bar/pie charts, and visualizing statistical data.',
+                'Generating heatmaps, pair plots, and interactive visual reports for data insights.',
+                'Building classification models, predictive analytics, clustering, and recommendation engines.',
+                'Developing image recognition systems, object detection, and natural language processing models.',
+                'Rapid prototyping for image recognition, text classification, and other deep learning projects.',
+                'Chatbots, sentiment analysis, language translation, and text-based data mining projects.',
+                'Entity recognition, document classification, and large-scale language modeling projects.',
+                'Face recognition, object detection, and motion tracking for real-time image processing.',
+                'Scraping news sites, aggregating data from multiple sources, and building data collection tools.',
+                'Accessing weather data, stock market APIs, and automating data retrieval tasks.',
+                'Building small web apps, dashboards, and RESTful services for rapid prototyping.',
+                'Developing e-commerce platforms, content management systems (CMS), and large-scale websites.',
+                'Creating interactive dashboards, data apps, and visualizations without extensive coding.',
+                'Developing 2D games, educational simulations, and interactive entertainment projects.',
+                'Handling big data tasks, real-time analytics, and processing large datasets efficiently.',
+                'Building interactive graphs, 3D visualizations, and dynamic dashboards for data analysis.',
+                'Managing databases, developing CRUD applications, and integrating backend services.'
+            ]
         }
 
         df = pd.DataFrame(data)
 
-        # Display the DataFrame as a table in Streamlit
-        st.dataframe(df)
-
-        # Apply CSS to make the table text larger and wrap, and increase table width
-        st.markdown(
-            """
-            <style>
-            .dataframe {
-                font-size: 14px !important; /* Increase font size */
-            }
-            .dataframe td {
-                white-space: pre-wrap !important; /* Wrap text in cells */
-            }
-            .stDataFrame { /* Target the container div of the dataframe */
-                width: 100% !important; /* Set width to 100% of its parent */
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
+        # Display the polished table using st.table for a static view that shows complete sentences
+        st.table(df)
 
     with tab6:
         st.write("Content for Tab 6")
@@ -163,3 +191,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
     with tab13:
         st.write("Content for Tab 13")
+
+# To run the app, make sure to call the show() function in your main block
+if __name__ == "__main__":
+    show()
