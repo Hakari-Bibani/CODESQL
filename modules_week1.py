@@ -192,8 +192,9 @@ print(f"The average temperature in {city} is {average_temp}°F.")
               .set_properties(**{'text-align': 'left'})
         )
 
-        # Render the styled table.
-        st.table(styled_df)
+        # Convert the styled DataFrame to HTML and render it with st.markdown.
+        html_table = styled_df.to_html()
+        st.markdown(html_table, unsafe_allow_html=True)
 
     with tab6:
         st.write("Content for Tab 6")
