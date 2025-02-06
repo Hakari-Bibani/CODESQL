@@ -180,35 +180,18 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
         df = pd.DataFrame(data)
 
-        # Build an HTML table from the DataFrame without the index
-        table_html = df.to_html(index=False, classes="my-table", escape=False)
+        # Style the DataFrame: white text, blue borders, and a dark background for contrast.
+        styled_df = (
+            df.style
+              .set_table_styles([
+                  {"selector": "th", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]},
+                  {"selector": "td", "props": [("color", "white"), ("border", "2px solid blue"), ("background-color", "black")]}
+              ])
+              .set_properties(**{'text-align': 'left'})
+        )
 
-        # Define custom CSS for the table
-        css = """
-        <style>
-        .my-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: black;
-        }
-        .my-table th {
-            color: white;
-            border: 2px solid blue;
-            background-color: black;
-            padding: 8px;
-        }
-        .my-table td {
-            color: white;
-            border: 2px solid blue;
-            background-color: black;
-            padding: 8px;
-            text-align: left;
-        }
-        </style>
-        """
-
-        # Display the styled HTML table
-        st.markdown(css + table_html, unsafe_allow_html=True)
+        # Render the styled table. st.table supports displaying a pandas Styler.
+        st.table(styled_df)
 
     with tab6:
         st.write("Content for Tab 6")
