@@ -284,7 +284,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
     with tab8:
     st.header("1.8 Understanding APIs: The Key to Real-Time Data Integration")
-    
     st.markdown("<h3 style='color: goldenrod;'>What is an API?</h3>", unsafe_allow_html=True)
     st.write(
         "An API (Application Programming Interface) is a set of rules and protocols that allows different software applications "
