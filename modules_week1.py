@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 def show():
     st.title("Week 1: Introduction to Coding")
@@ -10,7 +11,7 @@ def show():
         "You made it!",
         "What is Python?",
         "Python Script?",
-        "Tab 5",
+        "Libraries",
         "Tab 6",
         "Tab 7",
         "Tab 8",
@@ -105,7 +106,21 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 """, language="python")
 
     with tab5:
-        st.write("Content for Tab 5")
+        st.header("1.5 Introduction to Python Libraries")
+        st.write("Python libraries enhance programming functionality and efficiency. Libraries cover applications such as data manipulation, visualization, and machine learning. For more on essential Python libraries.")
+
+        # Data for the table
+        data = {
+            'Library': ['Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn', 'TensorFlow', 'Keras', 'NLTK', 'SpaCy', 'OpenCV', 'BeautifulSoup', 'Requests', 'Flask', 'Django', 'Streamlit', 'Pygame', 'PySpark', 'Plotly', 'SQLAlchemy'],
+            'Purpose': ['Data manipulation and analysis', 'Numerical and matrix computations', 'Data visualization', 'Statistical data visualization', 'Machine learning and data modeling', 'Deep learning and neural networks', 'Simplified neural network modeling', 'Natural language processing (NLP)', 'Advanced NLP for large-scale data', 'Computer vision and image processing', 'Web scraping for extracting data', 'Sending HTTP requests to access APIs', 'Web development framework', 'Full-stack web development framework', 'Interactive web applications for data apps', 'Game development', 'Distributed data processing', 'Interactive and web-based visualizations', 'Database access and ORM'],
+            'Project Examples': ['Data cleaning and analysis, financial data processing, CSV and Excel data transformations', 'Scientific computing, large-scale data processing, linear algebra applications', 'Plotting and visualizing data trends, creating line/bar/pie charts, and data exploration visuals', 'Statistical analysis with visualizations, building heatmaps, pair plots, and visual reports for data insights', 'Classification models, predictive modeling, clustering, and building recommendation engines', 'Image recognition, natural language processing (NLP), object detection, and sentiment analysis', 'Quick prototyping of deep learning models, image recognition, and text classification', 'Text analysis, language translation, sentiment analysis, and chatbot development', 'Entity recognition, language modeling, document classification, and sentiment analysis', 'Face recognition, object detection, motion tracking, and augmented reality applications', 'Web scraping projects to gather data from websites, news aggregation, and real-time data collection', 'Accessing public APIs for data (e.g., weather, stock prices), automation tasks, and data integration', 'Building small web applications, REST APIs, dashboards, and lightweight web services', 'Large-scale web applications, e-commerce platforms, and content management systems (CMS)', 'Rapidly developing data science dashboards, interactive charts, and model visualizations', 'Developing 2D games, interactive simulations, and educational game projects', 'Big data processing, real-time analytics, and large-scale data transformations', 'Dashboards, 3D visualizations, interactive graphs, and data analysis with interactive reports', 'Database management, building CRUD (Create, Read, Update, Delete) applications, and backend data handling']
+        }
+
+        df = pd.DataFrame(data)
+
+        # Display the DataFrame as a table in Streamlit
+        st.dataframe(df)
+
 
     with tab6:
         st.write("Content for Tab 6")
