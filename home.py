@@ -13,7 +13,7 @@ def show_home():
     apply_dark_theme()  # ensures dark background
     apply_custom_styles()  # custom styles
 
-    # Custom CSS to center animation & force transparency
+    # Custom CSS to center animation & remove white background
     st.markdown(
         """
         <style>
@@ -42,7 +42,7 @@ def show_home():
 
     # Centering the animation
     st.markdown('<div class="lottie-container">', unsafe_allow_html=True)
-    st_lottie(lottie_animation, speed=1, loop=True, height=300, width=300, key="animation", background="transparent")
+    st_lottie(lottie_animation, speed=1, loop=True, height=300, width=300, key="animation")  # Removed background="transparent"
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Footer messages
