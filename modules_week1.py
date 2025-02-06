@@ -371,6 +371,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
     )
 
 
+
     with tab11:
         st.write("Content for Tab 11")
 
