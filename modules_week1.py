@@ -6,7 +6,7 @@ def show():
     st.write("This week covers the basics of coding. Get ready to dive into fundamental programming concepts!")
 
     # Create tabs
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
         "Introduction to Python",
         "You made it!",
         "What is Python?",
@@ -367,11 +367,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         st.header("Quiz: Week 1")
         st.markdown('<p style="color: red; font-size: 20px;">📝 Select Quiz 1 from the sidebar in the Quizzes section.</p>', unsafe_allow_html=True)
 
-    with tab12:
-        st.write("Content for Tab 12")
-
-    with tab13:
-        st.write("Content for Tab 13")
 
 if __name__ == "__main__":
     show()
