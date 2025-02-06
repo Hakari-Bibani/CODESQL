@@ -13,7 +13,7 @@ def show():
         "Python Script?",
         "Libraries",
         "Google Colab",
-        "Tab 7",
+        "Assignment 1",
         "Tab 8",
         "Tab 9",
         "Tab 10",
@@ -269,10 +269,9 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         )
 
     with tab7:
-        st.write("with tab7:
-    st.header("Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python")
+        st.header("Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python")
     st.write("Complete your assignment by visiting the link below:")
-    st.markdown('[Assignment 1](https://codesql-xaj5cya5ac2ydtwmyv2zqv.streamlit.app/)', unsafe_allow_html=True)
+    st.markdown('[Assignment 1](https://codesql-xaj5cya5ac2ydtwmyv2zqv.streamlit.app/)', unsafe_allow_html=True)  
 ")
 
     with tab8:
