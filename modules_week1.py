@@ -200,7 +200,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "If you're new to coding or data analysis, here are the top 10 things you should know about Google Colab to get started:"
         )
 
-        st.markdown("**1. Free Access to Powerful Computing**")
+        st.markdown('<p style="color: #ADD8E6;"><strong>1. Free Access to Powerful Computing</strong></p>', unsafe_allow_html=True)
         st.write(
             "Google Colab provides free access to powerful hardware like GPUs and TPUs, which are essential for tasks like "
             "machine learning and data analysis. You can use these resources without needing expensive hardware."
