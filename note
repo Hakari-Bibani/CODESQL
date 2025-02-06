@@ -205,18 +205,21 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "Google Colab provides free access to powerful hardware like GPUs and TPUs, which are essential for tasks like "
             "machine learning and data analysis. You can use these resources without needing expensive hardware."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>2. No Installation Required</strong></p>', unsafe_allow_html=True)
         st.write(
             "With Google Colab, you don’t need to install Python or any software. You can run your code directly in your browser, "
             "making it easy to start coding from anywhere."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>3. Seamless Integration with Google Drive</strong></p>', unsafe_allow_html=True)
         st.write(
             "Colab integrates with Google Drive, so you can save your notebooks (files with .ipynb extensions) directly to your Drive. "
             "This ensures your work is safe, organized, and accessible across devices."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>4. Beginner-Friendly Interface</strong></p>', unsafe_allow_html=True)
         st.write(
@@ -225,42 +228,49 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "- **Text Cells:** Add explanations, instructions, or notes using Markdown.\n\n"
             "This mix of code and text makes your projects more readable."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>5. Built-In Libraries</strong></p>', unsafe_allow_html=True)
         st.write(
             "Colab comes pre-installed with popular Python libraries like Pandas, NumPy, and Matplotlib. "
             "You can start analyzing data or creating visualizations without needing to install these libraries manually."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>6. Collaboration Made Easy</strong></p>', unsafe_allow_html=True)
         st.write(
             "Share your Colab notebook with others (just like a Google Doc). Collaborators can view or edit your code in real time, "
             "making it ideal for group projects or peer reviews."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>7. Data Integration</strong></p>', unsafe_allow_html=True)
         st.write(
             "Easily upload datasets or connect directly to Google Sheets, databases, or APIs. "
             "This is perfect for beginners working with small to medium-sized datasets."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>8. Visualization Tools</strong></p>', unsafe_allow_html=True)
         st.write(
             "Colab supports interactive visualizations with libraries like Matplotlib, Plotly, and Seaborn. "
             "You can quickly turn raw data into graphs and charts for better insights."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>9. Simple Debugging</strong></p>', unsafe_allow_html=True)
         st.write(
             "Colab provides error messages that help you debug your code step by step. "
             "It’s a great way to learn how Python works and fix common issues as you practice."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>10. Access to Tutorials and Demos</strong></p>', unsafe_allow_html=True)
         st.write(
             "Explore Colab’s built-in tutorials and code snippets. These resources guide you through common tasks like creating machine learning models or analyzing datasets, "
             "even if you’re just starting out."
         )
+        st.markdown("---")
 
         st.markdown('<p style="color: #ADD8E6;"><strong>Bonus Tip: Keep Practicing!</strong></p>', unsafe_allow_html=True)
         st.write(
@@ -269,16 +279,9 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         )
 
     with tab7:
-    st.header("Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python")
-    st.write(
-        "For this assignment, you'll be working on mapping coordinates and calculating distances using Python. "
-        "Make sure to review the instructions carefully and follow the steps provided to complete the assignment."
-    )
-    st.markdown(
-        'You can access the assignment here: [Assignment 1](https://codesql-xaj5cya5ac2ydtwmyv2zqv.streamlit.app/)',
-        unsafe_allow_html=True
-    )
-
+        st.header("Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python")
+        st.write("For Assignment 1, please visit the following link to access the assignment page:")
+        st.markdown('[Click here to view Assignment 1](https://codesql-xaj5cya5ac2ydtwmyv2zqv.streamlit.app/)', unsafe_allow_html=True)
 
     with tab8:
         st.write("Content for Tab 8")
@@ -300,48 +303,3 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
 if __name__ == "__main__":
     show()
-
-----------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------
-
-
-
-Summary of All Options in This Updated admin.py
-Execute SQL:
-
-Run any valid SQL command.
-See results for queries (e.g., SELECT).
-View Schema:
-
-List all tables and view each table’s schema (columns and types).
-Create Table:
-
-Define and create a new table by specifying its name and columns.
-Drop Table:
-
-Permanently delete a table from the database (with a confirmation step).
-Insert Row:
-
-Insert a new row into a selected table by filling in values for each column.
-Edit Row:
-
-Fetch and update rows in a table based on a provided WHERE clause.
-Delete Row:
-
-Remove rows from a table using a specified WHERE clause.
-Alter Table:
-
-Add Column:
-Select a table and add a new column by specifying its name and data type.
-Delete Column:
-Select a table and choose an existing column to delete.
-The process recreates the table without the chosen column (data for remaining columns is preserved).
-Backup/Restore:
-
-Create a backup of the database file locally.
-Restore the database from an uploaded backup file.
-Push Changes to GitHub:
-
-After many operations, you can push your local database changes to GitHub.
