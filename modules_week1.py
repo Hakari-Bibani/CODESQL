@@ -6,6 +6,7 @@ def show():
     st.write("This week covers the basics of coding. Get ready to dive into fundamental programming concepts!")
 
     # Create tabs
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13 = st.tabs([
     tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
         "Introduction to Python",
         "You made it!",
@@ -20,7 +21,7 @@ def show():
         "Quiz"
     ])
 
-with tab1:
+    with tab1:
         st.header("1.1 Introduction to Python - Recorded Session")
         st.video("https://www.youtube.com/watch?v=Scem9sKTtJo")
         st.subheader("**ChatGPT Prompts**")
