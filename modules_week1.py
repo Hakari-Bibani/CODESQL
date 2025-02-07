@@ -32,7 +32,7 @@ def show():
             "whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as "
             "setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios."
         )
-    
+
     with tab2:
         st.header("1.2 You made it! Be prepared for your final project")
         st.video("https://www.youtube.com/watch?v=fD73oMb4NRg")
@@ -90,20 +90,16 @@ def show():
 # 1. Importing Libraries
 import pandas as pd  # This library helps manage and analyze data in tables
 import matplotlib.pyplot as plt  # This library helps create visualizations like charts
-
 # 2. Defining Variables
 data = {'Temperature': [70, 75, 80, 85, 90], 'Humidity': [30, 45, 50, 60, 70]}  # Creating sample data
 city = "Kurdistan"  # Name of the location for the data
-
 # 3. Creating a DataFrame and Calculating the Average Temperature
 df = pd.DataFrame(data)  # Convert the data dictionary into a table
 average_temp = df['Temperature'].mean()  # Calculate the average temperature
-
 # 4. Loop through Data to Print Each Temperature
 print(f"Weather data for {city}:")
 for temp in df['Temperature']:
     print(f"- Temperature: {temp}°F")
-
 # 5. Visualize Data: Plotting Temperature and Humidity
 plt.plot(df['Temperature'], label='Temperature', color='red')
 plt.plot(df['Humidity'], label='Humidity', color='blue')
@@ -112,7 +108,6 @@ plt.ylabel('Value')
 plt.title(f"Weather Data for {city}")
 plt.legend()
 plt.show()
-
 # 6. Output the Result
 print(f"The average temperature in {city} is {average_temp}°F.")
             """,
@@ -283,7 +278,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
     with tab8:
         st.header("1.8 Understanding APIs: The Key to Real-Time Data Integration")
-        
+
         st.markdown("<h3 style='color: goldenrod;'>What is an API?</h3>", unsafe_allow_html=True)
         st.write(
             "An API (Application Programming Interface) is a set of rules and protocols that allows different software applications "
@@ -291,7 +286,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "from another. APIs define how requests for information or actions are made, the format of these requests, and the expected responses, "
             "allowing applications to interact without needing to understand the inner workings of each other."
         )
-        
+
         st.markdown("<h3 style='color: goldenrod;'>Why is an API Important?</h3>", unsafe_allow_html=True)
         st.write(
             "APIs are crucial because they enable software systems to share data and functionality, which is especially useful for developers "
@@ -299,7 +294,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "This ability to pull in real-time data from other platforms, or let users perform specific tasks from different systems without leaving "
             "the primary application, enhances user experiences and broadens application capabilities."
         )
-        
+
         st.markdown("<h3 style='color: goldenrod;'>How is an API Used? (Example)</h3>", unsafe_allow_html=True)
         st.write(
             "To use an API, you usually send a request to an endpoint URL with specific parameters that define what data or action you’re interested in. "
@@ -317,7 +312,7 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "When a request is sent with the filled-in parameters, the API returns data, often in JSON format, containing details about all recorded "
             "earthquakes within that time range. Each record includes information such as location, magnitude, depth, and time."
         )
-        
+
         st.markdown("<h3 style='color: goldenrod;'>Why Use an API Like the USGS Earthquake API?</h3>", unsafe_allow_html=True)
         st.write(
             "Using APIs like the USGS Earthquake API allows developers to pull in constantly updated earthquake data directly into their applications "
@@ -368,6 +363,10 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         st.header("Quiz: Week 1")
         st.markdown('<p style="color: red; font-size: 20px;">📝 Select Quiz 1 from the sidebar in the Quizzes section.</p>', unsafe_allow_html=True)
 
+    with tab12:
+        st.write("Content for Tab 12")
+    with tab13:
+        st.write("Content for Tab 13")
 
 if __name__ == "__main__":
     show()
