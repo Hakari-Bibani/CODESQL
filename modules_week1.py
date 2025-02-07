@@ -20,7 +20,7 @@ def show():
         "Quiz"
     ])
 
- with tab1:
+with tab1:
     st.markdown("<h2 style='color: #FFE5B4;'>1.1 Introduction to Python - Recorded Session</h2>", unsafe_allow_html=True)
     st.video("https://www.youtube.com/watch?v=Scem9sKTtJo")
     st.subheader("**ChatGPT Prompts**")
