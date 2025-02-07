@@ -34,9 +34,9 @@ def show():
     
     with tab3:
     # Use st.markdown with HTML/CSS for the pale orange title
-    st.markdown(
-        "<h1 style='color: #FFD3A3;'>Stay Connected: Join Our Discord Server!</h1>", 
-        unsafe_allow_html=True
+        st.markdown(
+            "<h1 style='color: #FFD3A3;'>Stay Connected: Join Our Discord Server!</h1>", 
+            unsafe_allow_html=True
     )
     
     st.markdown("""
