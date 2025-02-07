@@ -6,7 +6,6 @@ def show():
     st.write("This week covers the basics of coding. Get ready to dive into fundamental programming concepts!")
 
     # Create tabs
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13 = st.tabs([
     tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
         "Introduction to Python",
         "You made it!",
@@ -32,6 +31,16 @@ def show():
             "whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as "
             "setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios."
         )
+    st.markdown("<h2 style='color: #FFE5B4;'>1.1 Introduction to Python - Recorded Session</h2>", unsafe_allow_html=True)
+    st.video("https://www.youtube.com/watch?v=Scem9sKTtJo")
+    st.subheader("**ChatGPT Prompts**")
+    st.markdown("[Links to an external site](https://chatgpt.com/share/6733c214-7ac4-8004-92f1-227d11b644ff)")
+    st.subheader("**Content**:")
+    st.write(
+        "In this session, we'll introduce you to the basics of Python and how it can be a powerful tool for enhancing personal impact, "
+        "whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as "
+        "setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios."
+    )
 
     with tab2:
         st.header("1.2 You made it! Be prepared for your final project")
