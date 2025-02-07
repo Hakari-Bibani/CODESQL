@@ -33,14 +33,11 @@ def show():
         """)
     
     with tab3:
-        with tab3:
-    st.title(
-        "<span style='color: #FFDAB9;'>Stay Connected: Join Our Discord Server!</span>", 
-        unsafe_allow_html=True
-    )
-    st.markdown("""
-    **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
-    """)
+         st.title(
+            "<span style='color: #FFDAB9;'>Stay Connected: Join Our Discord Server!</span>",unsafe_allow_html=True)
+         st.markdown("""
+        **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
+        """)
 
         ## Why Join Our Discord Server?
         * **Stay Updated:** Get instant updates about the course, assignments, and materials.
