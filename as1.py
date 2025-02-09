@@ -21,10 +21,8 @@ def show():
         st.session_state["dataframe_object"] = None
     if "captured_output" not in st.session_state:
         st.session_state["captured_output"] = ""
-    if "password_entered" not in st.session_state:
-        st.session_state["password_entered"] = False
-    if "valid_password" not in st.session_state:
-        st.session_state["valid_password"] = False
+    if "username_verified" not in st.session_state:
+        st.session_state["username_verified"] = False
 
     # Define db_path globally
     db_path = st.secrets["general"]["db_path"]
@@ -32,37 +30,31 @@ def show():
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 1: ENTER YOUR PASSWORD
+    # STEP 1: ENTER YOUR USERNAME
     # ─────────────────────────────────────────────────────────────────
-    st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Password</h1>', unsafe_allow_html=True)
-    password = st.text_input("Password", type="password", key="as1_password")
-    enter_password = st.button("Enter")
+    st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Username</h1>', unsafe_allow_html=True)
+    username = st.text_input("Username", key="username_input")
+    verify_username_button = st.button("Verify Username", key="verify_username_button")
 
-    if enter_password and password:
+    if verify_username_button and username:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM records WHERE password = ?", (password,))
+        cursor.execute("SELECT username FROM users WHERE username = ?", (username,))
         user_record = cursor.fetchone()
-
-        if user_record:
-            # Check if Assignment 2 has already been submitted
-            if user_record[6] != 0:  # Assuming as2 is the 7th column (index 6)
-                st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
-                st.session_state["password_entered"] = False
-                st.session_state["valid_password"] = False
-            else:
-                st.session_state["password_entered"] = True
-                st.session_state["valid_password"] = True
-        else:
-            st.error("Invalid password. Please enter the correct password registered before.")
-            st.session_state["password_entered"] = False
-            st.session_state["valid_password"] = False
         conn.close()
 
-    if st.session_state["password_entered"] and st.session_state["valid_password"]:
-        # ─────────────────────────────────────────────────────────────────
-        # STEP 2: REVIEW ASSIGNMENT DETAILS
-        # ─────────────────────────────────────────────────────────────────
+        if user_record:
+            st.session_state["username_verified"] = True
+            st.session_state["username"] = username  # Store username in session state
+            st.success("Username verified! You can now proceed to submit your assignment.")
+        else:
+            st.session_state["username_verified"] = False
+            st.error("Invalid username. Please enter a valid username registered in the database.")
+
+    # ─────────────────────────────────────────────────────────────────
+    # STEP 2: REVIEW ASSIGNMENT DETAILS
+    # ─────────────────────────────────────────────────────────────────
+    if st.session_state.get("username_verified", False):
         st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
@@ -212,25 +204,19 @@ def show():
         if submit_button:
             if not st.session_state.get("run_success", False):
                 st.error("Please run your code successfully before submitting.")
-            elif password:
-                # Check if Assignment 2 has already been submitted
-                conn = sqlite3.connect(db_path)
-                cursor = conn.cursor()
-                cursor.execute("SELECT as2 FROM records WHERE password = ?", (password,))
-                as2_submitted = cursor.fetchone()[0]
-                conn.close()
+            else:
+                # Grade the submission
+                from grades.grade1 import grade_assignment
+                grade = grade_assignment(code_input)
 
-                if as2_submitted != 0:
-                    st.error("You have already submitted Assignment 2. Resubmitting Assignment 1 is not allowed.")
-                else:
-                    # Grade the submission
-                    from grades.grade1 import grade_assignment
-                    grade = grade_assignment(code_input)
-
-                    # Update the grade in the records table for this password
+                # Update the grade in the users table for the current user
+                username = st.session_state.get("username")  # Retrieve username from session state
+                if username:
                     conn = sqlite3.connect(db_path)
                     cursor = conn.cursor()
-                    cursor.execute("UPDATE records SET as1 = ? WHERE password = ?", (grade, password))
+
+                    # Update the as1 grade for the user
+                    cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, username))
                     conn.commit()
                     conn.close()
 
@@ -238,5 +224,5 @@ def show():
                     push_db_to_github(db_path)
 
                     st.success(f"Submission successful! Your grade: {grade}/100")
-            else:
-                st.error("Please enter your password to submit.")
+                else:
+                    st.error("Username not found. Please verify your username again.")
