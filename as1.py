@@ -6,7 +6,8 @@ from io import StringIO
 from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
-from github_sync import push_db_to_github
+# Modified import: also import pull_db_from_github to update the local DB before grading.
+from github_sync import push_db_to_github, pull_db_from_github
 
 def show():
     # Apply the custom page style
@@ -21,8 +22,10 @@ def show():
         st.session_state["dataframe_object"] = None
     if "captured_output" not in st.session_state:
         st.session_state["captured_output"] = ""
-    if "username_verified" not in st.session_state:
-        st.session_state["username_verified"] = False
+    if "username_entered" not in st.session_state:
+        st.session_state["username_entered"] = False
+    if "username" not in st.session_state:
+        st.session_state["username"] = ""
 
     # Define db_path globally
     db_path = st.secrets["general"]["db_path"]
@@ -31,30 +34,29 @@ def show():
 
     # ─────────────────────────────────────────────────────────────────
     # STEP 1: ENTER YOUR USERNAME
+    # (Password verification removed – only username existence is checked)
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Username</h1>', unsafe_allow_html=True)
-    username = st.text_input("Username", key="username_input")
-    verify_username_button = st.button("Verify Username", key="verify_username_button")
-
-    if verify_username_button and username:
+    username_input = st.text_input("Username", key="as1_username")
+    enter_username = st.button("Enter")
+    if enter_username and username_input:
+        # (Optional: pull the latest DB before checking username if needed)
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT username FROM users WHERE username = ?", (username,))
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username_input,))
         user_record = cursor.fetchone()
+        if user_record:
+            st.session_state["username_entered"] = True
+            st.session_state["username"] = username_input
+        else:
+            st.error("Invalid username. Please enter a registered username.")
+            st.session_state["username_entered"] = False
         conn.close()
 
-        if user_record:
-            st.session_state["username_verified"] = True
-            st.session_state["username"] = username  # Store username in session state
-            st.success("Username verified! You can now proceed to submit your assignment.")
-        else:
-            st.session_state["username_verified"] = False
-            st.error("Invalid username. Please enter a valid username registered in the database.")
-
-    # ─────────────────────────────────────────────────────────────────
-    # STEP 2: REVIEW ASSIGNMENT DETAILS
-    # ─────────────────────────────────────────────────────────────────
-    if st.session_state.get("username_verified", False):
+    if st.session_state.get("username_entered", False):
+        # ─────────────────────────────────────────────────────────────────
+        # STEP 2: REVIEW ASSIGNMENT DETAILS
+        # ─────────────────────────────────────────────────────────────────
         st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
@@ -65,84 +67,55 @@ def show():
 
             ### Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python
             **Objective:**
-            In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+            Write a script that:
+            - Plots three specific coordinates on an interactive map.
+            - Calculates and displays the distances (in kilometers) between each pair of points.
             """)
             with st.expander("See More"):
                 st.markdown("""
             **Task Requirements:**
             1. **Plot the Three Coordinates on a Map:**
-               - The coordinates represent three locations in the Kurdistan Region.
-               - You will use Python libraries to plot these points on a map.
-               - The map should visually display the exact locations of the coordinates.
-            2. **Calculate the Distance Between Each Pair of Points:**
-               - You will calculate the distances between the three points in kilometers.
-               - Specifically, calculate:
-                 - The distance between Point 1 and Point 2.
-                 - The distance between Point 2 and Point 3.
-                 - The distance between Point 1 and Point 3.
-               - Add Markers to the map for each coordinate.
-               - Add polylines to connect the points.
-               - Add popups to display information about the distance.
-
+               - Use Python libraries to plot three locations in the Kurdistan Region.
+               - The map must show markers for each coordinate.
+            2. **Calculate the Distances:**
+               - Compute the distances (in kilometers) between:
+                 - Point 1 and Point 2.
+                 - Point 2 and Point 3.
+                 - Point 1 and Point 3.
+               - Display these distances in a text summary.
+            
             **Coordinates:**
             - Point 1: Latitude: 36.325735, Longitude: 43.928414
             - Point 2: Latitude: 36.393432, Longitude: 44.586781
             - Point 3: Latitude: 36.660477, Longitude: 43.840174
 
-            **Python Libraries You Will Use:**
-            - geopy for calculating the distance between two coordinates.
-            - folium for plotting the points on an interactive map.
-            - pandas to create a DataFrame that displays the distances between the points.
-
-            **Expected Output:**
-            1. A map showing the three coordinates.
-            2. A text summary (Express values to two decimal places.): showing the calculated distances (in kilometers) between:
-               - Point 1 and Point 2.
-               - Point 2 and Point 3.
-               - Point 1 and Point 3.
-            """)
+            **Libraries to Use:**
+            - geopy (for distance calculations),
+            - folium (for the interactive map),
+            - pandas (for the summary DataFrame).
+                """)
 
         with tab2:
             st.markdown("""
             ### Detailed Grading Breakdown
             #### 1. Code Structure and Implementation (30 points)
-            - **Library Imports (5 points):**
-                - Checks if the required libraries (folium, geopy, geodesic) are imported.
-            - **Coordinate Handling (5 points):**
-                - Checks if the correct coordinates are defined in the code.
-            - **Code Execution (10 points):**
-                - Checks if the code runs without errors.
-            - **Code Quality (10 points):**
-                - **Variable Naming:** 2 points (deducted if single-letter variables are used).
-                - **Spacing:** 2 points (deducted if improper spacing is found, e.g., no space after =).
-                - **Comments:** 2 points (deducted if no comments are present).
-                - **Code Organization:** 2 points (deducted if no blank lines are used for separation).
+            - Library imports, coordinate definitions, execution without errors, and code quality.
+            
+            #### 2. Map Visualization (40 points)
+            - Proper initialization of folium.Map, markers, polylines, and popups.
+            
+            #### 3. Distance Calculations (30 points)
+            - Accurate use of geopy.distance.geodesic and correctness within a 100-meter tolerance.
             """)
             with st.expander("See More"):
-                st.markdown("""
-            #### 2. Map Visualization (40 points)
-            - **Map Generation (15 points):**
-                - Checks if the folium.Map is correctly initialized.
-            - **Markers (15 points):**
-                - Checks if markers are added to the map for each coordinate.
-            - **Polylines (5 points):**
-                - Checks if polylines are used to connect the points.
-            - **Popups (5 points):**
-                - Checks if popups are added to the markers.
-
-            #### 3. Distance Calculations (30 points)
-            - **Geodesic Implementation (10 points):**
-                - Checks if the geodesic function is used correctly to calculate distances.
-            - **Distance Accuracy (20 points):**
-                - Checks if the calculated distances are accurate within a 100-meter tolerance.
-            """)
+                st.markdown("Additional grading details...")
 
         # ─────────────────────────────────────────────────────────────────
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-        code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+        code_input = st.text_area("", height=300)
 
         # Run Code Button
         run_button = st.button("Run Code", key="run_code_button")
@@ -181,11 +154,10 @@ def show():
                 sys.stdout = sys.__stdout__
                 st.error(f"An error occurred while running your code: {e}")
 
-        # Display Outputs
+        # Display Outputs if code ran successfully
         if st.session_state["run_success"]:
             st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
             if st.session_state["captured_output"]:
-                # Format the output with preserved whitespace and line breaks
                 formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
                 st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
             else:
@@ -199,30 +171,45 @@ def show():
                 st.markdown("### 📊 DataFrame Output")
                 st.dataframe(st.session_state["dataframe_object"])
 
-        # Submit Code Button
+        # ─────────────────────────────────────────────────────────────────
+        # SUBMIT CODE BUTTON (updates grade and pushes DB)
+        # Resubmission is allowed – each submission overwrites the previous grade in the database.
+        # ─────────────────────────────────────────────────────────────────
         submit_button = st.button("Submit Code", key="submit_code_button")
         if submit_button:
             if not st.session_state.get("run_success", False):
                 st.error("Please run your code successfully before submitting.")
-            else:
+            elif st.session_state.get("username", ""):
                 # Grade the submission
                 from grades.grade1 import grade_assignment
                 grade = grade_assignment(code_input)
 
-                # Update the grade in the users table for the current user
-                username = st.session_state.get("username")  # Retrieve username from session state
-                if username:
-                    conn = sqlite3.connect(db_path)
-                    cursor = conn.cursor()
+                # Pull the latest DB from GitHub before updating, ensuring the local copy is current.
+                pull_db_from_github(db_path)
+                
+                # Update the grade in the users table for this username (resubmission allowed)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
+                conn.commit()
+                conn.close()
 
-                    # Update the as1 grade for the user
-                    cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, username))
-                    conn.commit()
-                    conn.close()
+                st.info("Grade updated locally. Pushing changes to GitHub...")
 
-                    # Push the updated DB to GitHub
-                    push_db_to_github(db_path)
+                # Push the updated DB to GitHub
+                push_db_to_github(db_path)
 
-                    st.success(f"Submission successful! Your grade: {grade}/100")
-                else:
-                    st.error("Username not found. Please verify your username again.")
+                # (Optional) Add a small delay if necessary to let GitHub update
+                # import time
+                # time.sleep(1)
+
+                # Re-open connection to re-query the updated grade
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
+                new_grade = cursor.fetchone()[0]
+                conn.close()
+
+                st.success(f"Submission successful! Your grade: {new_grade}/100")
+            else:
+                st.error("Please enter your username to submit.")
